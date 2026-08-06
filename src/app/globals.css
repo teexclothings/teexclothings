@@ -22,6 +22,9 @@
   --animate-fade-in: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-slide-up: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-slide-down: slide-down 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-up-sheet: slide-up-sheet 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-down-sheet: slide-down-sheet 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-scale-tap: scale-tap 0.15s ease-out;
 }
 
 @keyframes fade-in {
@@ -37,6 +40,22 @@
 @keyframes slide-down {
   from { transform: translateY(-16px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slide-up-sheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slide-down-sheet {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+@keyframes scale-tap {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
 }
 
 @media (prefers-color-scheme: dark) {

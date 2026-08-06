@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
-import ProductDetailsClient from "./ProductDetailsClient";
+import ProductDetailsClient from "@/app/(customer)/products/[slug]/ProductDetailsClient";
 import type { Metadata } from "next";
 
 interface Props {
