@@ -22,7 +22,7 @@ const DEFAULT_SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 export default function ProductForm({ productId }: ProductFormProps) {
   const router = useRouter();
   const { showToast } = useToast();
-  const supabase = createClient() as any;
+  const supabase = createClient();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

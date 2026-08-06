@@ -11,7 +11,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const { showToast } = useToast();
-  const supabase = createClient() as any;
+  const supabase = createClient();
 
   // Settings State
   const [shopName, setShopName] = useState("");

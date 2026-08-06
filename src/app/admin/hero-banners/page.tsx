@@ -35,7 +35,7 @@ export default function HeroBannersPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const { showToast } = useToast();
-  const supabase = createClient() as any;
+  const supabase = createClient();
 
   // Add/Edit Modal States
   const [modalOpen, setModalOpen] = useState(false);

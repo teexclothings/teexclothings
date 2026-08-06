@@ -40,7 +40,7 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const { showToast } = useToast();
-  const supabase = createClient() as any;
+  const supabase = createClient();
 
   // Delete states
   const [deleteOpen, setDeleteOpen] = useState(false);

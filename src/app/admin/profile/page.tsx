@@ -14,7 +14,7 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [passwordSaving, setPasswordSaving] = useState(false);
   const { showToast } = useToast();
-  const supabase = createClient() as any;
+  const supabase = createClient();
 
   // Profile data states
   const [fullName, setFullName] = useState("");
