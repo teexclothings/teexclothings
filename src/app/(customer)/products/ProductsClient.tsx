@@ -17,6 +17,7 @@ interface Product {
   featured: boolean;
   images: string[];
   category_id: string;
+  created_at: string;
   categories?: {
     name: string;
   };
@@ -56,7 +57,7 @@ export default function ProductsClient({
       return b.price - a.price;
     }
     // "newest" defaults to creation date order
-    return new Date(b.id).getTime() - new Date(a.id).getTime(); // Wait! Let's just sort by ID or creation date if ID doesn't parse. Since initialProducts are ordered by created_at desc anyway, we can just keep default array index order!
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
   return (

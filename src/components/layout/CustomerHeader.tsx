@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, Search } from "lucide-react";
 
 interface HeaderProps {
@@ -16,6 +16,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,6 +85,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
           <div className="flex items-center space-x-4 text-white">
             <button
               type="button"
+              onClick={() => router.push("/products")}
               className="p-1 focus:outline-none cursor-pointer text-neutral-400 hover:text-white transition-colors"
               aria-label="Search Catalog"
             >
