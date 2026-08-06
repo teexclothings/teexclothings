@@ -74,6 +74,7 @@ export interface Database {
           category_id: string;
           sizes: string[];
           colors: string[];
+          images: string[];
           featured: boolean;
           active: boolean;
           created_at: string;
@@ -88,6 +89,7 @@ export interface Database {
           category_id: string;
           sizes?: string[];
           colors?: string[];
+          images?: string[];
           featured?: boolean;
           active?: boolean;
           created_at?: string;
@@ -102,6 +104,7 @@ export interface Database {
           category_id?: string;
           sizes?: string[];
           colors?: string[];
+          images?: string[];
           featured?: boolean;
           active?: boolean;
           created_at?: string;

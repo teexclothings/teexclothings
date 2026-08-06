@@ -33,7 +33,7 @@ export async function loginAction(formData: FormData): Promise<ActionResponse> {
       .from("profiles")
       .select("*")
       .eq("id", data.user.id)
-      .single()) as { data: { role: string } | null; error: any };
+      .single()) as { data: { role: string } | null };
 
     const isAuthorized = profile && (profile.role === "admin" || profile.role === "viewer");
 

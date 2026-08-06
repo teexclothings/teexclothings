@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
     .from("profiles")
     .select("*")
     .eq("id", user.id)
-    .single()) as { data: { role: string } | null; error: any };
+    .single()) as { data: { role: string } | null };
 
   const isAuthorized = profile && (profile.role === "admin" || profile.role === "viewer");
 

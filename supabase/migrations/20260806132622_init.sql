@@ -67,6 +67,7 @@ CREATE TABLE public.products (
   category_id uuid REFERENCES public.categories(id) ON DELETE RESTRICT NOT NULL,
   sizes text[] DEFAULT '{}'::text[] NOT NULL,
   colors text[] DEFAULT '{}'::text[] NOT NULL,
+  images text[] DEFAULT '{}'::text[] NOT NULL,
   featured boolean DEFAULT false NOT NULL,
   active boolean DEFAULT true NOT NULL,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,

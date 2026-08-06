@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AdminLayoutInner from "./AdminLayoutInner";
 
 export const metadata: Metadata = {
   title: "TEEX | Admin Console",
@@ -10,9 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-screen bg-neutral-950 text-white font-sans antialiased">
-      {children}
-    </div>
-  );
+  return <AdminLayoutInner>{children}</AdminLayoutInner>;
 }
