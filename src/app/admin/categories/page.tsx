@@ -255,7 +255,7 @@ export default function CategoriesPage() {
               </thead>
               <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                 {filtered.map((category) => (
-                  <tr key={category.id} className="transition-colors hover:bg-neutral-100 dark:bg-neutral-800/20">
+                  <tr key={category.id} className="transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800/50 dark:bg-neutral-850/10">
                     <td className="px-6 py-3">
                       {category.image_url ? (
                         <img

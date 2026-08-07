@@ -299,7 +299,7 @@ export default function HeroBannersPage() {
                   )}
 
                   <div className="absolute top-2 left-2 flex space-x-1">
-                    <span className="bg-black/80 backdrop-blur-sm border border-neutral-300 dark:border-neutral-700 px-2 py-0.5 text-[8px] font-semibold tracking-wider text-black dark:text-white uppercase rounded-xs">
+                    <span className="bg-black/80 backdrop-blur-sm border border-neutral-300 dark:border-neutral-700 px-2 py-0.5 text-[8px] font-semibold tracking-wider text-white uppercase rounded-xs">
                       Desktop
                     </span>
                     {banner.mobile_media_url ? (
@@ -349,13 +349,13 @@ export default function HeroBannersPage() {
                   <div className="flex justify-end space-x-2 pt-2 border-t border-neutral-200 dark:border-neutral-850">
                     <button
                       onClick={() => handleOpenEdit(banner)}
-                      className="flex cursor-pointer items-center border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-1.5 text-[9px] uppercase tracking-widest text-neutral-600 dark:text-neutral-400 hover:text-black dark:text-white hover:border-neutral-500 rounded-sm focus:outline-none"
+                      className="flex cursor-pointer items-center border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-1.5 text-[9px] uppercase tracking-widest text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white hover:bg-neutral-200 dark:hover:bg-neutral-900 hover:border-neutral-500 rounded-sm focus:outline-none"
                     >
                       <Edit2 size={10} className="mr-1" /> Edit
                     </button>
                     <button
                       onClick={() => handleOpenDelete(banner.id)}
-                      className="flex cursor-pointer items-center border border-red-950 bg-red-950/10 px-3 py-1.5 text-[9px] uppercase tracking-widest text-red-500 hover:bg-red-900 hover:text-black dark:text-white rounded-sm focus:outline-none"
+                      className="flex cursor-pointer items-center border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/20 px-3 py-1.5 text-[9px] uppercase tracking-widest text-red-700 dark:text-red-400 hover:bg-red-600 hover:text-white dark:hover:bg-red-900 dark:hover:text-red-100 rounded-sm focus:outline-none"
                     >
                       <Trash2 size={10} className="mr-1" /> Delete
                     </button>

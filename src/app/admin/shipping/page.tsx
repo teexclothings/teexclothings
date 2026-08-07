@@ -241,7 +241,7 @@ export default function ShippingPage() {
               </thead>
               <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                 {filtered.map((rule) => (
-                  <tr key={rule.id} className="transition-colors hover:bg-neutral-100 dark:bg-neutral-800/20">
+                  <tr key={rule.id} className="transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800/50 dark:bg-neutral-850/10">
                     <td className="px-6 py-4 font-medium text-black dark:text-white">{rule.state_name}</td>
                     <td className="px-6 py-4 font-mono text-neutral-600 dark:text-neutral-400">
                       ₹{rule.shipping_charge.toFixed(2)}
