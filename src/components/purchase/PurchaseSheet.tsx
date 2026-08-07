@@ -7,6 +7,7 @@ import OrderSummaryCard from "@/components/purchase/OrderSummaryCard";
 import DeliveryForm from "@/components/purchase/DeliveryForm";
 import { validateName, validatePhone, validatePincode, validateRequired } from "@/utils/validation";
 import { generateWhatsAppMessage, openWhatsApp } from "@/utils/whatsapp";
+import { DEFAULT_WHATSAPP_NUMBER } from "@/utils/constants";
 import { saveDeliveryDetails, loadDeliveryDetails } from "@/utils/localStorage";
 import type { DeliveryDetails } from "@/utils/localStorage";
 import { Loader2, MessageSquare, AlertTriangle } from "lucide-react";
@@ -55,7 +56,7 @@ export default function PurchaseSheet({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [shippingCharge, setShippingCharge] = useState<number | null>(null);
   const [shippingLoading, setShippingLoading] = useState(false);
-  const [whatsappNumber, setWhatsappNumber] = useState<string | null>(null);
+  const [whatsappNumber, setWhatsappNumber] = useState<string>(DEFAULT_WHATSAPP_NUMBER);
   const [shopName, setShopName] = useState<string>("TEEX");
   const [settingsLoading, setSettingsLoading] = useState(true);
   const [settingsError, setSettingsError] = useState(false);
@@ -73,6 +74,8 @@ export default function PurchaseSheet({
   useEffect(() => {
     if (!isOpen) return;
 
+    let isMounted = true;
+
     async function fetchSettings() {
       setSettingsLoading(true);
       setSettingsError(false);
@@ -85,8 +88,8 @@ export default function PurchaseSheet({
           .maybeSingle();
 
         if (error) throw error;
-        if (data) {
-          setWhatsappNumber(data.whatsapp || null);
+        if (data && isMounted) {
+          setWhatsappNumber(data.whatsapp || DEFAULT_WHATSAPP_NUMBER);
           setShopName(data.shop_name || "TEEX");
         }
       } catch {

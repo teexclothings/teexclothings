@@ -6,6 +6,7 @@ import { FormSkeleton } from "@/components/ui/Skeletons";
 import MediaUpload from "@/components/ui/MediaUpload";
 import { useToast } from "@/context/ToastContext";
 import { Save } from "lucide-react";
+import { DEFAULT_WHATSAPP_NUMBER, DEFAULT_WHATSAPP_DISPLAY_PHONE } from "@/utils/constants";
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
@@ -35,13 +36,13 @@ export default function SettingsPage() {
       showToast(error.message, "error");
     } else if (data) {
       setShopName(data.shop_name);
-      setLogo(data.logo);
+      setLogo(data.logo || "/images/logo.png");
       setEmail(data.email || "");
-      setPhone(data.phone || "");
-      setWhatsapp(data.whatsapp || "");
-      setInstagram(data.instagram || "");
+      setPhone(data.phone || DEFAULT_WHATSAPP_DISPLAY_PHONE);
+      setWhatsapp(data.whatsapp || DEFAULT_WHATSAPP_NUMBER);
+      setInstagram(data.instagram || "https://instagram.com/__teex");
       setFacebook(data.facebook || "");
-      setAddress(data.address || "");
+      setAddress(data.address || "Vengara, Tharayittal 676304");
     }
     setLoading(false);
   }, [supabase, showToast]);

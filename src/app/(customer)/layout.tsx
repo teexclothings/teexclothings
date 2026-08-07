@@ -14,11 +14,18 @@ export default async function CustomerLayout({ children }: { children: React.Rea
     .eq("id", true)
     .maybeSingle();
 
+  // Fetch active categories for footer & global navigation
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("id, name, slug")
+    .eq("active", true)
+    .order("created_at", { ascending: true });
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans select-none" suppressHydrationWarning>
       <CustomerHeader settings={settings} />
       <main className="flex-1 flex flex-col">{children}</main>
-      <CustomerFooter settings={settings} />
+      <CustomerFooter settings={settings} categories={categories || []} />
       <ScrollToTopButton />
     </div>
   );
