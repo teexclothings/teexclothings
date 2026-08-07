@@ -7,6 +7,7 @@ import PurchaseSheet from "@/components/purchase/PurchaseSheet";
 import StateDropdown from "@/components/ui/StateDropdown";
 import { createClient } from "@/utils/supabase/client";
 import { loadDeliveryDetails } from "@/utils/localStorage";
+import CustomerProductCard from "@/components/ui/CustomerProductCard";
 
 interface Product {
   id: string;
@@ -25,9 +26,10 @@ interface Product {
 
 interface ProductDetailsClientProps {
   product: Product;
+  recommendedProducts: Product[];
 }
 
-export default function ProductDetailsClient({ product }: ProductDetailsClientProps) {
+export default function ProductDetailsClient({ product, recommendedProducts }: ProductDetailsClientProps) {
   const [activeImage, setActiveImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -38,6 +40,29 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
   const [quantity, setQuantity] = useState(1);
   const [selectedState, setSelectedState] = useState("");
   const [shippingCharge, setShippingCharge] = useState<number | null>(null);
+
+  const inlineBuyButtonRef = useRef<HTMLButtonElement>(null);
+  const [isInlineVisible, setIsInlineVisible] = useState(true);
+
+  useEffect(() => {
+    const target = inlineBuyButtonRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry) {
+          setIsInlineVisible(entry.isIntersecting);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(target);
+    return () => {
+      observer.unobserve(target);
+    };
+  }, []);
 
   useEffect(() => {
     const saved = loadDeliveryDetails();
@@ -377,11 +402,12 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
               </div>
             </div>
 
-            {/* Desktop Buy Now button */}
+            {/* Buy Now button */}
             <button
+              ref={inlineBuyButtonRef}
               type="button"
               onClick={handleBuyNow}
-              className="hidden md:flex w-full max-w-md items-center justify-center space-x-2 bg-black dark:bg-white text-white dark:text-black py-4 text-[10px] font-semibold tracking-widest uppercase transition-all hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm cursor-pointer active:animate-scale-tap"
+              className="flex w-full max-w-md items-center justify-center space-x-2 bg-black dark:bg-white text-white dark:text-black py-4 text-[10px] font-semibold tracking-widest uppercase transition-all hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm cursor-pointer active:animate-scale-tap"
             >
               <ShoppingBag size={14} />
               <span>Buy Now</span>
@@ -390,8 +416,31 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
         </div>
       </div>
 
+      {/* Recommended Products */}
+      {recommendedProducts && recommendedProducts.length > 0 && (
+        <div className="mx-auto max-w-7xl px-6 pb-16 space-y-8 select-none">
+          <div className="border-t border-neutral-200 dark:border-neutral-850 pt-16">
+            <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-500 uppercase">
+              Curated For You
+            </span>
+            <h2 className="text-2xl font-serif-luxury font-light tracking-wide text-black dark:text-white uppercase mt-1">
+              Recommended Products
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4">
+            {recommendedProducts.map((prod) => (
+              <CustomerProductCard key={prod.id} product={prod} />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Sticky Buy Now button */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-black/90 backdrop-blur-md border-t border-neutral-200 dark:border-neutral-850 safe-area-bottom md:hidden">
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-black/95 backdrop-blur-md border-t border-neutral-200 dark:border-neutral-850 safe-area-bottom transition-all duration-300 transform ${
+          isInlineVisible ? "translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
+        }`}
+      >
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex-1 min-w-0">
             <p className="text-xs font-medium text-black dark:text-white truncate uppercase tracking-wide">

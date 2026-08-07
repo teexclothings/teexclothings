@@ -244,7 +244,7 @@ export default function ShippingPage() {
                   <tr key={rule.id} className="transition-colors hover:bg-neutral-100 dark:bg-neutral-800/20">
                     <td className="px-6 py-4 font-medium text-black dark:text-white">{rule.state_name}</td>
                     <td className="px-6 py-4 font-mono text-neutral-600 dark:text-neutral-400">
-                      ${rule.shipping_charge.toFixed(2)}
+                      ₹{rule.shipping_charge.toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <button
@@ -309,7 +309,7 @@ export default function ShippingPage() {
 
           <div>
             <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
-              Shipping Cost ($)
+              Shipping Cost (₹)
             </label>
             <input
               type="number"
