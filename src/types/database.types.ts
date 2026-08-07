@@ -118,6 +118,8 @@ export interface Database {
           subtitle: string | null;
           media_url: string;
           media_type: "image" | "video";
+          mobile_media_url: string | null;
+          mobile_media_type: "image" | "video" | null;
           button_text: string | null;
           button_link: string | null;
           active: boolean;
@@ -130,6 +132,8 @@ export interface Database {
           subtitle?: string | null;
           media_url: string;
           media_type: "image" | "video";
+          mobile_media_url?: string | null;
+          mobile_media_type?: "image" | "video" | null;
           button_text?: string | null;
           button_link?: string | null;
           active?: boolean;
@@ -142,6 +146,8 @@ export interface Database {
           subtitle?: string | null;
           media_url?: string;
           media_type?: "image" | "video";
+          mobile_media_url?: string | null;
+          mobile_media_type?: "image" | "video" | null;
           button_text?: string | null;
           button_link?: string | null;
           active?: boolean;

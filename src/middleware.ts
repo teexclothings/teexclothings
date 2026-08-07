@@ -41,6 +41,12 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
+  // Redirect root /admin path to /admin/dashboard
+  if (url.pathname === "/admin" || url.pathname === "/admin/") {
+    url.pathname = "/admin/dashboard";
+    return NextResponse.redirect(url);
+  }
+
   // Redirect authenticated admin/viewers away from the login page
   if (isLoginPage) {
     url.pathname = "/admin/dashboard";

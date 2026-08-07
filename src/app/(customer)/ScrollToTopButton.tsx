@@ -5,8 +5,10 @@ import { ArrowUp } from "lucide-react";
 
 export default function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const toggleVisibility = () => {
       if (window.scrollY > 300) {
         setIsVisible(true);
@@ -14,7 +16,8 @@ export default function ScrollToTopButton() {
         setIsVisible(false);
       }
     };
-    window.addEventListener("scroll", toggleVisibility);
+    toggleVisibility();
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
@@ -24,6 +27,8 @@ export default function ScrollToTopButton() {
       behavior: "smooth",
     });
   };
+
+  if (!mounted) return null;
 
   return (
     <button
