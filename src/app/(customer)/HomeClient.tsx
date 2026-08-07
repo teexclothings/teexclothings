@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import CustomerProductCard from "@/components/ui/CustomerProductCard";
-import { ArrowRight, ChevronLeft, ChevronRight, VolumeX, ShieldCheck, RefreshCw, Sparkles, MessageCircle, Image as ImageIcon, Layers } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, VolumeX, ShieldCheck, Truck, Sparkles, MessageCircle, Image as ImageIcon, Layers } from "lucide-react";
+import { DEFAULT_WHATSAPP_LINK } from "@/utils/constants";
 
 interface Banner {
   id: string;
@@ -145,7 +146,7 @@ export default function HomeClient({
       >
         {initialBanners.length === 0 ? (
           /* Default Banner Placeholder layout if no banner is added in Admin yet */
-          <div className="relative inset-0 h-full w-full flex flex-col md:flex-row items-center justify-between px-8 md:px-16 py-12 bg-neutral-100 dark:bg-neutral-900">
+          <div className="relative inset-0 h-full w-full flex flex-col md:flex-row items-center justify-between px-10 sm:px-16 md:px-24 lg:px-28 py-12 bg-neutral-100 dark:bg-neutral-900">
             <div className="max-w-xl space-y-4 z-10 text-left">
               <span className="text-xs font-bold tracking-[0.25em] text-neutral-500 uppercase">
                 NEW DROP
@@ -256,29 +257,33 @@ export default function HomeClient({
                 <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/40 to-transparent sm:from-white/80 dark:from-black/90 dark:via-black/40" />
 
                 {/* Banner Content Copy */}
-                <div className="absolute inset-0 flex items-center justify-start px-8 md:px-16 text-left">
-                  <div className="max-w-xl space-y-4 animate-slide-up">
-                    {banner.subtitle && (
-                      <span className="block text-xs font-bold tracking-[0.25em] text-neutral-600 dark:text-neutral-450 uppercase">
-                        {banner.subtitle}
-                      </span>
-                    )}
+                <div className="absolute inset-0 flex items-center justify-start px-10 sm:px-16 md:px-24 lg:px-28 text-left">
+                  <div className="max-w-xl space-y-3 sm:space-y-4 animate-slide-up">
+                    <span className="block text-[11px] sm:text-xs font-bold tracking-[0.25em] text-neutral-700 dark:text-neutral-300 uppercase">
+                      {banner.subtitle || "NEW DROP"}
+                    </span>
+
                     {banner.title && (
-                      <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-black dark:text-white uppercase leading-tight">
+                      <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-black dark:text-white uppercase leading-none whitespace-pre-line">
                         {banner.title}
                       </h1>
                     )}
+
                     {banner.button_text && (
-                      <div className="pt-2">
-                        <Link
-                          href={banner.button_link || "/products"}
-                          className="inline-flex items-center space-x-3 bg-black text-white dark:bg-white dark:text-black px-7 py-3 text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all rounded-xs shadow-xs"
-                        >
-                          <span>{banner.button_text}</span>
-                          <ArrowRight size={14} />
-                        </Link>
-                      </div>
+                      <p className="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400 max-w-sm whitespace-pre-line leading-relaxed">
+                        {banner.button_text}
+                      </p>
                     )}
+
+                    <div className="pt-2">
+                      <Link
+                        href="/products"
+                        className="inline-flex items-center space-x-3 bg-black text-white dark:bg-white dark:text-black px-7 py-3 text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all rounded-xs shadow-xs"
+                      >
+                        <span>EXPLORE COLLECTION</span>
+                        <ArrowRight size={14} />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -354,7 +359,7 @@ export default function HomeClient({
               {initialCategories.map((cat) => (
                 <Link
                   key={cat.id}
-                  href={`/products?category=${cat.id}`}
+                  href={`/products?category=${cat.slug || cat.id}`}
                   className="group relative aspect-[3/4] w-full overflow-hidden bg-neutral-900 rounded-xs border border-neutral-200 dark:border-neutral-850 block select-none"
                 >
                   {cat.image_url ? (
@@ -387,7 +392,7 @@ export default function HomeClient({
               {initialCategories.map((cat) => (
                 <Link
                   key={cat.id}
-                  href={`/products?category=${cat.id}`}
+                  href={`/products?category=${cat.slug || cat.id}`}
                   className="group flex flex-col items-center flex-shrink-0 w-20 sm:w-24 focus:outline-none"
                 >
                   {/* Circle Image Avatar */}
@@ -462,12 +467,12 @@ export default function HomeClient({
             </p>
           </div>
           <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-1 sm:px-4 border-l border-neutral-200 dark:border-neutral-800">
-            <RefreshCw className="text-black dark:text-white mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
+            <Truck className="text-black dark:text-white mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
             <h3 className="text-[9px] sm:text-xs font-extrabold tracking-wider uppercase text-black dark:text-white leading-tight">
-              EASY RETURNS
+              SHIPS ACROSS INDIA
             </h3>
             <p className="text-[8px] sm:text-xs font-light text-neutral-500 dark:text-neutral-400 max-w-xs leading-tight sm:leading-relaxed">
-              No questions asked 7-day return policy.
+              Fast express shipping directly to your doorstep.
             </p>
           </div>
           <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-1 sm:px-4 border-l border-neutral-200 dark:border-neutral-800">

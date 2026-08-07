@@ -1,0 +1,7 @@
+export const DEFAULT_WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "918714881681";
+
+export const DEFAULT_WHATSAPP_DISPLAY_PHONE =
+  process.env.NEXT_PUBLIC_WHATSAPP_DISPLAY_PHONE || "+91 87148 81681";
+
+export const DEFAULT_WHATSAPP_LINK = `https://wa.me/${DEFAULT_WHATSAPP_NUMBER.replace(/[^\d]/g, "")}`;

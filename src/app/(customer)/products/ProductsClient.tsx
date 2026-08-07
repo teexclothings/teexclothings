@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import CustomerProductCard from "@/components/ui/CustomerProductCard";
 import { Search, SlidersHorizontal } from "lucide-react";
 
 interface Category {
   id: string;
   name: string;
+  slug?: string;
 }
 
 interface Product {
@@ -34,13 +36,42 @@ export default function ProductsClient({
   initialProducts,
   initialSearch = "",
 }: ProductsClientProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const categoryQuery = searchParams.get("category") || "";
+
   const [search, setSearch] = useState(initialSearch);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(categoryQuery);
   const [sortKey, setSortKey] = useState("newest");
+
+  // Sync state when URL query parameter changes
+  useEffect(() => {
+    setSelectedCategory(categoryQuery);
+  }, [categoryQuery]);
+
+  // Handle category change in selector dropdown
+  const handleCategoryChange = (val: string) => {
+    setSelectedCategory(val);
+    if (val) {
+      router.push(`/products?category=${val}`, { scroll: false });
+    } else {
+      router.push("/products", { scroll: false });
+    }
+  };
+
+  // Match category object by slug or id
+  const targetCategory = initialCategories.find(
+    (c) => c.slug === selectedCategory || c.id === selectedCategory
+  );
 
   // Filtering
   const filtered = initialProducts.filter((product) => {
-    const matchCategory = selectedCategory === "" || product.category_id === selectedCategory;
+    const matchCategory =
+      selectedCategory === "" ||
+      (targetCategory
+        ? product.category_id === targetCategory.id
+        : product.category_id === selectedCategory);
+
     const matchSearch =
       search.trim() === "" ||
       product.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -58,7 +89,6 @@ export default function ProductsClient({
     if (sortKey === "price-desc") {
       return b.price - a.price;
     }
-    // "newest" defaults to creation date order
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
@@ -94,12 +124,18 @@ export default function ProductsClient({
         <div className="flex space-x-3">
           <select
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            onChange={(e) => handleCategoryChange(e.target.value)}
             className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs tracking-widest uppercase px-4 py-3 text-neutral-700 dark:text-neutral-300 rounded-xs focus:outline-none focus:border-black dark:focus:border-white cursor-pointer font-bold"
           >
-            <option value="" className="bg-white dark:bg-neutral-900 text-black dark:text-white">All Collections</option>
+            <option value="" className="bg-white dark:bg-neutral-900 text-black dark:text-white">
+              All Collections
+            </option>
             {initialCategories.map((c) => (
-              <option key={c.id} value={c.id} className="bg-white dark:bg-neutral-900 text-black dark:text-white">
+              <option
+                key={c.id}
+                value={c.slug || c.id}
+                className="bg-white dark:bg-neutral-900 text-black dark:text-white"
+              >
                 {c.name}
               </option>
             ))}
@@ -110,9 +146,15 @@ export default function ProductsClient({
             onChange={(e) => setSortKey(e.target.value)}
             className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs tracking-widest uppercase px-4 py-3 text-neutral-700 dark:text-neutral-300 rounded-xs focus:outline-none focus:border-black dark:focus:border-white cursor-pointer font-bold"
           >
-            <option value="newest" className="bg-white dark:bg-neutral-900 text-black dark:text-white">Sort: Newest</option>
-            <option value="price-asc" className="bg-white dark:bg-neutral-900 text-black dark:text-white">Price: Low to High</option>
-            <option value="price-desc" className="bg-white dark:bg-neutral-900 text-black dark:text-white">Price: High to Low</option>
+            <option value="newest" className="bg-white dark:bg-neutral-900 text-black dark:text-white">
+              Sort: Newest
+            </option>
+            <option value="price-asc" className="bg-white dark:bg-neutral-900 text-black dark:text-white">
+              Price: Low to High
+            </option>
+            <option value="price-desc" className="bg-white dark:bg-neutral-900 text-black dark:text-white">
+              Price: High to Low
+            </option>
           </select>
         </div>
       </div>

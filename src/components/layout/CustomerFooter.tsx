@@ -3,6 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
+import { DEFAULT_WHATSAPP_NUMBER, DEFAULT_WHATSAPP_DISPLAY_PHONE } from "@/utils/constants";
+
+interface CategoryItem {
+  id: string;
+  name: string;
+  slug: string;
+}
 
 interface FooterProps {
   settings: {
@@ -15,9 +22,10 @@ interface FooterProps {
     facebook: string | null;
     address: string | null;
   } | null;
+  categories?: CategoryItem[];
 }
 
-export default function CustomerFooter({ settings }: FooterProps) {
+export default function CustomerFooter({ settings, categories = [] }: FooterProps) {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
     shop: false,
     company: false,
@@ -34,17 +42,11 @@ export default function CustomerFooter({ settings }: FooterProps) {
         {/* Brand block */}
         <div className="space-y-4 pb-4 md:pb-0 border-b md:border-b-0 border-neutral-200 dark:border-neutral-800">
           <Link href="/" className="focus:outline-none block">
-            {settings?.logo ? (
-              <img
-                src={settings.logo}
-                alt={settings.shop_name}
-                className="h-6 w-auto object-contain"
-              />
-            ) : (
-              <span className="font-extrabold text-xl tracking-[0.2em] text-black dark:text-white uppercase font-sans">
-                {settings?.shop_name || "TEEX"}
-              </span>
-            )}
+            <img
+              src="/images/logo.png"
+              alt={settings?.shop_name || "TEEX Clothings"}
+              className="h-8 sm:h-10 md:h-11 w-auto max-w-[160px] sm:max-w-[200px] object-contain dark:invert"
+            />
           </Link>
           <p className="text-xs font-light leading-relaxed tracking-wide text-neutral-500 dark:text-neutral-400 max-w-xs">
             Minimal streetwear crafted for everyday wear. Made with premium quality and attention to detail.
@@ -75,29 +77,27 @@ export default function CustomerFooter({ settings }: FooterProps) {
                 </svg>
               </a>
             )}
-            {settings?.whatsapp && (
-              <a
-                href={`https://wa.me/${settings.whatsapp.replace(/[^\d]/g, "")}`}
-                target="_blank"
-                rel="noreferrer"
-                className="hover:opacity-75 transition-opacity p-1 bg-neutral-200/60 dark:bg-neutral-800 rounded-full"
-                aria-label="WhatsApp Link"
+            <a
+              href={`https://wa.me/${(settings?.whatsapp || DEFAULT_WHATSAPP_NUMBER).replace(/[^\d]/g, "")}`}
+              target="_blank"
+              rel="noreferrer"
+              className="hover:opacity-75 transition-opacity p-1 bg-neutral-200/60 dark:bg-neutral-800 rounded-full"
+              aria-label="WhatsApp Link"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
-                </svg>
-              </a>
-            )}
+                <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+              </svg>
+            </a>
           </div>
         </div>
 
@@ -130,26 +130,16 @@ export default function CustomerFooter({ settings }: FooterProps) {
                   All Products
                 </Link>
               </li>
-              <li>
-                <Link href="/products?category=graphic-tees" className="hover:text-black dark:hover:text-white transition-colors">
-                  Graphic Tees
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=oversized" className="hover:text-black dark:hover:text-white transition-colors">
-                  Oversized
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=striped-tees" className="hover:text-black dark:hover:text-white transition-colors">
-                  Striped Tees
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=plain-tees" className="hover:text-black dark:hover:text-white transition-colors">
-                  Plain Tees
-                </Link>
-              </li>
+              {categories.map((cat) => (
+                <li key={cat.id}>
+                  <Link
+                    href={`/products?category=${cat.slug || cat.id}`}
+                    className="hover:text-black dark:hover:text-white transition-colors"
+                  >
+                    {cat.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -186,21 +176,6 @@ export default function CustomerFooter({ settings }: FooterProps) {
               <li>
                 <Link href="/contact" className="hover:text-black dark:hover:text-white transition-colors">
                   Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/shipping" className="hover:text-black dark:hover:text-white transition-colors">
-                  Shipping Info
-                </Link>
-              </li>
-              <li>
-                <Link href="/returns" className="hover:text-black dark:hover:text-white transition-colors">
-                  Returns & Exchange
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="hover:text-black dark:hover:text-white transition-colors">
-                  Privacy Policy
                 </Link>
               </li>
             </ul>

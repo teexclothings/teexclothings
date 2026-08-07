@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createClient } from "@/utils/supabase/server";
 import ProductsClient from "@/app/(customer)/products/ProductsClient";
 
@@ -15,7 +16,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   // Fetch active categories (First added first)
   const { data: categories } = await supabase
     .from("categories")
-    .select("id, name")
+    .select("id, name, slug")
     .eq("active", true)
     .order("created_at", { ascending: true });
 
@@ -27,10 +28,16 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     .order("created_at", { ascending: false });
 
   return (
-    <ProductsClient
-      initialCategories={categories || []}
-      initialProducts={products || []}
-      initialSearch={initialSearch}
+    <Suspense fallback={
+      <div className="mx-auto max-w-7xl px-6 py-16 text-center text-xs text-neutral-500 uppercase tracking-widest">
+        Loading Collection...
+      </div>
+    }>
+      <ProductsClient
+        initialCategories={categories || []}
+        initialProducts={products || []}
+        initialSearch={initialSearch}
     />
+    </Suspense>
   );
 }

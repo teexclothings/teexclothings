@@ -43,7 +43,11 @@ export default function AdminSidebar({ isOpen = false, onClose }: SidebarProps) 
     <div className="flex flex-col h-full bg-neutral-50 dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-850 text-neutral-800 dark:text-white p-6 justify-between select-none">
       <div className="space-y-8">
         <div>
-          <h2 className="font-serif-luxury text-xl tracking-widest uppercase text-black dark:text-white">TEEX</h2>
+          <img
+            src="/images/logo.png"
+            alt="TEEX Logo"
+            className="h-8 sm:h-10 w-auto object-contain dark:invert"
+          />
           <p className="text-[9px] tracking-[0.2em] text-neutral-500 uppercase mt-1">
             Management Console
           </p>

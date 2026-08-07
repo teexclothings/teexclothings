@@ -60,17 +60,11 @@ export default function CustomerHeader({ settings }: HeaderProps) {
       <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/" className="focus:outline-none flex items-center">
-          {settings?.logo ? (
-            <img
-              src={settings.logo}
-              alt={settings.shop_name}
-              className="h-6 w-auto object-contain"
-            />
-          ) : (
-            <span className="font-extrabold text-xl tracking-[0.2em] text-black dark:text-white uppercase font-sans">
-              TEEX
-            </span>
-          )}
+          <img
+            src="/images/logo.png"
+            alt={settings?.shop_name || "TEEX Clothings"}
+            className="h-8 sm:h-10 md:h-11 w-auto max-w-[160px] sm:max-w-[200px] object-contain dark:invert"
+          />
         </Link>
 
         {/* Desktop Navigation */}
