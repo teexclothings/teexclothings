@@ -22,6 +22,7 @@ interface PurchaseSheetProps {
   isOpen: boolean;
   onClose: () => void;
   product: PurchaseProduct;
+  productSlug: string;
   selectedSize: string;
   selectedColor: string;
   quantity: number;
@@ -43,6 +44,7 @@ export default function PurchaseSheet({
   isOpen,
   onClose,
   product,
+  productSlug,
   selectedSize,
   selectedColor,
   quantity,
@@ -58,6 +60,14 @@ export default function PurchaseSheet({
   const [settingsLoading, setSettingsLoading] = useState(true);
   const [settingsError, setSettingsError] = useState(false);
   const [sending, setSending] = useState(false);
+  const [toastError, setToastError] = useState("");
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    };
+  }, []);
 
   // Load settings on mount
   useEffect(() => {
@@ -171,7 +181,32 @@ export default function PurchaseSheet({
     if (!stateResult.valid) newErrors.state = stateResult.message;
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+
+    const errorCount = Object.keys(newErrors).length;
+    if (errorCount > 0) {
+      const firstErrorKey = Object.keys(newErrors)[0] ?? "";
+      const fieldIdMap: Record<string, string> = {
+        customerName: "delivery-name",
+        phone: "delivery-phone",
+        houseName: "delivery-house",
+        address: "delivery-address",
+        district: "delivery-district",
+        pincode: "delivery-pincode",
+      };
+      const targetId = fieldIdMap[firstErrorKey];
+      if (targetId) {
+        document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      const msg = errorCount === 1
+        ? (Object.values(newErrors)[0] ?? "Please check the form")
+        : `Please fix ${errorCount} errors in the form`;
+      setToastError(msg);
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+      toastTimeoutRef.current = setTimeout(() => setToastError(""), 3500);
+    }
+
+    return errorCount === 0;
   }
 
   function handleSend() {
@@ -197,6 +232,8 @@ export default function PurchaseSheet({
 
     const grandTotal = (product.price * quantity) + shippingCharge;
 
+    const productUrl = `${window.location.origin}/products/${productSlug}`;
+
     const message = generateWhatsAppMessage({
       productName: product.title,
       category: product.categories?.name || "Uncategorized",
@@ -214,6 +251,7 @@ export default function PurchaseSheet({
       state: formData.state,
       pincode: formData.pincode.trim(),
       phone: formData.phone.trim(),
+      productUrl,
     });
 
     // Save final form data
@@ -295,6 +333,14 @@ export default function PurchaseSheet({
               </p>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Floating Error Toast */}
+      {toastError && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[2000] bg-red-700 dark:bg-red-950 text-white dark:text-red-200 border border-red-800 dark:border-red-900 px-6 py-3.5 rounded-sm shadow-2xl flex items-center space-x-3 backdrop-blur-md animate-fade-in max-w-sm w-[90%] md:w-auto">
+          <AlertTriangle size={14} className="text-white dark:text-red-400 flex-shrink-0 animate-bounce" />
+          <span className="text-[10px] font-semibold tracking-wider uppercase font-mono">{toastError}</span>
         </div>
       )}
     </BottomSheet>

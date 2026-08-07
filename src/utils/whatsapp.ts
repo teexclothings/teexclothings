@@ -15,6 +15,7 @@ interface WhatsAppMessageParams {
   state: string;
   pincode: string;
   phone: string;
+  productUrl: string;
 }
 
 export function generateWhatsAppMessage(params: WhatsAppMessageParams): string {
@@ -23,74 +24,47 @@ export function generateWhatsAppMessage(params: WhatsAppMessageParams): string {
 
 ━━━━━━━━━━━━━━━━━━
 
-📦 PRODUCT
-
-Product:
-${params.productName}
-
-Category:
-${params.category}
-
-Price:
-₹${params.productPrice.toFixed(2)}
-
-Quantity:
-${params.quantity}
-
-Subtotal:
-₹${subtotal.toFixed(2)}
-
-Size:
-${params.selectedSize}
-
-Color:
-${params.selectedColor}
+👕 *${params.productName.toUpperCase()}*
+------------------
+🏷️ Category: ${params.category}
+💰 Price: ₹${params.productPrice.toFixed(2)}
+📦 Quantity: ${params.quantity}
+💵 Subtotal: ₹${subtotal.toFixed(2)}
+📏 Size: ${params.selectedSize}
+🎨 Color: ${params.selectedColor}
+------------------
 
 ━━━━━━━━━━━━━━━━━━
 
-🚚 SHIPPING
+🚚 *SHIPPING*
 
-State:
-${params.stateName}
-
-Shipping Charge:
-₹${params.shippingCharge.toFixed(2)}
+📍 State: ${params.stateName}
+💲 Shipping Charge: ₹${params.shippingCharge.toFixed(2)}
 
 ━━━━━━━━━━━━━━━━━━
 
-💰 TOTAL
-
-Grand Total:
-₹${params.grandTotal.toFixed(2)}
+💰 *GRAND TOTAL: ₹${params.grandTotal.toFixed(2)}*
 
 ━━━━━━━━━━━━━━━━━━
 
-👤 CUSTOMER DETAILS
+👤 *CUSTOMER DETAILS*
 
-Name:
-${params.customerName}
-
-House Name:
-${params.houseName}
-
-Address:
-${params.address}
-
-District:
-${params.district}
-
-State:
-${params.state}
-
-Pincode:
-${params.pincode}
-
-Phone:
-${params.phone}
+📛 Name: ${params.customerName}
+🏠 House: ${params.houseName}
+📍 Address: ${params.address}
+🏙️ District: ${params.district}
+🗺️ State: ${params.state}
+📮 Pincode: ${params.pincode}
+📞 Phone: ${params.phone}
 
 ━━━━━━━━━━━━━━━━━━
 
-Thank you.`;
+🔗 *VIEW PRODUCT ON SITE*
+${params.productUrl}
+
+━━━━━━━━━━━━━━━━━━
+
+Looking forward to your response! 🙏`;
 }
 
 export function openWhatsApp(phone: string, message: string): void {
