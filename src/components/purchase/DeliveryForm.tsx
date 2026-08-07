@@ -2,6 +2,7 @@
 
 import FormInput from "@/components/ui/FormInput";
 import StateDropdown from "@/components/ui/StateDropdown";
+import DistrictDropdown from "@/components/ui/DistrictDropdown";
 import type { DeliveryDetails } from "@/utils/localStorage";
 
 interface DeliveryFormProps {
@@ -61,19 +62,21 @@ export default function DeliveryForm({ formData, setFormData, errors, onStateCha
         placeholder="Street, locality, landmark"
       />
 
-      <FormInput
-        id="delivery-district"
-        label="District"
+      <DistrictDropdown
         value={formData.district}
+        state={formData.state}
         onChange={(v) => updateField("district", v)}
         error={errors.district}
-        placeholder="Your district"
       />
 
       <StateDropdown
         value={formData.state}
         onChange={(stateName, shippingCharge) => {
-          updateField("state", stateName);
+          setFormData({
+            ...formData,
+            state: stateName,
+            district: "", // reset district when state changes
+          });
           onStateChange(stateName, shippingCharge);
         }}
         error={errors.state}
