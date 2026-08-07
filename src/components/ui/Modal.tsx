@@ -12,6 +12,7 @@ interface ModalProps {
   onAction?: () => void | Promise<void>;
   actionLoading?: boolean;
   danger?: boolean;
+  maxWidth?: string;
 }
 
 export default function Modal({
@@ -24,6 +25,7 @@ export default function Modal({
   onAction,
   actionLoading = false,
   danger = false,
+  maxWidth = "max-w-md",
 }: ModalProps) {
   // Close on Escape keypress and lock body scroll
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function Modal({
       />
 
       {/* Modal Card */}
-      <div className="relative w-full max-w-md border border-neutral-800 bg-neutral-900 p-6 text-white shadow-2xl animate-fade-in rounded-sm max-h-[90vh] overflow-y-auto z-10">
+      <div className={`relative w-full ${maxWidth} border border-neutral-800 bg-neutral-900 p-6 text-white shadow-2xl animate-fade-in rounded-sm max-h-[90vh] overflow-y-auto z-10`}>
         <button
           onClick={onClose}
           className="absolute right-4 top-4 text-neutral-400 hover:text-white transition-colors"
