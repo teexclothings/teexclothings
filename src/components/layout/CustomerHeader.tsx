@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, Search } from "lucide-react";
+import { Menu, X, Search, ShoppingBag } from "lucide-react";
 
 interface HeaderProps {
   settings: {
@@ -34,10 +34,10 @@ export default function CustomerHeader({ settings }: HeaderProps) {
   }, []);
 
   const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Collection", path: "/products" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
+    { name: "HOME", path: "/" },
+    { name: "SHOP", path: "/products" },
+    { name: "ABOUT", path: "/about" },
+    { name: "CONTACT", path: "/contact" },
   ];
 
   const handleLinkClick = () => {
@@ -49,95 +49,109 @@ export default function CustomerHeader({ settings }: HeaderProps) {
   return (
     <header
       suppressHydrationWarning
-      className={`sticky top-0 z-45 w-full transition-all duration-300 select-none ${
-        isScrolled
-          ? "bg-black/90 backdrop-blur-md border-b border-neutral-900 py-3.5"
-          : "bg-black/20 py-6"
+      className={`sticky top-0 z-45 w-full bg-white transition-all duration-200 select-none border-b border-neutral-200 ${
+        isScrolled ? "py-3 shadow-xs" : "py-4.5"
       }`}
     >
       <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
-        <Link href="/" className="focus:outline-none">
+        {/* Brand Logo */}
+        <Link href="/" className="focus:outline-none flex items-center">
           {settings?.logo ? (
             <img
               src={settings.logo}
               alt={settings.shop_name}
-              className="h-6 w-auto object-contain brightness-0 invert"
+              className="h-6 w-auto object-contain"
             />
           ) : (
-            <span className="font-serif-luxury text-lg font-light tracking-[0.25em] text-white uppercase">
-              {settings?.shop_name || "TEEX"}
+            <span className="font-extrabold text-xl tracking-[0.2em] text-black uppercase font-sans">
+              TEEX
             </span>
           )}
         </Link>
 
-        <nav className="hidden md:flex space-x-10">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => {
-            const active = pathname === link.path;
+            const active =
+              pathname === link.path ||
+              (link.path === "/products" && pathname.startsWith("/products"));
             return (
               <Link
                 key={link.path}
                 href={link.path}
-                className={`text-[10px] uppercase tracking-[0.2em] font-medium transition-colors hover:text-white ${
-                  active ? "text-white" : "text-neutral-500"
+                className={`relative py-1 text-[11px] uppercase tracking-[0.2em] font-semibold transition-colors ${
+                  active ? "text-black font-bold" : "text-neutral-600 hover:text-black"
                 }`}
               >
                 {link.name}
+                {active && (
+                  <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black rounded-full" />
+                )}
               </Link>
             );
           })}
         </nav>
 
-        <div className="flex items-center space-x-4 text-white">
+        {/* Action Icons */}
+        <div className="flex items-center space-x-5 text-black">
           <button
             type="button"
             onClick={() => router.push("/products")}
-            className="p-1 focus:outline-none cursor-pointer text-neutral-400 hover:text-white transition-colors"
+            className="p-1.5 focus:outline-none cursor-pointer text-neutral-700 hover:text-black transition-colors"
             aria-label="Search Catalog"
           >
-            <Search size={16} />
+            <Search size={17} strokeWidth={2} />
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/products")}
+            className="p-1.5 focus:outline-none cursor-pointer text-neutral-700 hover:text-black transition-colors"
+            aria-label="View Shopping Bag"
+          >
+            <ShoppingBag size={17} strokeWidth={2} />
           </button>
           <button
             type="button"
             onClick={() => setDrawerOpen(!drawerOpen)}
-            className="p-1 md:hidden focus:outline-none cursor-pointer text-neutral-400 hover:text-white transition-colors"
+            className="p-1 md:hidden focus:outline-none cursor-pointer text-neutral-700 hover:text-black transition-colors"
             aria-label="Open Menu"
           >
-            <Menu size={18} />
+            <Menu size={20} strokeWidth={2} />
           </button>
         </div>
       </div>
 
-      {/* Drawer Overlay */}
+      {/* Mobile Drawer Overlay */}
       {drawerOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity duration-300 md:hidden"
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs transition-opacity duration-300 md:hidden"
           onClick={() => setDrawerOpen(false)}
         />
       )}
 
-      {/* Drawer Panel */}
+      {/* Mobile Drawer Panel */}
       <div
-        className={`fixed top-0 bottom-0 left-0 z-55 w-72 max-w-[80vw] bg-neutral-950 border-r border-neutral-900 p-6 flex flex-col justify-between transition-transform duration-500 ease-out md:hidden ${
+        className={`fixed top-0 bottom-0 left-0 z-55 w-72 max-w-[80vw] bg-white border-r border-neutral-200 p-6 flex flex-col justify-between transition-transform duration-300 ease-out md:hidden ${
           drawerOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="space-y-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
             <Link href="/" onClick={handleLinkClick} className="focus:outline-none">
-              <span className="font-serif-luxury text-base font-light tracking-[0.25em] text-white uppercase">
-                {settings?.shop_name || "TEEX"}
+              <span className="font-extrabold text-lg tracking-[0.2em] text-black uppercase font-sans">
+                TEEX
               </span>
             </Link>
             <button
               onClick={() => setDrawerOpen(false)}
-              className="p-1 text-neutral-400 hover:text-white focus:outline-none cursor-pointer"
+              className="p-1 text-neutral-500 hover:text-black focus:outline-none cursor-pointer"
               aria-label="Close Menu"
             >
-              <X size={18} />
+              <X size={20} />
             </button>
           </div>
 
-          <nav className="flex flex-col space-y-6">
+          <nav className="flex flex-col space-y-5">
             {navLinks.map((link) => {
               const active = pathname === link.path;
               return (
@@ -145,8 +159,8 @@ export default function CustomerHeader({ settings }: HeaderProps) {
                   key={link.path}
                   href={link.path}
                   onClick={handleLinkClick}
-                  className={`text-[10px] uppercase tracking-[0.2em] font-medium transition-colors ${
-                    active ? "text-white" : "text-neutral-500 hover:text-white"
+                  className={`text-xs uppercase tracking-[0.2em] font-semibold transition-colors ${
+                    active ? "text-black font-bold" : "text-neutral-600 hover:text-black"
                   }`}
                 >
                   {link.name}
@@ -156,7 +170,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
           </nav>
         </div>
 
-        <div className="border-t border-neutral-900 pt-6 text-[9px] tracking-widest uppercase text-neutral-600 font-light">
+        <div className="border-t border-neutral-100 pt-6 text-[9px] tracking-widest uppercase text-neutral-400 font-light">
           © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {settings?.shop_name || "TEEX CLOTHINGS"}.
         </div>
       </div>
