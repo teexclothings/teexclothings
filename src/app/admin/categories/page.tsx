@@ -197,7 +197,7 @@ export default function CategoriesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 border-b border-neutral-850 pb-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 border-b border-neutral-200 dark:border-neutral-850 pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <span className="text-[10px] font-light tracking-[0.25em] text-neutral-500 uppercase">
             Collections Settings
@@ -208,7 +208,7 @@ export default function CategoriesPage() {
         </div>
         <button
           onClick={handleOpenAdd}
-          className="flex cursor-pointer items-center justify-center space-x-2 bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-black transition-colors hover:bg-neutral-200 rounded-sm select-none"
+          className="flex cursor-pointer items-center justify-center space-x-2 bg-black dark:bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-black dark:text-white dark:text-black transition-colors hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm select-none"
         >
           <Plus size={14} />
           <span>Add Category</span>
@@ -225,16 +225,16 @@ export default function CategoriesPage() {
             placeholder="SEARCH CATEGORIES..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-sm border border-neutral-800 bg-neutral-900 px-10 py-2.5 text-xs tracking-wider uppercase text-white placeholder-neutral-600 focus:border-neutral-500 focus:outline-none"
+            className="w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-10 py-2.5 text-xs tracking-wider uppercase text-black dark:text-white placeholder-neutral-600 focus:border-black dark:focus:border-neutral-500 focus:outline-none"
           />
         </div>
 
         {loading ? (
           <TableSkeleton rows={5} cols={3} />
         ) : filtered.length === 0 ? (
-          <div className="rounded-sm border border-neutral-800 bg-neutral-900/30 p-12 text-center">
+          <div className="rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50/30 dark:bg-neutral-50 dark:bg-neutral-900/30 p-12 text-center">
             <FolderTree className="mx-auto text-neutral-700 mb-4" size={40} />
-            <h3 className="text-xs font-semibold tracking-widest text-neutral-400 uppercase">
+            <h3 className="text-xs font-semibold tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
               No categories found
             </h3>
             <p className="mt-1 text-xs font-light text-neutral-500">
@@ -242,10 +242,10 @@ export default function CategoriesPage() {
             </p>
           </div>
         ) : (
-          <div className="w-full overflow-x-auto rounded-sm border border-neutral-800 bg-neutral-900">
+          <div className="w-full overflow-x-auto rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-neutral-800 bg-neutral-950 text-neutral-400 tracking-widest uppercase">
+                <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400 tracking-widest uppercase">
                   <th className="px-6 py-4 font-light">Image</th>
                   <th className="px-6 py-4 font-light">Name</th>
                   <th className="px-6 py-4 font-light">Slug</th>
@@ -253,29 +253,29 @@ export default function CategoriesPage() {
                   <th className="px-6 py-4 text-right font-light">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800">
+              <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                 {filtered.map((category) => (
-                  <tr key={category.id} className="transition-colors hover:bg-neutral-800/20">
+                  <tr key={category.id} className="transition-colors hover:bg-neutral-100 dark:bg-neutral-800/20">
                     <td className="px-6 py-3">
                       {category.image_url ? (
                         <img
                           src={category.image_url}
                           alt={category.name}
-                          className="h-10 w-10 object-cover rounded-sm border border-neutral-800 bg-neutral-950"
+                          className="h-10 w-10 object-cover rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950"
                         />
                       ) : (
-                        <div className="h-10 w-10 rounded-sm border border-neutral-800 bg-neutral-950 flex items-center justify-center text-neutral-600">
+                        <div className="h-10 w-10 rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 flex items-center justify-center text-neutral-600">
                           <ImageIcon size={16} />
                         </div>
                       )}
                     </td>
-                    <td className="px-6 py-4 font-medium text-white">{category.name}</td>
-                    <td className="px-6 py-4 font-mono text-neutral-400">{category.slug}</td>
+                    <td className="px-6 py-4 font-medium text-black dark:text-white">{category.name}</td>
+                    <td className="px-6 py-4 font-mono text-neutral-600 dark:text-neutral-400">{category.slug}</td>
                     <td className="px-6 py-4 text-center">
                       <button
                         onClick={() => handleToggleActive(category)}
                         className={`inline-flex items-center space-x-1.5 focus:outline-none cursor-pointer ${
-                          category.active ? "text-white" : "text-neutral-600"
+                          category.active ? "text-black dark:text-white" : "text-neutral-600"
                         }`}
                       >
                         {category.active ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
@@ -287,7 +287,7 @@ export default function CategoriesPage() {
                     <td className="px-6 py-4 text-right space-x-3">
                       <button
                         onClick={() => handleOpenEdit(category)}
-                        className="text-neutral-400 hover:text-white transition-colors focus:outline-none cursor-pointer"
+                        className="text-neutral-600 dark:text-neutral-400 hover:text-black dark:text-white transition-colors focus:outline-none cursor-pointer"
                       >
                         <Edit2 size={14} />
                       </button>
@@ -318,7 +318,7 @@ export default function CategoriesPage() {
       >
         <form onSubmit={handleSave} className="space-y-4">
           <div>
-            <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase mb-1">
+            <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase mb-1">
               Category Image
             </label>
             <MediaUpload
@@ -329,7 +329,7 @@ export default function CategoriesPage() {
           </div>
 
           <div>
-            <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase">
+            <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
               Category Name
             </label>
             <input
@@ -338,12 +338,12 @@ export default function CategoriesPage() {
               value={formName}
               onChange={handleNameChange}
               placeholder="e.g. Graphic Tees"
-              className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white focus:border-neutral-500 focus:outline-none"
+              className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-sm text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase">
+            <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
               URL Slug
             </label>
             <input
@@ -352,7 +352,7 @@ export default function CategoriesPage() {
               value={formSlug}
               onChange={(e) => setFormSlug(e.target.value.toLowerCase().replace(/\s+/g, "-"))}
               placeholder="e.g. graphic-tees"
-              className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 font-mono text-sm text-white focus:border-neutral-500 focus:outline-none"
+              className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 font-mono text-sm text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
             />
           </div>
 
@@ -362,11 +362,11 @@ export default function CategoriesPage() {
               type="checkbox"
               checked={formActive}
               onChange={(e) => setFormActive(e.target.checked)}
-              className="h-4 w-4 accent-white cursor-pointer"
+              className="h-4 w-4 accent-black dark:accent-white cursor-pointer"
             />
             <label
               htmlFor="category-active"
-              className="ml-2 text-xs font-light text-neutral-400 cursor-pointer"
+              className="ml-2 text-xs font-light text-neutral-600 dark:text-neutral-400 cursor-pointer"
             >
               Category is active (visible to storefront)
             </label>
@@ -375,7 +375,7 @@ export default function CategoriesPage() {
           <button
             type="submit"
             disabled={formLoading}
-            className="w-full cursor-pointer bg-white text-black py-2.5 text-xs font-semibold uppercase tracking-widest hover:bg-neutral-200 disabled:bg-neutral-600 disabled:text-neutral-300 rounded-sm mt-4"
+            className="w-full cursor-pointer bg-white text-black py-2.5 text-xs font-semibold uppercase tracking-widest hover:bg-neutral-200 disabled:bg-neutral-600 disabled:text-neutral-700 dark:text-neutral-300 rounded-sm mt-4"
           >
             {formLoading ? "Saving..." : "Save Category"}
           </button>

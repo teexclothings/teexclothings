@@ -212,13 +212,13 @@ export default function ProductForm({ productId }: ProductFormProps) {
   return (
     <form onSubmit={handleSave} className="space-y-8 max-w-3xl select-none animate-fade-in pb-16">
       {/* Identity block */}
-      <div className="rounded-sm border border-neutral-800 bg-neutral-900/50 p-6 space-y-6">
-        <h2 className="text-xs font-semibold tracking-widest text-neutral-400 uppercase">
+      <div className="rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-50 dark:bg-neutral-900/50 p-6 space-y-6">
+        <h2 className="text-xs font-semibold tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
           Product Details
         </h2>
 
         <div>
-          <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase">
+          <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
             Title
           </label>
           <input
@@ -227,12 +227,12 @@ export default function ProductForm({ productId }: ProductFormProps) {
             value={title}
             onChange={handleTitleChange}
             placeholder="e.g. Oversized Knit Sweater"
-            className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white focus:border-neutral-500 focus:outline-none"
+            className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-sm text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase">
+          <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
             URL Slug
           </label>
           <input
@@ -241,12 +241,12 @@ export default function ProductForm({ productId }: ProductFormProps) {
             value={slug}
             onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/\s+/g, "-"))}
             placeholder="e.g. oversized-knit-sweater"
-            className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 font-mono text-sm text-white focus:border-neutral-500 focus:outline-none"
+            className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 font-mono text-sm text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase">
+          <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
             Description
           </label>
           <textarea
@@ -254,13 +254,13 @@ export default function ProductForm({ productId }: ProductFormProps) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe craftsmanship, stitching, fit layout and material composition details..."
-            className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white focus:border-neutral-500 focus:outline-none"
+            className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-sm text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
           />
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase">
+            <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
               Retail Price ($)
             </label>
             <input
@@ -271,19 +271,19 @@ export default function ProductForm({ productId }: ProductFormProps) {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="e.g. 120.00"
-              className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white focus:border-neutral-500 focus:outline-none"
+              className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-sm text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase">
+            <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
               Category Placement
             </label>
             <select
               required
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2.5 text-sm text-white focus:border-neutral-500 focus:outline-none cursor-pointer"
+              className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2.5 text-sm text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none cursor-pointer"
             >
               <option value="">Select Category</option>
               {categories.map((c) => (
@@ -297,27 +297,27 @@ export default function ProductForm({ productId }: ProductFormProps) {
       </div>
 
       {/* Sizing & Colors block */}
-      <div className="rounded-sm border border-neutral-800 bg-neutral-900/50 p-6 space-y-6">
-        <h2 className="text-xs font-semibold tracking-widest text-neutral-400 uppercase">
+      <div className="rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-50 dark:bg-neutral-900/50 p-6 space-y-6">
+        <h2 className="text-xs font-semibold tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
           Attributes Configuration
         </h2>
 
         {/* Sizes */}
         <div>
-          <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase mb-1">
+          <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase mb-1">
             Sizes
           </label>
           <div className="flex flex-wrap gap-2 mb-3">
             {sizes.map((s) => (
               <span
                 key={s}
-                className="flex items-center space-x-1 border border-neutral-700 bg-neutral-950 px-2 py-1 text-[9px] font-mono font-semibold uppercase text-white rounded-sm"
+                className="flex items-center space-x-1 border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-950 px-2 py-1 text-[9px] font-mono font-semibold uppercase text-black dark:text-white rounded-sm"
               >
                 <span>{s}</span>
                 <button
                   type="button"
                   onClick={() => handleRemoveSize(s)}
-                  className="text-neutral-500 hover:text-white focus:outline-none cursor-pointer"
+                  className="text-neutral-500 hover:text-black dark:text-white focus:outline-none cursor-pointer"
                 >
                   ✕
                 </button>
@@ -332,12 +332,12 @@ export default function ProductForm({ productId }: ProductFormProps) {
               onChange={(e) => setSizeInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddSize(sizeInput))}
               placeholder="Type custom size (e.g. S, Custom-Fit)"
-              className="flex-1 rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 text-xs text-white focus:border-neutral-500 focus:outline-none"
+              className="flex-1 rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-xs text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
             />
             <button
               type="button"
               onClick={() => handleAddSize(sizeInput)}
-              className="flex items-center justify-center border border-neutral-800 bg-neutral-950 text-neutral-400 hover:text-white hover:border-neutral-500 px-4 py-2 rounded-sm focus:outline-none cursor-pointer"
+              className="flex items-center justify-center border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400 hover:text-black dark:text-white hover:border-neutral-500 px-4 py-2 rounded-sm focus:outline-none cursor-pointer"
             >
               <Plus size={12} />
             </button>
@@ -352,7 +352,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                 key={ds}
                 type="button"
                 onClick={() => handleAddSize(ds)}
-                className="bg-neutral-850 hover:bg-neutral-800 text-neutral-400 hover:text-white px-2 py-1 text-[8px] tracking-wider uppercase font-semibold rounded-sm focus:outline-none cursor-pointer"
+                className="bg-neutral-100 dark:bg-neutral-850 hover:bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:text-black dark:text-white px-2 py-1 text-[8px] tracking-wider uppercase font-semibold rounded-sm focus:outline-none cursor-pointer"
               >
                 {ds}
               </button>
@@ -362,20 +362,20 @@ export default function ProductForm({ productId }: ProductFormProps) {
 
         {/* Colors */}
         <div>
-          <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase mb-1">
+          <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase mb-1">
             Colors
           </label>
           <div className="flex flex-wrap gap-2 mb-3">
             {colors.map((c) => (
               <span
                 key={c}
-                className="flex items-center space-x-1 border border-neutral-700 bg-neutral-950 px-2.5 py-1 text-[9px] uppercase tracking-widest font-semibold text-white rounded-sm"
+                className="flex items-center space-x-1 border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-950 px-2.5 py-1 text-[9px] uppercase tracking-widest font-semibold text-black dark:text-white rounded-sm"
               >
                 <span>{c}</span>
                 <button
                   type="button"
                   onClick={() => handleRemoveColor(c)}
-                  className="text-neutral-500 hover:text-white focus:outline-none cursor-pointer"
+                  className="text-neutral-500 hover:text-black dark:text-white focus:outline-none cursor-pointer"
                 >
                   ✕
                 </button>
@@ -392,12 +392,12 @@ export default function ProductForm({ productId }: ProductFormProps) {
                 e.key === "Enter" && (e.preventDefault(), handleAddColor(colorInput))
               }
               placeholder="Type color (e.g. Jet Black, #000000)"
-              className="flex-1 rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 text-xs text-white focus:border-neutral-500 focus:outline-none"
+              className="flex-1 rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-xs text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
             />
             <button
               type="button"
               onClick={() => handleAddColor(colorInput)}
-              className="flex items-center justify-center border border-neutral-800 bg-neutral-950 text-neutral-400 hover:text-white hover:border-neutral-500 px-4 py-2 rounded-sm focus:outline-none cursor-pointer"
+              className="flex items-center justify-center border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400 hover:text-black dark:text-white hover:border-neutral-500 px-4 py-2 rounded-sm focus:outline-none cursor-pointer"
             >
               <Plus size={12} />
             </button>
@@ -406,8 +406,8 @@ export default function ProductForm({ productId }: ProductFormProps) {
       </div>
 
       {/* Media Upload block */}
-      <div className="rounded-sm border border-neutral-800 bg-neutral-900/50 p-6 space-y-6">
-        <h2 className="text-xs font-semibold tracking-widest text-neutral-400 uppercase">
+      <div className="rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-50 dark:bg-neutral-900/50 p-6 space-y-6">
+        <h2 className="text-xs font-semibold tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
           Product Images (Upload at least one)
         </h2>
 
@@ -420,8 +420,8 @@ export default function ProductForm({ productId }: ProductFormProps) {
       </div>
 
       {/* Visibility Flags block */}
-      <div className="rounded-sm border border-neutral-800 bg-neutral-900/50 p-6 space-y-4">
-        <h2 className="text-xs font-semibold tracking-widest text-neutral-400 uppercase border-b border-neutral-850 pb-2">
+      <div className="rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-50 dark:bg-neutral-900/50 p-6 space-y-4">
+        <h2 className="text-xs font-semibold tracking-widest text-neutral-600 dark:text-neutral-400 uppercase border-b border-neutral-200 dark:border-neutral-850 pb-2">
           Visibility & Promotion
         </h2>
 
@@ -431,11 +431,11 @@ export default function ProductForm({ productId }: ProductFormProps) {
             type="checkbox"
             checked={featured}
             onChange={(e) => setFeatured(e.target.checked)}
-            className="h-4 w-4 accent-white cursor-pointer"
+            className="h-4 w-4 accent-black dark:accent-white cursor-pointer"
           />
           <label
             htmlFor="prod-featured"
-            className="ml-2 text-xs font-light text-neutral-400 cursor-pointer"
+            className="ml-2 text-xs font-light text-neutral-600 dark:text-neutral-400 cursor-pointer"
           >
             Mark product as Featured (appears on homepage promo grids)
           </label>
@@ -447,11 +447,11 @@ export default function ProductForm({ productId }: ProductFormProps) {
             type="checkbox"
             checked={active}
             onChange={(e) => setActive(e.target.checked)}
-            className="h-4 w-4 accent-white cursor-pointer"
+            className="h-4 w-4 accent-black dark:accent-white cursor-pointer"
           />
           <label
             htmlFor="prod-active"
-            className="ml-2 text-xs font-light text-neutral-400 cursor-pointer"
+            className="ml-2 text-xs font-light text-neutral-600 dark:text-neutral-400 cursor-pointer"
           >
             Product is active (visible to storefront catalogs)
           </label>
@@ -465,14 +465,14 @@ export default function ProductForm({ productId }: ProductFormProps) {
           onClick={() => {
             if (confirm("Discard all unsaved changes?")) router.push("/admin/products");
           }}
-          className="border border-neutral-800 bg-neutral-950 text-neutral-400 hover:text-white hover:border-neutral-500 px-6 py-3 text-xs uppercase tracking-widest transition-all rounded-sm focus:outline-none cursor-pointer"
+          className="border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400 hover:text-black dark:text-white hover:border-neutral-500 px-6 py-3 text-xs uppercase tracking-widest transition-all rounded-sm focus:outline-none cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={saving}
-          className="flex cursor-pointer items-center justify-center space-x-2 bg-white text-black px-6 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-neutral-200 disabled:bg-neutral-600 disabled:text-neutral-300 rounded-sm select-none"
+          className="flex cursor-pointer items-center justify-center space-x-2 bg-white text-black px-6 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-neutral-200 disabled:bg-neutral-600 disabled:text-neutral-700 dark:text-neutral-300 rounded-sm select-none"
         >
           <Save size={14} />
           <span>{saving ? "Saving Product..." : "Save Product"}</span>
