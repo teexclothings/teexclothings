@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
-import { DEFAULT_WHATSAPP_NUMBER, DEFAULT_WHATSAPP_DISPLAY_PHONE } from "@/utils/constants";
+import { DEFAULT_WHATSAPP_NUMBER } from "@/utils/constants";
 
 interface CategoryItem {
   id: string;
@@ -208,12 +208,24 @@ export default function CustomerFooter({ settings, categories = [] }: FooterProp
             <ul className="space-y-2 text-[11px] tracking-wider font-medium text-neutral-600 dark:text-neutral-400">
               <li>WhatsApp</li>
               <li className="font-semibold text-black dark:text-white">
-                {settings?.whatsapp || settings?.phone || DEFAULT_WHATSAPP_DISPLAY_PHONE}
+                {settings?.whatsapp || settings?.phone || "—"}
               </li>
               <li className="pt-1">Instagram</li>
-              <li className="font-semibold text-black dark:text-white">__teex</li>
+              <li className="font-semibold text-black dark:text-white">
+                {settings?.instagram
+                  ? (() => {
+                      try {
+                        const pathname = new URL(settings.instagram).pathname.replace(/\/+$/, "");
+                        const handle = pathname.split("/").pop();
+                        return handle ? `@${handle}` : settings.instagram;
+                      } catch {
+                        return settings.instagram;
+                      }
+                    })()
+                  : "—"}
+              </li>
               <li className="pt-1">Email</li>
-              <li className="font-semibold text-black dark:text-white">{settings?.email || "teexclothings@gmail.com"}</li>
+              <li className="font-semibold text-black dark:text-white">{settings?.email || "—"}</li>
             </ul>
           </div>
         </div>
