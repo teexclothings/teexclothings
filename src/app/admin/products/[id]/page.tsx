@@ -14,7 +14,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
 
   return (
     <div className="space-y-6">
-      <div className="border-b border-neutral-850 pb-6">
+      <div className="border-b border-neutral-200 dark:border-neutral-850 pb-6">
         <span className="text-[10px] font-light tracking-[0.25em] text-neutral-500 uppercase">
           Catalog Inventory
         </span>

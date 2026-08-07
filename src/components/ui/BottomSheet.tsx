@@ -32,7 +32,7 @@ export default function BottomSheet({ isOpen, onClose, title, children }: Bottom
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-end justify-center" role="dialog" aria-modal="true" aria-label={title}>
+    <div className="fixed inset-0 z-[1000] flex items-end md:items-center justify-center p-0 md:p-6" role="dialog" aria-modal="true" aria-label={title}>
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/70 backdrop-blur-sm animate-fade-in"
@@ -41,14 +41,14 @@ export default function BottomSheet({ isOpen, onClose, title, children }: Bottom
       />
 
       {/* Sheet */}
-      <div className="relative z-10 w-full max-w-lg bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-850 rounded-t-2xl animate-slide-up-sheet max-h-[92vh] flex flex-col safe-area-bottom">
+      <div className="relative z-10 w-full max-w-lg md:max-w-3xl bg-white dark:bg-neutral-950 border-t md:border border-neutral-200 dark:border-neutral-850 rounded-t-2xl md:rounded-2xl animate-slide-up-sheet md:animate-fade-in max-h-[92vh] md:max-h-[85vh] flex flex-col safe-area-bottom shadow-2xl">
         {/* Handle bar */}
-        <div className="flex-shrink-0 pt-3 pb-1 flex justify-center">
+        <div className="flex-shrink-0 pt-3 pb-1 flex justify-center md:hidden">
           <div className="w-10 h-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
         </div>
 
         {/* Header */}
-        <div className="flex-shrink-0 flex items-center justify-between px-6 pb-4 border-b border-neutral-100 dark:border-neutral-900">
+        <div className="flex-shrink-0 flex items-center justify-between px-6 py-4 md:py-5 border-b border-neutral-100 dark:border-neutral-900">
           <h2 className="font-serif-luxury text-lg tracking-wider uppercase font-medium text-black dark:text-white">
             {title}
           </h2>

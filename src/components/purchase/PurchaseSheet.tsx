@@ -22,8 +22,12 @@ interface PurchaseSheetProps {
   isOpen: boolean;
   onClose: () => void;
   product: PurchaseProduct;
+  productSlug: string;
   selectedSize: string;
   selectedColor: string;
+  quantity: number;
+  initialState?: string;
+  initialShippingCharge?: number | null;
 }
 
 const emptyForm: DeliveryDetails = {
@@ -40,8 +44,12 @@ export default function PurchaseSheet({
   isOpen,
   onClose,
   product,
+  productSlug,
   selectedSize,
   selectedColor,
+  quantity,
+  initialState,
+  initialShippingCharge,
 }: PurchaseSheetProps) {
   const [formData, setFormData] = useState<DeliveryDetails>(emptyForm);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -52,6 +60,14 @@ export default function PurchaseSheet({
   const [settingsLoading, setSettingsLoading] = useState(true);
   const [settingsError, setSettingsError] = useState(false);
   const [sending, setSending] = useState(false);
+  const [toastError, setToastError] = useState("");
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    };
+  }, []);
 
   // Load settings on mount
   useEffect(() => {
@@ -113,17 +129,21 @@ export default function PurchaseSheet({
     if (initializedRef.current) return;
     initializedRef.current = true;
 
-    const saved = loadDeliveryDetails();
-    if (saved) {
-      // Schedule state update outside effect synchronous body
-      queueMicrotask(() => {
-        setFormData(saved);
-        if (saved.state) {
-          fetchShippingForState(saved.state);
-        }
-      });
+    const saved = loadDeliveryDetails() || { ...emptyForm };
+    if (initialState) {
+      saved.state = initialState;
     }
-  }, [isOpen, fetchShippingForState]);
+
+    // Schedule state update outside effect synchronous body
+    queueMicrotask(() => {
+      setFormData(saved);
+      if (initialShippingCharge !== undefined && initialShippingCharge !== null) {
+        setShippingCharge(initialShippingCharge);
+      } else if (saved.state) {
+        fetchShippingForState(saved.state);
+      }
+    });
+  }, [isOpen, initialState, initialShippingCharge, fetchShippingForState]);
 
   function handleStateChange(_stateName: string, charge: number) {
     setShippingCharge(charge);
@@ -161,7 +181,32 @@ export default function PurchaseSheet({
     if (!stateResult.valid) newErrors.state = stateResult.message;
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+
+    const errorCount = Object.keys(newErrors).length;
+    if (errorCount > 0) {
+      const firstErrorKey = Object.keys(newErrors)[0] ?? "";
+      const fieldIdMap: Record<string, string> = {
+        customerName: "delivery-name",
+        phone: "delivery-phone",
+        houseName: "delivery-house",
+        address: "delivery-address",
+        district: "delivery-district",
+        pincode: "delivery-pincode",
+      };
+      const targetId = fieldIdMap[firstErrorKey];
+      if (targetId) {
+        document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      const msg = errorCount === 1
+        ? (Object.values(newErrors)[0] ?? "Please check the form")
+        : `Please fix ${errorCount} errors in the form`;
+      setToastError(msg);
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+      toastTimeoutRef.current = setTimeout(() => setToastError(""), 3500);
+    }
+
+    return errorCount === 0;
   }
 
   function handleSend() {
@@ -185,12 +230,15 @@ export default function PurchaseSheet({
 
     setSending(true);
 
-    const grandTotal = product.price + shippingCharge;
+    const grandTotal = (product.price * quantity) + shippingCharge;
+
+    const productUrl = `${window.location.origin}/products/${productSlug}`;
 
     const message = generateWhatsAppMessage({
       productName: product.title,
       category: product.categories?.name || "Uncategorized",
       productPrice: product.price,
+      quantity,
       selectedSize,
       selectedColor,
       stateName: formData.state,
@@ -203,6 +251,7 @@ export default function PurchaseSheet({
       state: formData.state,
       pincode: formData.pincode.trim(),
       phone: formData.phone.trim(),
+      productUrl,
     });
 
     // Save final form data
@@ -227,57 +276,72 @@ export default function PurchaseSheet({
           <p className="text-xs text-red-400 font-light">Failed to load store settings. Please try again.</p>
         </div>
       ) : (
-        <>
-          {/* Order Summary */}
-          <OrderSummaryCard
-            productImage={productImage}
-            productName={product.title}
-            category={product.categories?.name || ""}
-            selectedSize={selectedSize}
-            selectedColor={selectedColor}
-            productPrice={product.price}
-            shippingCharge={shippingCharge}
-            shippingLoading={shippingLoading}
-            stateName={formData.state}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+          {/* Left column: Summary */}
+          <div className="space-y-6">
+            <OrderSummaryCard
+              productImage={productImage}
+              productName={product.title}
+              category={product.categories?.name || ""}
+              selectedSize={selectedSize}
+              selectedColor={selectedColor}
+              productPrice={product.price}
+              quantity={quantity}
+              shippingCharge={shippingCharge}
+              shippingLoading={shippingLoading}
+              stateName={formData.state}
+            />
+          </div>
 
-          {/* Delivery Form */}
-          <DeliveryForm
-            formData={formData}
-            setFormData={setFormData}
-            errors={errors}
-            onStateChange={handleStateChange}
-          />
+          {/* Right column: Form and Actions */}
+          <div className="space-y-6">
+            <DeliveryForm
+              formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              onStateChange={handleStateChange}
+            />
 
-          {/* Global error */}
-          {errors._global && (
-            <div className="flex items-center space-x-2 bg-red-950/50 border border-red-900 rounded-sm px-4 py-3">
-              <AlertTriangle size={14} className="text-red-400 flex-shrink-0" />
-              <p className="text-[10px] text-red-400 font-light">{errors._global}</p>
-            </div>
-          )}
-
-          {/* Send button */}
-          <button
-            type="button"
-            onClick={handleSend}
-            disabled={sending}
-            className="w-full flex items-center justify-center space-x-2 bg-green-700 hover:bg-green-600 text-white px-6 py-4 text-xs font-semibold tracking-widest uppercase transition-all rounded-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:animate-scale-tap"
-          >
-            {sending ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              <>
-                <MessageSquare size={16} />
-                <span>Send via WhatsApp</span>
-              </>
+            {/* Global error */}
+            {errors._global && (
+              <div className="flex items-center space-x-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-sm px-4 py-3">
+                <AlertTriangle size={14} className="text-red-650 dark:text-red-400 flex-shrink-0" />
+                <p className="text-[10px] text-red-850 dark:text-red-400 font-light">{errors._global}</p>
+              </div>
             )}
-          </button>
 
-          <p className="text-[8px] text-neutral-600 font-light text-center tracking-wider uppercase">
-            Your order details will be sent to our WhatsApp for confirmation
-          </p>
-        </>
+            {/* Send button */}
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={handleSend}
+                disabled={sending}
+                className="w-full flex items-center justify-center space-x-2 bg-green-700 hover:bg-green-600 text-white px-6 py-4 text-xs font-semibold tracking-widest uppercase transition-all rounded-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:animate-scale-tap"
+              >
+                {sending ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <>
+                    <MessageSquare size={16} />
+                    <span>Send via WhatsApp</span>
+                  </>
+                )}
+              </button>
+
+              <p className="text-[8px] text-neutral-600 font-light text-center tracking-wider uppercase">
+                Your order details will be sent to our WhatsApp for confirmation
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Error Toast */}
+      {toastError && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[2000] bg-red-700 dark:bg-red-950 text-white dark:text-red-200 border border-red-800 dark:border-red-900 px-6 py-3.5 rounded-sm shadow-2xl flex items-center space-x-3 backdrop-blur-md animate-fade-in max-w-sm w-[90%] md:w-auto">
+          <AlertTriangle size={14} className="text-white dark:text-red-400 flex-shrink-0 animate-bounce" />
+          <span className="text-[10px] font-semibold tracking-wider uppercase font-mono">{toastError}</span>
+        </div>
       )}
     </BottomSheet>
   );

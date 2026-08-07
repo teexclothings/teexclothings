@@ -46,7 +46,7 @@ export default function FormInput({
         }`}
       />
       {error && (
-        <p id={`${id}-error`} className="text-[10px] text-red-400 font-light tracking-wide" role="alert">
+        <p id={`${id}-error`} className="text-[10px] text-red-650 dark:text-red-400 font-light tracking-wide" role="alert">
           {error}
         </p>
       )}
