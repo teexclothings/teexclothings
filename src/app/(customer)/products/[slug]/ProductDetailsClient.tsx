@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
-import { ChevronLeft, Star, ShoppingBag, ZoomIn, ZoomOut, AlertTriangle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, ShoppingBag, ZoomIn, ZoomOut, AlertTriangle } from "lucide-react";
 import PurchaseSheet from "@/components/purchase/PurchaseSheet";
 import StateDropdown from "@/components/ui/StateDropdown";
 import { createClient } from "@/utils/supabase/client";
@@ -73,32 +73,91 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
     }
   }, []);
 
-  // Swipe support
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
+  // Unified Drag/Swipe support for both touch and mouse
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartY = useRef(0);
+  const hasMoved = useRef(false);
 
   const galleryImages = product.images.length > 0 ? product.images : ["/placeholder-product.jpg"];
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0]?.clientX ?? 0;
+  const handleDragStart = useCallback((clientX: number, clientY: number) => {
+    isDragging.current = true;
+    dragStartX.current = clientX;
+    dragStartY.current = clientY;
+    hasMoved.current = false;
   }, []);
 
-  const handleTouchEnd = useCallback(
-    (e: React.TouchEvent) => {
-      touchEndX.current = e.changedTouches[0]?.clientX ?? 0;
-      const diff = touchStartX.current - touchEndX.current;
-      const threshold = 50;
+  const handleDragMove = useCallback((clientX: number, clientY: number) => {
+    if (!isDragging.current) return;
+    const diffX = Math.abs(clientX - dragStartX.current);
+    const diffY = Math.abs(clientY - dragStartY.current);
+    if (diffX > 8 || diffY > 8) {
+      hasMoved.current = true;
+    }
+  }, []);
 
-      if (Math.abs(diff) > threshold) {
-        if (diff > 0 && activeImage < galleryImages.length - 1) {
-          setActiveImage((prev) => prev + 1);
-        } else if (diff < 0 && activeImage > 0) {
-          setActiveImage((prev) => prev - 1);
-        }
+  const handleDragEnd = useCallback((clientX: number) => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+
+    const diff = dragStartX.current - clientX;
+    const threshold = 55; // swipe threshold in pixels
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0 && activeImage < galleryImages.length - 1) {
+        setActiveImage((prev) => prev + 1);
+      } else if (diff < 0 && activeImage > 0) {
+        setActiveImage((prev) => prev - 1);
       }
-    },
-    [activeImage, galleryImages.length],
-  );
+    }
+  }, [activeImage, galleryImages.length]);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    if (touch) {
+      handleDragStart(touch.clientX, touch.clientY);
+    }
+  }, [handleDragStart]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    if (touch) {
+      handleDragMove(touch.clientX, touch.clientY);
+    }
+  }, [handleDragMove]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    const touch = e.changedTouches[0];
+    if (touch) {
+      handleDragEnd(touch.clientX);
+    }
+  }, [handleDragEnd]);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    if (e.button !== 0) return; // only left click
+    handleDragStart(e.clientX, e.clientY);
+  }, [handleDragStart]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    handleDragMove(e.clientX, e.clientY);
+  }, [handleDragMove]);
+
+  const handleMouseUp = useCallback((e: React.MouseEvent) => {
+    handleDragEnd(e.clientX);
+  }, [handleDragEnd]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (isDragging.current) {
+      isDragging.current = false;
+    }
+  }, []);
+
+  const handleImageClick = useCallback(() => {
+    if (!hasMoved.current) {
+      setZoomed((prev) => !prev);
+    }
+  }, []);
 
   function handleBuyNow() {
     let hasError = false;
@@ -159,10 +218,15 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
           {/* Left side: Images Gallery */}
           <div className="space-y-4">
             <div
-              className="relative aspect-[3/4] w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 rounded-sm overflow-hidden select-none cursor-pointer"
+              className="group relative h-[400px] sm:h-[500px] md:h-[600px] w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 rounded-sm overflow-hidden select-none cursor-pointer flex items-center justify-center"
               onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
-              onClick={() => setZoomed(!zoomed)}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseLeave}
+              onClick={handleImageClick}
             >
               {product.featured && (
                 <span className="absolute top-4 left-4 z-10 bg-white text-black text-[8px] font-semibold tracking-widest uppercase px-2 py-0.5 rounded-sm flex items-center space-x-1 shadow-md">
@@ -187,10 +251,45 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               <img
                 src={galleryImages[activeImage]}
                 alt={product.title}
-                className={`h-full w-full transition-all duration-500 ${
-                  zoomed ? "object-contain scale-150" : "object-cover"
+                className={`w-full h-full transition-all duration-500 object-contain ${
+                  zoomed ? "scale-150" : ""
                 }`}
+                draggable={false}
               />
+
+              {/* Left/Right navigation arrows (shown on hover on desktop if there are multiple images) */}
+              {galleryImages.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (activeImage > 0) {
+                        setActiveImage((prev) => prev - 1);
+                      }
+                    }}
+                    disabled={activeImage === 0}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/35 hover:bg-black/60 disabled:opacity-0 text-white p-2.5 rounded-full backdrop-blur-sm transition-all cursor-pointer opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center border border-white/10"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (activeImage < galleryImages.length - 1) {
+                        setActiveImage((prev) => prev + 1);
+                      }
+                    }}
+                    disabled={activeImage === galleryImages.length - 1}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/35 hover:bg-black/60 disabled:opacity-0 text-white p-2.5 rounded-full backdrop-blur-sm transition-all cursor-pointer opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center border border-white/10"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </>
+              )}
 
               {/* Swipe indicator dots */}
               {galleryImages.length > 1 && (
@@ -250,7 +349,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               <h1 className="font-serif-luxury text-3xl font-light tracking-wide text-black dark:text-white uppercase leading-tight sm:text-4xl">
                 {product.title}
               </h1>
-              <p className="text-xl font-mono font-medium text-black dark:text-white">
+              <p className="hidden md:block text-xl font-mono font-medium text-black dark:text-white">
                 ₹{product.price.toFixed(2)}
               </p>
             </div>
@@ -320,6 +419,16 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                 )}
               </div>
             )}
+
+            {/* Mobile-only Price (shown after size and color selection) */}
+            <div className="md:hidden space-y-1">
+              <h4 className="text-[9px] uppercase tracking-widest text-neutral-500 font-semibold">
+                Price
+              </h4>
+              <p className="text-2xl font-mono font-semibold text-black dark:text-white">
+                ₹{product.price.toFixed(2)}
+              </p>
+            </div>
 
             {/* Quantity picker */}
             <div className="space-y-3">
