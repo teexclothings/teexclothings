@@ -27,11 +27,19 @@ export default async function HomePage() {
     .eq("active", true)
     .order("created_at", { ascending: false });
 
+  // Fetch admin settings for dynamic links (whatsapp, instagram, etc.)
+  const { data: settings } = await supabase
+    .from("settings")
+    .select("whatsapp, instagram, facebook, phone, email, address")
+    .eq("id", true)
+    .maybeSingle();
+
   return (
     <HomeClient
       initialBanners={banners || []}
       initialCategories={categories || []}
       initialProducts={products || []}
+      settings={settings}
     />
   );
 }

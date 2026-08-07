@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, Search, ShoppingBag } from "lucide-react";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import SearchModal from "@/components/ui/SearchModal";
 
 interface HeaderProps {
   settings: {
@@ -15,6 +16,7 @@ interface HeaderProps {
 
 export default function CustomerHeader({ settings }: HeaderProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
@@ -54,6 +56,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
         isScrolled ? "py-3 shadow-xs" : "py-4.5"
       }`}
     >
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
       <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/" className="focus:outline-none flex items-center">
@@ -88,31 +91,40 @@ export default function CustomerHeader({ settings }: HeaderProps) {
         </nav>
 
         {/* Action Icons */}
-        <div className="flex items-center space-x-5 text-black dark:text-white">
-          <ThemeToggle />
+        <div className="flex items-center space-x-3 sm:space-x-5 text-black dark:text-white">
+          {/* Desktop-only Theme Toggle */}
+          <div className="hidden md:block">
+            <ThemeToggle />
+          </div>
+
+          {/* Search Button (Mobile & Desktop) */}
           <button
             type="button"
-            onClick={() => router.push("/products")}
-            className="p-1.5 focus:outline-none cursor-pointer text-neutral-700 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
+            onClick={() => setSearchOpen(true)}
+            className="p-1.5 focus:outline-none cursor-pointer text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors"
             aria-label="Search Catalog"
           >
-            <Search size={17} strokeWidth={2} />
+            <Search size={19} strokeWidth={2} />
           </button>
+
+          {/* Desktop-only Shopping Bag Button */}
           <button
             type="button"
             onClick={() => router.push("/products")}
-            className="p-1.5 focus:outline-none cursor-pointer text-neutral-700 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
+            className="hidden md:block p-1.5 focus:outline-none cursor-pointer text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors"
             aria-label="View Shopping Bag"
           >
-            <ShoppingBag size={17} strokeWidth={2} />
+            <ShoppingBag size={18} strokeWidth={2} />
           </button>
+
+          {/* Mobile Hamburger Menu Button */}
           <button
             type="button"
             onClick={() => setDrawerOpen(!drawerOpen)}
-            className="p-1 md:hidden focus:outline-none cursor-pointer text-neutral-700 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
+            className="p-1 md:hidden focus:outline-none cursor-pointer text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors ml-1"
             aria-label="Open Menu"
           >
-            <Menu size={20} strokeWidth={2} />
+            <Menu size={22} strokeWidth={2} />
           </button>
         </div>
       </div>
@@ -166,8 +178,26 @@ export default function CustomerHeader({ settings }: HeaderProps) {
           </nav>
         </div>
 
-        <div className="border-t border-neutral-100 dark:border-neutral-900 pt-6 text-[9px] tracking-widest uppercase text-neutral-400 font-light">
-          © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {settings?.shop_name || "TEEX CLOTHINGS"}.
+        {/* Mobile Drawer Footer Actions (Shopping Bag & Theme Toggle) */}
+        <div className="border-t border-neutral-100 dark:border-neutral-900 pt-5 space-y-4">
+          <div className="flex items-center justify-between py-1">
+            <Link
+              href="/products"
+              onClick={handleLinkClick}
+              className="flex items-center space-x-2 text-xs font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors"
+            >
+              <ShoppingBag size={18} />
+              <span>SHOPPING BAG</span>
+            </Link>
+            <div className="flex items-center space-x-2">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-neutral-400">THEME</span>
+              <ThemeToggle />
+            </div>
+          </div>
+
+          <div className="text-[9px] tracking-widest uppercase text-neutral-400 font-light pt-2 border-t border-neutral-100/60 dark:border-neutral-900/60">
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {settings?.shop_name || "TEEX CLOTHINGS"}.
+          </div>
         </div>
       </div>
     </header>
