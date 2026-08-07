@@ -14,14 +14,14 @@ export default function AboutPage() {
         <span className="text-[10px] tracking-[0.3em] text-neutral-500 uppercase font-light">
           Our Philosophy
         </span>
-        <h1 className="font-serif-luxury text-4xl font-light tracking-widest text-white uppercase sm:text-5xl">
+        <h1 className="font-serif-luxury text-4xl font-light tracking-widest text-black dark:text-white uppercase sm:text-5xl">
           Craft & Silhouettes
         </h1>
-        <div className="mx-auto h-[1px] w-12 bg-neutral-800 mt-4" />
+        <div className="mx-auto h-[1px] w-12 bg-neutral-300 dark:bg-neutral-800 mt-4" />
       </div>
 
       {/* Copy block */}
-      <div className="space-y-6 text-neutral-350 text-xs font-light leading-relaxed tracking-wide">
+      <div className="space-y-6 text-neutral-600 dark:text-neutral-300 text-xs font-light leading-relaxed tracking-wide">
         <p>
           Founded on the principles of extreme simplicity and premium utility, TEEX CLOTHINGS represents
           a contemporary perspective on daily tailoring. We reject the rapid cycles of fast fashion in
@@ -40,8 +40,8 @@ export default function AboutPage() {
       </div>
 
       {/* Aesthetic Image box placeholder */}
-      <div className="relative aspect-[21/9] w-full border border-neutral-900 bg-neutral-950/40 rounded-sm flex items-center justify-center">
-        <span className="text-[9px] tracking-[0.25em] text-neutral-600 uppercase font-semibold">
+      <div className="relative aspect-[21/9] w-full border border-neutral-200 dark:border-neutral-900 bg-neutral-50 dark:bg-neutral-950/40 rounded-sm flex items-center justify-center">
+        <span className="text-[9px] tracking-[0.25em] text-neutral-500 dark:text-neutral-450 uppercase font-semibold">
           Tailored Minimalist Aesthetics
         </span>
       </div>

@@ -40,10 +40,10 @@ export default function AdminSidebar({ isOpen = false, onClose }: SidebarProps) 
   };
 
   const content = (
-    <div className="flex flex-col h-full bg-neutral-900 border-r border-neutral-850 text-white p-6 justify-between select-none">
+    <div className="flex flex-col h-full bg-neutral-50 dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-850 text-neutral-800 dark:text-white p-6 justify-between select-none">
       <div className="space-y-8">
         <div>
-          <h2 className="font-serif-luxury text-xl tracking-widest uppercase text-white">TEEX</h2>
+          <h2 className="font-serif-luxury text-xl tracking-widest uppercase text-black dark:text-white">TEEX</h2>
           <p className="text-[9px] tracking-[0.2em] text-neutral-500 uppercase mt-1">
             Management Console
           </p>
@@ -60,8 +60,8 @@ export default function AdminSidebar({ isOpen = false, onClose }: SidebarProps) 
                 onClick={onClose}
                 className={`flex items-center space-x-3 px-4 py-3 text-xs uppercase tracking-widest transition-colors rounded-sm ${
                   active
-                    ? "bg-white text-black font-semibold"
-                    : "text-neutral-400 hover:text-white hover:bg-neutral-800/50"
+                    ? "bg-black text-white dark:bg-white dark:text-black font-semibold shadow-xs"
+                    : "text-neutral-600 hover:text-black dark:text-neutral-400 dark:hover:text-white hover:bg-neutral-200/50 dark:hover:bg-neutral-850/50"
                 }`}
               >
                 <Icon size={14} />
@@ -75,7 +75,7 @@ export default function AdminSidebar({ isOpen = false, onClose }: SidebarProps) 
       <div>
         <button
           onClick={handleLogout}
-          className="flex w-full items-center space-x-3 px-4 py-3 text-xs uppercase tracking-widest text-red-500 hover:bg-red-950/20 hover:text-red-400 transition-colors rounded-sm focus:outline-none cursor-pointer"
+          className="flex w-full items-center space-x-3 px-4 py-3 text-xs uppercase tracking-widest text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-700 dark:hover:text-red-450 transition-colors rounded-sm focus:outline-none cursor-pointer"
         >
           <LogOut size={14} />
           <span>Sign Out</span>
@@ -96,10 +96,10 @@ export default function AdminSidebar({ isOpen = false, onClose }: SidebarProps) 
             className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
             onClick={onClose}
           />
-          <aside className="relative flex-1 flex flex-col max-w-xs w-full bg-neutral-900 h-full animate-fade-in">
+          <aside className="relative flex-1 flex flex-col max-w-xs w-full bg-neutral-50 dark:bg-neutral-900 h-full animate-fade-in">
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 text-neutral-400 hover:text-white transition-colors z-55 text-sm cursor-pointer"
+              className="absolute right-4 top-4 text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors z-55 text-sm cursor-pointer"
             >
               ✕
             </button>

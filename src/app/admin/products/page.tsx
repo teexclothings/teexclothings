@@ -140,7 +140,7 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-6 select-none">
-      <div className="flex flex-col gap-4 border-b border-neutral-850 pb-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 border-b border-neutral-200 dark:border-neutral-850 pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <span className="text-[10px] font-light tracking-[0.25em] text-neutral-500 uppercase">
             Catalog inventory
@@ -151,7 +151,7 @@ export default function ProductsPage() {
         </div>
         <Link
           href="/admin/products/new"
-          className="flex cursor-pointer items-center justify-center space-x-2 bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-black transition-colors hover:bg-neutral-200 rounded-sm select-none"
+          className="flex cursor-pointer items-center justify-center space-x-2 bg-black dark:bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-black dark:text-white dark:text-black transition-colors hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm select-none"
         >
           <Plus size={14} />
           <span>Add Product</span>
@@ -168,7 +168,7 @@ export default function ProductsPage() {
             placeholder="SEARCH PRODUCTS..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-sm border border-neutral-800 bg-neutral-900 px-10 py-2.5 text-xs tracking-wider uppercase text-white placeholder-neutral-600 focus:border-neutral-500 focus:outline-none"
+            className="w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-10 py-2.5 text-xs tracking-wider uppercase text-black dark:text-white placeholder-neutral-600 focus:border-black dark:focus:border-neutral-500 focus:outline-none"
           />
         </div>
 
@@ -176,7 +176,7 @@ export default function ProductsPage() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-neutral-900 border border-neutral-800 text-xs tracking-wider uppercase px-4 py-2.5 text-white rounded-sm focus:outline-none focus:border-neutral-500 cursor-pointer"
+            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs tracking-wider uppercase px-4 py-2.5 text-black dark:text-white rounded-sm focus:outline-none focus:border-black dark:focus:border-neutral-500 cursor-pointer"
           >
             <option value="">All Categories</option>
             {categories.map((c) => (
@@ -191,9 +191,9 @@ export default function ProductsPage() {
       {loading ? (
         <TableSkeleton rows={5} cols={5} />
       ) : filtered.length === 0 ? (
-        <div className="rounded-sm border border-neutral-800 bg-neutral-900/30 p-12 text-center">
+        <div className="rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50/30 dark:bg-neutral-50 dark:bg-neutral-900/30 p-12 text-center">
           <ShoppingBag className="mx-auto text-neutral-700 mb-4" size={40} />
-          <h3 className="text-xs font-semibold tracking-widest text-neutral-400 uppercase">
+          <h3 className="text-xs font-semibold tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
             No products found
           </h3>
           <p className="mt-1 text-xs font-light text-neutral-500">
@@ -201,10 +201,10 @@ export default function ProductsPage() {
           </p>
         </div>
       ) : (
-        <div className="w-full overflow-x-auto rounded-sm border border-neutral-800 bg-neutral-900">
+        <div className="w-full overflow-x-auto rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="border-b border-neutral-800 bg-neutral-950 text-neutral-400 tracking-widest uppercase font-light">
+              <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400 tracking-widest uppercase font-light">
                 <th className="px-6 py-4 font-light">Title</th>
                 <th className="px-6 py-4 font-light">Category</th>
                 <th className="px-6 py-4 font-light">Price</th>
@@ -213,21 +213,21 @@ export default function ProductsPage() {
                 <th className="px-6 py-4 text-right font-light">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-800">
+            <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
               {filtered.map((prod) => (
-                <tr key={prod.id} className="transition-colors hover:bg-neutral-800/20">
-                  <td className="px-6 py-4 font-medium text-white">
+                <tr key={prod.id} className="transition-colors hover:bg-neutral-100 dark:bg-neutral-800/20">
+                  <td className="px-6 py-4 font-medium text-black dark:text-white">
                     <div>
-                      <div className="font-semibold text-white">{prod.title}</div>
+                      <div className="font-semibold text-black dark:text-white">{prod.title}</div>
                       <div className="text-[10px] text-neutral-500 font-mono mt-0.5">
                         {prod.slug}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-neutral-400 uppercase tracking-wider text-[10px]">
+                  <td className="px-6 py-4 text-neutral-600 dark:text-neutral-400 uppercase tracking-wider text-[10px]">
                     {prod.categories?.name || "Uncategorized"}
                   </td>
-                  <td className="px-6 py-4 font-mono text-white font-semibold">
+                  <td className="px-6 py-4 font-mono text-black dark:text-white font-semibold">
                     ${prod.price.toFixed(2)}
                   </td>
                   <td className="px-6 py-4 text-center">
@@ -246,7 +246,7 @@ export default function ProductsPage() {
                     <button
                       onClick={() => handleToggleActive(prod)}
                       className={`inline-flex items-center space-x-1.5 focus:outline-none cursor-pointer ${
-                        prod.active ? "text-white" : "text-neutral-600"
+                        prod.active ? "text-black dark:text-white" : "text-neutral-600"
                       }`}
                     >
                       {prod.active ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
@@ -258,7 +258,7 @@ export default function ProductsPage() {
                   <td className="px-6 py-4 text-right space-x-3">
                     <Link
                       href={`/admin/products/${prod.id}`}
-                      className="inline-block text-neutral-400 hover:text-white transition-colors focus:outline-none cursor-pointer"
+                      className="inline-block text-neutral-600 dark:text-neutral-400 hover:text-black dark:text-white transition-colors focus:outline-none cursor-pointer"
                     >
                       <Edit2 size={14} />
                     </Link>

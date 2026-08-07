@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, Search, ShoppingBag } from "lucide-react";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 interface HeaderProps {
   settings: {
@@ -49,7 +50,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
   return (
     <header
       suppressHydrationWarning
-      className={`sticky top-0 z-45 w-full bg-white transition-all duration-200 select-none border-b border-neutral-200 ${
+      className={`sticky top-0 z-45 w-full bg-white dark:bg-black transition-all duration-200 select-none border-b border-neutral-200 dark:border-neutral-850 ${
         isScrolled ? "py-3 shadow-xs" : "py-4.5"
       }`}
     >
@@ -63,7 +64,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
               className="h-6 w-auto object-contain"
             />
           ) : (
-            <span className="font-extrabold text-xl tracking-[0.2em] text-black uppercase font-sans">
+            <span className="font-extrabold text-xl tracking-[0.2em] text-black dark:text-white uppercase font-sans">
               TEEX
             </span>
           )}
@@ -80,12 +81,12 @@ export default function CustomerHeader({ settings }: HeaderProps) {
                 key={link.path}
                 href={link.path}
                 className={`relative py-1 text-[11px] uppercase tracking-[0.2em] font-semibold transition-colors ${
-                  active ? "text-black font-bold" : "text-neutral-600 hover:text-black"
+                  active ? "text-black dark:text-white font-bold" : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"
                 }`}
               >
                 {link.name}
                 {active && (
-                  <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black rounded-full" />
+                  <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black dark:bg-white rounded-full" />
                 )}
               </Link>
             );
@@ -93,11 +94,12 @@ export default function CustomerHeader({ settings }: HeaderProps) {
         </nav>
 
         {/* Action Icons */}
-        <div className="flex items-center space-x-5 text-black">
+        <div className="flex items-center space-x-5 text-black dark:text-white">
+          <ThemeToggle />
           <button
             type="button"
             onClick={() => router.push("/products")}
-            className="p-1.5 focus:outline-none cursor-pointer text-neutral-700 hover:text-black transition-colors"
+            className="p-1.5 focus:outline-none cursor-pointer text-neutral-700 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
             aria-label="Search Catalog"
           >
             <Search size={17} strokeWidth={2} />
@@ -105,7 +107,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
           <button
             type="button"
             onClick={() => router.push("/products")}
-            className="p-1.5 focus:outline-none cursor-pointer text-neutral-700 hover:text-black transition-colors"
+            className="p-1.5 focus:outline-none cursor-pointer text-neutral-700 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
             aria-label="View Shopping Bag"
           >
             <ShoppingBag size={17} strokeWidth={2} />
@@ -113,7 +115,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
           <button
             type="button"
             onClick={() => setDrawerOpen(!drawerOpen)}
-            className="p-1 md:hidden focus:outline-none cursor-pointer text-neutral-700 hover:text-black transition-colors"
+            className="p-1 md:hidden focus:outline-none cursor-pointer text-neutral-700 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
             aria-label="Open Menu"
           >
             <Menu size={20} strokeWidth={2} />
@@ -131,20 +133,20 @@ export default function CustomerHeader({ settings }: HeaderProps) {
 
       {/* Mobile Drawer Panel */}
       <div
-        className={`fixed top-0 bottom-0 left-0 z-55 w-72 max-w-[80vw] bg-white border-r border-neutral-200 p-6 flex flex-col justify-between transition-transform duration-300 ease-out md:hidden ${
+        className={`fixed top-0 bottom-0 left-0 z-55 w-72 max-w-[80vw] bg-white dark:bg-neutral-950 border-r border-neutral-200 dark:border-neutral-850 p-6 flex flex-col justify-between transition-transform duration-300 ease-out md:hidden ${
           drawerOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="space-y-8">
-          <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
+          <div className="flex items-center justify-between border-b border-neutral-100 dark:border-neutral-900 pb-4">
             <Link href="/" onClick={handleLinkClick} className="focus:outline-none">
-              <span className="font-extrabold text-lg tracking-[0.2em] text-black uppercase font-sans">
+              <span className="font-extrabold text-lg tracking-[0.2em] text-black dark:text-white uppercase font-sans">
                 TEEX
               </span>
             </Link>
             <button
               onClick={() => setDrawerOpen(false)}
-              className="p-1 text-neutral-500 hover:text-black focus:outline-none cursor-pointer"
+              className="p-1 text-neutral-500 hover:text-black dark:hover:text-white focus:outline-none cursor-pointer"
               aria-label="Close Menu"
             >
               <X size={20} />
@@ -160,7 +162,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
                   href={link.path}
                   onClick={handleLinkClick}
                   className={`text-xs uppercase tracking-[0.2em] font-semibold transition-colors ${
-                    active ? "text-black font-bold" : "text-neutral-600 hover:text-black"
+                    active ? "text-black dark:text-white font-bold" : "text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white"
                   }`}
                 >
                   {link.name}
@@ -170,7 +172,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
           </nav>
         </div>
 
-        <div className="border-t border-neutral-100 pt-6 text-[9px] tracking-widest uppercase text-neutral-400 font-light">
+        <div className="border-t border-neutral-100 dark:border-neutral-900 pt-6 text-[9px] tracking-widest uppercase text-neutral-400 font-light">
           © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {settings?.shop_name || "TEEX CLOTHINGS"}.
         </div>
       </div>
