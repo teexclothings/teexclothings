@@ -145,18 +145,18 @@ export default function HomeClient({
       >
         {initialBanners.length === 0 ? (
           /* Default Banner Placeholder layout if no banner is added in Admin yet */
-          <div className="relative inset-0 h-full w-full flex flex-col md:flex-row items-center justify-between px-10 sm:px-16 md:px-24 lg:px-28 py-12 bg-neutral-100 dark:bg-neutral-900">
-            <div className="max-w-xl space-y-4 z-10 text-left">
-              <span className="text-xs font-bold tracking-[0.25em] text-neutral-500 uppercase">
+          <div className="relative inset-0 h-full w-full flex flex-col md:flex-row items-center justify-between px-5 sm:px-14 md:px-24 lg:px-28 py-12 bg-neutral-100 dark:bg-neutral-900">
+            <div className="max-w-[55%] sm:max-w-md md:max-w-xl space-y-2 sm:space-y-4 z-10 text-left">
+              <span className="text-[10px] sm:text-xs font-bold tracking-[0.2em] sm:tracking-[0.25em] text-neutral-500 uppercase">
                 NEW DROP
               </span>
-              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-black dark:text-white uppercase leading-none">
+              <h1 className="text-xl sm:text-4xl md:text-6xl font-extrabold tracking-tight text-black dark:text-white uppercase leading-tight sm:leading-none">
                 PREMIUM <br /> STREETWEAR
               </h1>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-[10px] sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">
                 Minimal designs. Maximum impact.
               </p>
-              <div className="pt-2">
+              <div className="pt-1 sm:pt-2">
                 <Link
                   href="/products"
                   className="inline-flex items-center space-x-3 bg-black text-white dark:bg-white dark:text-black px-7 py-3 text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all rounded-xs"
@@ -256,31 +256,31 @@ export default function HomeClient({
                 <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/40 to-transparent sm:from-white/80 dark:from-black/90 dark:via-black/40" />
 
                 {/* Banner Content Copy */}
-                <div className="absolute inset-0 flex items-center justify-start px-10 sm:px-16 md:px-24 lg:px-28 text-left">
-                  <div className="max-w-xl space-y-3 sm:space-y-4 animate-slide-up">
-                    <span className="block text-[11px] sm:text-xs font-bold tracking-[0.25em] text-neutral-700 dark:text-neutral-300 uppercase">
+                <div className="absolute inset-0 flex items-center justify-start px-5 sm:px-14 md:px-24 lg:px-28 text-left">
+                  <div className="max-w-[55%] sm:max-w-md md:max-w-xl space-y-2 sm:space-y-4 animate-slide-up">
+                    <span className="block text-[10px] sm:text-xs font-bold tracking-[0.2em] sm:tracking-[0.25em] text-neutral-700 dark:text-neutral-300 uppercase">
                       {banner.subtitle || "NEW DROP"}
                     </span>
 
                     {banner.title && (
-                      <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-black dark:text-white uppercase leading-none whitespace-pre-line">
+                      <h1 className="text-xl sm:text-4xl md:text-6xl font-extrabold tracking-tight text-black dark:text-white uppercase leading-tight sm:leading-none whitespace-pre-line">
                         {banner.title}
                       </h1>
                     )}
 
                     {banner.button_text && (
-                      <p className="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400 max-w-sm whitespace-pre-line leading-relaxed">
+                      <p className="text-[10px] sm:text-sm font-medium text-neutral-600 dark:text-neutral-400 whitespace-pre-line leading-normal sm:leading-relaxed line-clamp-3">
                         {banner.button_text}
                       </p>
                     )}
 
-                    <div className="pt-2">
+                    <div className="pt-1 sm:pt-2">
                       <Link
                         href="/products"
-                        className="inline-flex items-center space-x-3 bg-black text-white dark:bg-white dark:text-black px-7 py-3 text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all rounded-xs shadow-xs"
+                        className="inline-flex items-center space-x-2 sm:space-x-3 bg-black text-white dark:bg-white dark:text-black px-4 py-2 sm:px-7 sm:py-3 text-[10px] sm:text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all rounded-xs shadow-xs"
                       >
                         <span>EXPLORE COLLECTION</span>
-                        <ArrowRight size={14} />
+                        <ArrowRight size={13} className="sm:w-[14px] sm:h-[14px]" />
                       </Link>
                     </div>
                   </div>
@@ -455,32 +455,32 @@ export default function HomeClient({
 
       {/* 4. VALUE PROPOSITIONS / FEATURES BAR */}
       <section className="mx-auto max-w-7xl px-3 sm:px-6">
-        <div className="grid grid-cols-3 gap-1 sm:gap-6 rounded-xs border border-neutral-200 dark:border-neutral-850 bg-neutral-50/80 dark:bg-neutral-900/50 p-3 sm:p-8 text-center">
-          <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-1 sm:px-4">
+        <div className="grid grid-cols-3 gap-1 sm:gap-6 rounded-xs border border-neutral-200 dark:border-neutral-850 bg-neutral-50/80 dark:bg-neutral-900/50 p-3 sm:p-8 text-center items-start">
+          <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-0.5 sm:px-4">
             <Sparkles className="text-black dark:text-white mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
             <h3 className="text-[9px] sm:text-xs font-extrabold tracking-wider uppercase text-black dark:text-white leading-tight">
               PREMIUM QUALITY
             </h3>
             <p className="text-[8px] sm:text-xs font-light text-neutral-500 dark:text-neutral-400 max-w-xs leading-tight sm:leading-relaxed">
-              100% premium cotton fabrics for all-day comfort.
+              100% premium cotton fabric.
             </p>
           </div>
-          <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-1 sm:px-4 border-l border-neutral-200 dark:border-neutral-800">
+          <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-0.5 sm:px-4 border-l border-neutral-200 dark:border-neutral-800">
             <Truck className="text-black dark:text-white mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
             <h3 className="text-[9px] sm:text-xs font-extrabold tracking-wider uppercase text-black dark:text-white leading-tight">
-              SHIPS ACROSS INDIA
+              EXPRESS SHIPPING
             </h3>
             <p className="text-[8px] sm:text-xs font-light text-neutral-500 dark:text-neutral-400 max-w-xs leading-tight sm:leading-relaxed">
-              Fast express shipping directly to your doorstep.
+              Fast delivery across India.
             </p>
           </div>
-          <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-1 sm:px-4 border-l border-neutral-200 dark:border-neutral-800">
+          <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-0.5 sm:px-4 border-l border-neutral-200 dark:border-neutral-800">
             <ShieldCheck className="text-black dark:text-white mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
             <h3 className="text-[9px] sm:text-xs font-extrabold tracking-wider uppercase text-black dark:text-white leading-tight">
               SECURE ORDERING
             </h3>
             <p className="text-[8px] sm:text-xs font-light text-neutral-500 dark:text-neutral-400 max-w-xs leading-tight sm:leading-relaxed">
-              Order directly on WhatsApp 100% safe & secure.
+              Direct WhatsApp checkout.
             </p>
           </div>
         </div>
