@@ -121,12 +121,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/60 backdrop-blur-sm animate-fade-in select-none">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-3 sm:pt-24 px-2 sm:px-4 bg-black/60 backdrop-blur-sm animate-fade-in select-none">
       {/* Backdrop overlay click to close */}
       <div className="fixed inset-0" onClick={onClose} />
 
       {/* Modal Content */}
-      <div className="relative w-full max-w-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-2xl overflow-hidden z-10 text-neutral-900 dark:text-neutral-100 transition-all duration-200">
+      <div className="relative w-full max-w-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden z-10 text-neutral-900 dark:text-neutral-100 transition-all duration-200">
         
         {/* Search Input Bar */}
         <div className="flex items-center px-4 py-3.5 border-b border-neutral-200 dark:border-neutral-800">

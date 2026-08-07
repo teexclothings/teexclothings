@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
-import { DEFAULT_WHATSAPP_NUMBER, DEFAULT_WHATSAPP_DISPLAY_PHONE } from "@/utils/constants";
+import { DEFAULT_WHATSAPP_NUMBER } from "@/utils/constants";
 
 interface CategoryItem {
   id: string;
