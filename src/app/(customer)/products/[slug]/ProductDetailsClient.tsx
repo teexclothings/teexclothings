@@ -86,7 +86,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
         <div className="select-none">
           <Link
             href="/products"
-            className="inline-flex items-center space-x-1.5 text-[9px] uppercase tracking-widest text-neutral-500 hover:text-white transition-colors"
+            className="inline-flex items-center space-x-1.5 text-[9px] uppercase tracking-widest text-neutral-500 hover:text-black dark:hover:text-white transition-colors"
           >
             <ChevronLeft size={12} />
             <span>Back to Collection</span>
@@ -97,7 +97,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
           {/* Left side: Images Gallery */}
           <div className="space-y-4">
             <div
-              className="relative aspect-[3/4] w-full bg-neutral-900 border border-neutral-850 rounded-sm overflow-hidden select-none cursor-pointer"
+              className="relative aspect-[3/4] w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 rounded-sm overflow-hidden select-none cursor-pointer"
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
               onClick={() => setZoomed(!zoomed)}
@@ -159,10 +159,10 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                   <button
                     key={idx}
                     onClick={() => setActiveImage(idx)}
-                    className={`relative aspect-square w-16 bg-neutral-900 border rounded-sm overflow-hidden flex-shrink-0 cursor-pointer transition-all ${
+                    className={`relative aspect-square w-16 bg-neutral-50 dark:bg-neutral-900 border rounded-sm overflow-hidden flex-shrink-0 cursor-pointer transition-all ${
                       idx === activeImage
-                        ? "border-white ring-1 ring-white"
-                        : "border-neutral-800 hover:border-neutral-500"
+                        ? "border-black dark:border-white ring-1 ring-black dark:ring-white"
+                        : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-450 dark:hover:border-neutral-550"
                     }`}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -185,15 +185,15 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                   {product.categories.name}
                 </span>
               )}
-              <h1 className="font-serif-luxury text-3xl font-light tracking-wide text-white uppercase leading-tight sm:text-4xl">
+              <h1 className="font-serif-luxury text-3xl font-light tracking-wide text-black dark:text-white uppercase leading-tight sm:text-4xl">
                 {product.title}
               </h1>
-              <p className="text-xl font-mono font-medium text-white">
+              <p className="text-xl font-mono font-medium text-black dark:text-white">
                 ₹{product.price.toFixed(2)}
               </p>
             </div>
 
-            <div className="h-[1px] bg-neutral-900" />
+            <div className="h-[1px] bg-neutral-250 dark:bg-neutral-850" />
 
             {/* Description */}
             {product.description && (
@@ -201,7 +201,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                 <h4 className="text-[9px] uppercase tracking-widest text-neutral-500 font-semibold">
                   Description / Composition
                 </h4>
-                <p className="text-xs text-neutral-300 font-light leading-relaxed whitespace-pre-line max-w-md">
+                <p className="text-xs text-neutral-600 dark:text-neutral-350 font-light leading-relaxed whitespace-pre-line max-w-md">
                   {product.description}
                 </p>
               </div>
@@ -223,8 +223,8 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                       }}
                       className={`px-4 py-2 border text-[9px] font-mono font-semibold uppercase rounded-sm transition-all cursor-pointer active:animate-scale-tap ${
                         selectedSize === sz
-                          ? "bg-white text-black border-white"
-                          : "bg-transparent text-neutral-400 border-neutral-800 hover:border-neutral-500 hover:text-white"
+                          ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white"
+                          : "bg-transparent text-neutral-600 dark:text-neutral-450 border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 hover:text-black dark:hover:text-white"
                       }`}
                     >
                       {sz}
@@ -232,7 +232,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                   ))}
                 </div>
                 {sizeError && (
-                  <p className="text-[10px] text-red-400 font-light tracking-wide" role="alert">
+                  <p className="text-[10px] text-red-500 font-light tracking-wide" role="alert">
                     {sizeError}
                   </p>
                 )}
@@ -255,8 +255,8 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                       }}
                       className={`px-4 py-2 border text-[9px] uppercase tracking-widest font-semibold rounded-sm transition-all cursor-pointer active:animate-scale-tap ${
                         selectedColor === col
-                          ? "bg-white text-black border-white"
-                          : "bg-transparent text-neutral-400 border-neutral-800 hover:border-neutral-500 hover:text-white"
+                          ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white"
+                          : "bg-transparent text-neutral-600 dark:text-neutral-450 border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 hover:text-black dark:hover:text-white"
                       }`}
                     >
                       {col}
@@ -264,7 +264,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                   ))}
                 </div>
                 {colorError && (
-                  <p className="text-[10px] text-red-400 font-light tracking-wide" role="alert">
+                  <p className="text-[10px] text-red-500 font-light tracking-wide" role="alert">
                     {colorError}
                   </p>
                 )}
@@ -275,20 +275,20 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
       </div>
 
       {/* Sticky Buy Now button */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-t border-neutral-800 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-black/90 backdrop-blur-md border-t border-neutral-200 dark:border-neutral-850 safe-area-bottom">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-white truncate uppercase tracking-wide">
+            <p className="text-xs font-medium text-black dark:text-white truncate uppercase tracking-wide">
               {product.title}
             </p>
-            <p className="text-sm font-mono font-medium text-white">
+            <p className="text-sm font-mono font-medium text-black dark:text-white">
               ₹{product.price.toFixed(2)}
             </p>
           </div>
           <button
             type="button"
             onClick={handleBuyNow}
-            className="flex items-center space-x-2 bg-white text-black px-6 py-3.5 text-[10px] font-semibold tracking-widest uppercase transition-all hover:bg-neutral-200 rounded-sm cursor-pointer active:animate-scale-tap flex-shrink-0"
+            className="flex items-center space-x-2 bg-black dark:bg-white text-white dark:text-black px-6 py-3.5 text-[10px] font-semibold tracking-widest uppercase transition-all hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm cursor-pointer active:animate-scale-tap flex-shrink-0"
           >
             <ShoppingBag size={14} />
             <span>Buy Now</span>

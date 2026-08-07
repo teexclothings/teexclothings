@@ -61,13 +61,13 @@ export default function ProductsClient({
   });
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-12 space-y-10 flex-1 flex flex-col justify-start bg-white text-black">
+    <div className="mx-auto max-w-7xl px-6 py-12 space-y-10 flex-1 flex flex-col justify-start bg-transparent text-foreground">
       {/* Header and overview */}
-      <div className="border-b border-neutral-200 pb-6">
+      <div className="border-b border-neutral-200 dark:border-neutral-850 pb-6">
         <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-500 uppercase">
           Silhouettes
         </span>
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-black uppercase mt-1">
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-black dark:text-white uppercase mt-1">
           Catalog Collection
         </h1>
       </div>
@@ -84,7 +84,7 @@ export default function ProductsClient({
             placeholder="SEARCH COLLECTION..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-neutral-50 border border-neutral-200 text-xs tracking-widest uppercase px-10 py-3 rounded-xs placeholder-neutral-400 focus:outline-none focus:border-black text-black font-semibold"
+            className="w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs tracking-widest uppercase px-10 py-3 rounded-xs placeholder-neutral-400 dark:placeholder-neutral-550 focus:outline-none focus:border-black dark:focus:border-white text-black dark:text-white font-semibold"
           />
         </div>
 
@@ -93,11 +93,11 @@ export default function ProductsClient({
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-neutral-50 border border-neutral-200 text-xs tracking-widest uppercase px-4 py-3 text-neutral-700 rounded-xs focus:outline-none focus:border-black cursor-pointer font-bold"
+            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs tracking-widest uppercase px-4 py-3 text-neutral-700 dark:text-neutral-300 rounded-xs focus:outline-none focus:border-black dark:focus:border-white cursor-pointer font-bold"
           >
-            <option value="">All Collections</option>
+            <option value="" className="bg-white dark:bg-neutral-900 text-black dark:text-white">All Collections</option>
             {initialCategories.map((c) => (
-              <option key={c.id} value={c.id}>
+              <option key={c.id} value={c.id} className="bg-white dark:bg-neutral-900 text-black dark:text-white">
                 {c.name}
               </option>
             ))}
@@ -106,23 +106,23 @@ export default function ProductsClient({
           <select
             value={sortKey}
             onChange={(e) => setSortKey(e.target.value)}
-            className="bg-neutral-50 border border-neutral-200 text-xs tracking-widest uppercase px-4 py-3 text-neutral-700 rounded-xs focus:outline-none focus:border-black cursor-pointer font-bold"
+            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs tracking-widest uppercase px-4 py-3 text-neutral-700 dark:text-neutral-300 rounded-xs focus:outline-none focus:border-black dark:focus:border-white cursor-pointer font-bold"
           >
-            <option value="newest">Sort: Newest</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
+            <option value="newest" className="bg-white dark:bg-neutral-900 text-black dark:text-white">Sort: Newest</option>
+            <option value="price-asc" className="bg-white dark:bg-neutral-900 text-black dark:text-white">Price: Low to High</option>
+            <option value="price-desc" className="bg-white dark:bg-neutral-900 text-black dark:text-white">Price: High to Low</option>
           </select>
         </div>
       </div>
 
       {/* Grid List */}
       {sorted.length === 0 ? (
-        <div className="rounded-xs border border-neutral-200 bg-neutral-50 p-16 text-center space-y-2">
+        <div className="rounded-xs border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 p-16 text-center space-y-2">
           <SlidersHorizontal className="mx-auto text-neutral-400" size={32} />
-          <h3 className="text-xs uppercase font-bold tracking-widest text-black">
+          <h3 className="text-xs uppercase font-bold tracking-widest text-black dark:text-white">
             No silhouettes matched
           </h3>
-          <p className="text-xs text-neutral-500 font-light">
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 font-light">
             Try adjusting your search criteria or category filter.
           </p>
         </div>

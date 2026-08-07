@@ -41,20 +41,20 @@ export default function BottomSheet({ isOpen, onClose, title, children }: Bottom
       />
 
       {/* Sheet */}
-      <div className="relative z-10 w-full max-w-lg bg-neutral-950 border-t border-neutral-800 rounded-t-2xl animate-slide-up-sheet max-h-[92vh] flex flex-col safe-area-bottom">
+      <div className="relative z-10 w-full max-w-lg bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-850 rounded-t-2xl animate-slide-up-sheet max-h-[92vh] flex flex-col safe-area-bottom">
         {/* Handle bar */}
         <div className="flex-shrink-0 pt-3 pb-1 flex justify-center">
-          <div className="w-10 h-1 rounded-full bg-neutral-700" />
+          <div className="w-10 h-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
         </div>
 
         {/* Header */}
-        <div className="flex-shrink-0 flex items-center justify-between px-6 pb-4 border-b border-neutral-900">
-          <h2 className="font-serif-luxury text-lg tracking-wider uppercase font-medium text-white">
+        <div className="flex-shrink-0 flex items-center justify-between px-6 pb-4 border-b border-neutral-100 dark:border-neutral-900">
+          <h2 className="font-serif-luxury text-lg tracking-wider uppercase font-medium text-black dark:text-white">
             {title}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 text-neutral-500 hover:text-white transition-colors rounded-full hover:bg-neutral-900 cursor-pointer"
+            className="p-2 text-neutral-500 hover:text-black dark:hover:text-white transition-colors rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-900 cursor-pointer"
             aria-label="Close sheet"
           >
             <X size={18} />
