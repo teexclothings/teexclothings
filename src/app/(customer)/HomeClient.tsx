@@ -37,16 +37,39 @@ interface Product {
   };
 }
 
+interface SiteSettings {
+  whatsapp: string | null;
+  instagram: string | null;
+  facebook: string | null;
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+}
+
 interface HomeClientProps {
   initialBanners: Banner[];
   initialCategories: Category[];
   initialProducts: Product[];
+  settings: SiteSettings | null;
+}
+
+/** Extract Instagram handle from a URL like https://instagram.com/_teex */
+function extractInstagramHandle(url: string | null | undefined): string | null {
+  if (!url) return null;
+  try {
+    const pathname = new URL(url).pathname.replace(/\/+$/, "");
+    const handle = pathname.split("/").pop();
+    return handle ? `@${handle}` : null;
+  } catch {
+    return null;
+  }
 }
 
 export default function HomeClient({
   initialBanners,
   initialCategories,
   initialProducts,
+  settings,
 }: HomeClientProps) {
   const [activeBanner, setActiveBanner] = useState(0);
   const instaScrollRef = useRef<HTMLDivElement>(null);
@@ -467,11 +490,11 @@ export default function HomeClient({
               SHOP THE LOOK
             </span>
             <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-black dark:text-white uppercase mt-0.5">
-              @_TEEX
+              {extractInstagramHandle(settings?.instagram) || "@_TEEX"}
             </h2>
           </div>
           <a
-            href="https://instagram.com"
+            href={settings?.instagram || "https://instagram.com"}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center space-x-1.5 md:space-x-2 border-0 md:border md:border-neutral-300 dark:md:border-neutral-700 bg-transparent md:bg-white dark:md:bg-neutral-900 p-0 md:px-4 md:py-2 text-xs font-bold tracking-wider uppercase text-black dark:text-white hover:opacity-80 md:hover:bg-neutral-100 dark:md:hover:bg-neutral-800 transition-colors rounded-xs"
@@ -592,7 +615,7 @@ export default function HomeClient({
             </p>
             <div className="pt-1">
               <a
-                href="https://wa.me/919876543210"
+                href={`https://wa.me/${settings?.whatsapp?.replace(/[^\d]/g, "") || ""}`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center space-x-2 bg-black text-white dark:bg-white dark:text-black px-3.5 py-2 sm:px-6 sm:py-2.5 text-[10px] sm:text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all rounded-xs shadow-xs"

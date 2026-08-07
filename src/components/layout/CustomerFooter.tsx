@@ -233,12 +233,24 @@ export default function CustomerFooter({ settings }: FooterProps) {
             <ul className="space-y-2 text-[11px] tracking-wider font-medium text-neutral-600 dark:text-neutral-400">
               <li>WhatsApp</li>
               <li className="font-semibold text-black dark:text-white">
-                {settings?.whatsapp || settings?.phone || "+91 (98765) 43210"}
+                {settings?.whatsapp || settings?.phone || "—"}
               </li>
               <li className="pt-1">Instagram</li>
-              <li className="font-semibold text-black dark:text-white">@_teex</li>
+              <li className="font-semibold text-black dark:text-white">
+                {settings?.instagram
+                  ? (() => {
+                      try {
+                        const pathname = new URL(settings.instagram).pathname.replace(/\/+$/, "");
+                        const handle = pathname.split("/").pop();
+                        return handle ? `@${handle}` : settings.instagram;
+                      } catch {
+                        return settings.instagram;
+                      }
+                    })()
+                  : "—"}
+              </li>
               <li className="pt-1">Email</li>
-              <li className="font-semibold text-black dark:text-white">{settings?.email || "teexclothings@gmail.com"}</li>
+              <li className="font-semibold text-black dark:text-white">{settings?.email || "—"}</li>
             </ul>
           </div>
         </div>
