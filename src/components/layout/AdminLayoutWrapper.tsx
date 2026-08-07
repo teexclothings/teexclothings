@@ -8,7 +8,7 @@ export default function AdminLayoutWrapper({ children }: { children: React.React
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white font-sans antialiased">
+    <div className="min-h-screen bg-background text-foreground font-sans antialiased">
       {/* Sidebar navigation */}
       <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -18,7 +18,7 @@ export default function AdminLayoutWrapper({ children }: { children: React.React
         <AdminHeader onMenuOpen={() => setSidebarOpen(true)} />
 
         {/* Dynamic page content */}
-        <main className="flex-1 bg-neutral-950 p-6 sm:p-8">
+        <main className="flex-1 bg-background p-6 sm:p-8">
           <div className="mx-auto w-full max-w-5xl animate-fade-in">{children}</div>
         </main>
       </div>

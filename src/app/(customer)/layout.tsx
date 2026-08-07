@@ -15,7 +15,7 @@ export default async function CustomerLayout({ children }: { children: React.Rea
     .maybeSingle();
 
   return (
-    <div className="min-h-screen bg-white text-neutral-900 flex flex-col font-sans select-none" suppressHydrationWarning>
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans select-none" suppressHydrationWarning>
       <CustomerHeader settings={settings} />
       <main className="flex-1 flex flex-col">{children}</main>
       <CustomerFooter settings={settings} />
