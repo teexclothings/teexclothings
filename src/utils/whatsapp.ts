@@ -2,6 +2,7 @@ interface WhatsAppMessageParams {
   productName: string;
   category: string;
   productPrice: number;
+  quantity: number;
   selectedSize: string;
   selectedColor: string;
   stateName: string;
@@ -17,6 +18,7 @@ interface WhatsAppMessageParams {
 }
 
 export function generateWhatsAppMessage(params: WhatsAppMessageParams): string {
+  const subtotal = params.productPrice * params.quantity;
   return `🛍️ *New Product Inquiry*
 
 ━━━━━━━━━━━━━━━━━━
@@ -31,6 +33,12 @@ ${params.category}
 
 Price:
 ₹${params.productPrice.toFixed(2)}
+
+Quantity:
+${params.quantity}
+
+Subtotal:
+₹${subtotal.toFixed(2)}
 
 Size:
 ${params.selectedSize}

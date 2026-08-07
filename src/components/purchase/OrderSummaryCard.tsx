@@ -9,6 +9,7 @@ interface OrderSummaryCardProps {
   selectedSize: string;
   selectedColor: string;
   productPrice: number;
+  quantity: number;
   shippingCharge: number | null;
   shippingLoading: boolean;
   stateName: string;
@@ -21,11 +22,13 @@ export default function OrderSummaryCard({
   selectedSize,
   selectedColor,
   productPrice,
+  quantity,
   shippingCharge,
   shippingLoading,
   stateName,
 }: OrderSummaryCardProps) {
-  const grandTotal = shippingCharge !== null ? productPrice + shippingCharge : null;
+  const subtotal = productPrice * quantity;
+  const grandTotal = shippingCharge !== null ? subtotal + shippingCharge : null;
 
   return (
     <div className="border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 rounded-sm overflow-hidden">
@@ -64,6 +67,9 @@ export default function OrderSummaryCard({
                 Color: {selectedColor}
               </span>
             )}
+            <span className="text-[8px] uppercase tracking-widest bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-300 px-2 py-0.5 rounded-sm">
+              Qty: {quantity}
+            </span>
           </div>
         </div>
       </div>
@@ -73,6 +79,16 @@ export default function OrderSummaryCard({
         <div className="flex justify-between text-xs">
           <span className="text-neutral-600 dark:text-neutral-400 font-light">Product Price</span>
           <span className="text-black dark:text-white font-mono">₹{productPrice.toFixed(2)}</span>
+        </div>
+
+        <div className="flex justify-between text-xs">
+          <span className="text-neutral-600 dark:text-neutral-400 font-light">Quantity</span>
+          <span className="text-black dark:text-white font-mono">x{quantity}</span>
+        </div>
+
+        <div className="flex justify-between text-xs">
+          <span className="text-neutral-600 dark:text-neutral-400 font-light">Subtotal</span>
+          <span className="text-black dark:text-white font-mono">₹{subtotal.toFixed(2)}</span>
         </div>
 
         <div className="flex justify-between text-xs">
@@ -88,7 +104,7 @@ export default function OrderSummaryCard({
           )}
         </div>
 
-        <div className="h-[1px] bg-neutral-250 dark:bg-neutral-800 my-1" />
+        <div className="h-[1px] bg-neutral-250 dark:bg-neutral-850 my-1" />
 
         <div className="flex justify-between text-sm font-medium">
           <span className="text-black dark:text-white">Grand Total</span>
