@@ -25,7 +25,11 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-neutral-100 dark:bg-neutral-950 px-4 text-black dark:text-white">
       <div className="w-full max-w-md space-y-8 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-8 rounded-sm shadow-2xl">
         <div className="text-center">
-          <h2 className="font-serif-luxury text-3xl font-light tracking-widest uppercase">TEEX</h2>
+          <img
+            src="/images/logo.png"
+            alt="TEEX Logo"
+            className="h-12 sm:h-14 w-auto mx-auto object-contain dark:invert"
+          />
           <p className="mt-2 text-xs tracking-[0.25em] text-neutral-600 dark:text-neutral-400 uppercase">
             Admin Console Login
           </p>
