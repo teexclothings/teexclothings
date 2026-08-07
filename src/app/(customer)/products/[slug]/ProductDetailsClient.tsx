@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
-import { ChevronLeft, Star, ShoppingBag, ZoomIn, ZoomOut } from "lucide-react";
+import { ChevronLeft, Star, ShoppingBag, ZoomIn, ZoomOut, AlertTriangle } from "lucide-react";
 import PurchaseSheet from "@/components/purchase/PurchaseSheet";
 import StateDropdown from "@/components/ui/StateDropdown";
 import { createClient } from "@/utils/supabase/client";
@@ -40,6 +40,14 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
   const [quantity, setQuantity] = useState(1);
   const [selectedState, setSelectedState] = useState("");
   const [shippingCharge, setShippingCharge] = useState<number | null>(null);
+  const [toastError, setToastError] = useState("");
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     const saved = loadDeliveryDetails();
@@ -106,7 +114,29 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
       hasError = true;
     }
 
-    if (!hasError) {
+    if (hasError) {
+      const errorMsg =
+        product.sizes.length > 0 && !selectedSize && product.colors.length > 0 && !selectedColor
+          ? "Please select size and color"
+          : product.sizes.length > 0 && !selectedSize
+          ? "Please select a size"
+          : "Please select a color";
+
+      setToastError(errorMsg);
+
+      // Smooth scroll to selection section
+      const section = document.getElementById("product-info-column");
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      // Clear toast after 3.5 seconds
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+      toastTimeoutRef.current = setTimeout(() => {
+        setToastError("");
+      }, 3550);
+    } else {
+      setToastError("");
       setSheetOpen(true);
     }
   }
@@ -210,7 +240,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
           </div>
 
           {/* Right side: Product info */}
-          <div className="space-y-8 select-none md:sticky md:top-24 self-start">
+          <div id="product-info-column" className="space-y-8 select-none md:sticky md:top-24 self-start">
             <div className="space-y-3">
               {product.categories?.name && (
                 <span className="text-[10px] tracking-[0.25em] text-neutral-500 uppercase font-light">
@@ -252,7 +282,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                   ))}
                 </div>
                 {sizeError && (
-                  <p className="text-[10px] text-red-500 font-light tracking-wide" role="alert">
+                  <p className="text-[10px] text-red-655 dark:text-red-450 font-light tracking-wide" role="alert">
                     {sizeError}
                   </p>
                 )}
@@ -284,7 +314,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                   ))}
                 </div>
                 {colorError && (
-                  <p className="text-[10px] text-red-500 font-light tracking-wide" role="alert">
+                  <p className="text-[10px] text-red-655 dark:text-red-450 font-light tracking-wide" role="alert">
                     {colorError}
                   </p>
                 )}
@@ -424,6 +454,14 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
         initialState={selectedState}
         initialShippingCharge={shippingCharge}
       />
+
+      {/* Floating Error Toast */}
+      {toastError && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[2000] bg-red-700 dark:bg-red-950 text-white dark:text-red-200 border border-red-800 dark:border-red-900 px-6 py-3.5 rounded-sm shadow-2xl flex items-center space-x-3 backdrop-blur-md animate-fade-in max-w-sm w-[90%] md:w-auto">
+          <AlertTriangle size={14} className="text-white dark:text-red-400 flex-shrink-0 animate-bounce" />
+          <span className="text-[10px] font-semibold tracking-wider uppercase font-mono">{toastError}</span>
+        </div>
+      )}
     </>
   );
 }
