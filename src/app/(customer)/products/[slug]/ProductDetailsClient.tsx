@@ -41,29 +41,6 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
   const [selectedState, setSelectedState] = useState("");
   const [shippingCharge, setShippingCharge] = useState<number | null>(null);
 
-  const inlineBuyButtonRef = useRef<HTMLButtonElement>(null);
-  const [isInlineVisible, setIsInlineVisible] = useState(true);
-
-  useEffect(() => {
-    const target = inlineBuyButtonRef.current;
-    if (!target) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (entry) {
-          setIsInlineVisible(entry.isIntersecting);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(target);
-    return () => {
-      observer.unobserve(target);
-    };
-  }, []);
-
   useEffect(() => {
     const saved = loadDeliveryDetails();
     if (saved?.state) {
@@ -250,18 +227,6 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
 
             <div className="h-[1px] bg-neutral-250 dark:bg-neutral-850" />
 
-            {/* Description */}
-            {product.description && (
-              <div className="space-y-2">
-                <h4 className="text-[9px] uppercase tracking-widest text-neutral-500 font-semibold">
-                  Description / Composition
-                </h4>
-                <p className="text-xs text-neutral-600 dark:text-neutral-350 font-light leading-relaxed whitespace-pre-line max-w-md">
-                  {product.description}
-                </p>
-              </div>
-            )}
-
             {/* Size picker */}
             {product.sizes.length > 0 && (
               <div className="space-y-3">
@@ -402,16 +367,29 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               </div>
             </div>
 
-            {/* Buy Now button */}
-            <button
-              ref={inlineBuyButtonRef}
-              type="button"
-              onClick={handleBuyNow}
-              className="flex w-full max-w-md items-center justify-center space-x-2 bg-black dark:bg-white text-white dark:text-black py-4 text-[10px] font-semibold tracking-widest uppercase transition-all hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm cursor-pointer active:animate-scale-tap"
-            >
-              <ShoppingBag size={14} />
-              <span>Buy Now</span>
-            </button>
+            {/* Description */}
+            {product.description && (
+              <div className="space-y-2 max-w-md pt-2">
+                <h4 className="text-[9px] uppercase tracking-widest text-neutral-500 font-semibold">
+                  Description / Composition
+                </h4>
+                <p className="text-xs text-neutral-600 dark:text-neutral-350 font-light leading-relaxed whitespace-pre-line">
+                  {product.description}
+                </p>
+              </div>
+            )}
+
+            {/* Sticky Buy Now button */}
+            <div className="sticky bottom-0 z-40 bg-white dark:bg-black py-4 border-t border-neutral-200 dark:border-neutral-850 safe-area-bottom w-full max-w-md">
+              <button
+                type="button"
+                onClick={handleBuyNow}
+                className="flex w-full items-center justify-center space-x-2 bg-black dark:bg-white text-white dark:text-black py-4 text-[10px] font-semibold tracking-widest uppercase transition-all hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm cursor-pointer active:animate-scale-tap"
+              >
+                <ShoppingBag size={14} />
+                <span>Buy Now</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -434,37 +412,6 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
           </div>
         </div>
       )}
-
-      {/* Sticky Buy Now button */}
-      <div
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-black/95 backdrop-blur-md border-t border-neutral-200 dark:border-neutral-850 safe-area-bottom transition-all duration-300 transform ${
-          isInlineVisible ? "translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
-        }`}
-      >
-        <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-black dark:text-white truncate uppercase tracking-wide">
-              {product.title}
-            </p>
-            <p className="text-sm font-mono font-medium text-black dark:text-white">
-              ₹{(product.price * quantity + (shippingCharge ?? 0)).toFixed(2)}
-            </p>
-            {selectedState && (
-              <p className="text-[9px] text-neutral-500 dark:text-neutral-450 font-light truncate">
-                State: {selectedState} {shippingCharge !== null && `(Shipping: ₹${shippingCharge.toFixed(2)})`}
-              </p>
-            )}
-          </div>
-          <button
-            type="button"
-            onClick={handleBuyNow}
-            className="flex items-center space-x-2 bg-black dark:bg-white text-white dark:text-black px-6 py-3.5 text-[10px] font-semibold tracking-widest uppercase transition-all hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm cursor-pointer active:animate-scale-tap flex-shrink-0"
-          >
-            <ShoppingBag size={14} />
-            <span>Buy Now</span>
-          </button>
-        </div>
-      </div>
 
       {/* Purchase Bottom Sheet */}
       <PurchaseSheet
