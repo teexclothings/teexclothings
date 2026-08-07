@@ -208,7 +208,7 @@ export default function CategoriesPage() {
         </div>
         <button
           onClick={handleOpenAdd}
-          className="flex cursor-pointer items-center justify-center space-x-2 bg-black dark:bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-black dark:text-white dark:text-black transition-colors hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm select-none"
+          className="flex cursor-pointer items-center justify-center space-x-2 bg-black dark:bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-white dark:text-black transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm select-none"
         >
           <Plus size={14} />
           <span>Add Category</span>
