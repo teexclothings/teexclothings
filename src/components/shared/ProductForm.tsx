@@ -261,7 +261,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
-              Retail Price ($)
+              Retail Price (₹)
             </label>
             <input
               type="number"

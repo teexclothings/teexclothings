@@ -24,6 +24,9 @@ interface PurchaseSheetProps {
   product: PurchaseProduct;
   selectedSize: string;
   selectedColor: string;
+  quantity: number;
+  initialState?: string;
+  initialShippingCharge?: number | null;
 }
 
 const emptyForm: DeliveryDetails = {
@@ -42,6 +45,9 @@ export default function PurchaseSheet({
   product,
   selectedSize,
   selectedColor,
+  quantity,
+  initialState,
+  initialShippingCharge,
 }: PurchaseSheetProps) {
   const [formData, setFormData] = useState<DeliveryDetails>(emptyForm);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -113,17 +119,21 @@ export default function PurchaseSheet({
     if (initializedRef.current) return;
     initializedRef.current = true;
 
-    const saved = loadDeliveryDetails();
-    if (saved) {
-      // Schedule state update outside effect synchronous body
-      queueMicrotask(() => {
-        setFormData(saved);
-        if (saved.state) {
-          fetchShippingForState(saved.state);
-        }
-      });
+    const saved = loadDeliveryDetails() || { ...emptyForm };
+    if (initialState) {
+      saved.state = initialState;
     }
-  }, [isOpen, fetchShippingForState]);
+
+    // Schedule state update outside effect synchronous body
+    queueMicrotask(() => {
+      setFormData(saved);
+      if (initialShippingCharge !== undefined && initialShippingCharge !== null) {
+        setShippingCharge(initialShippingCharge);
+      } else if (saved.state) {
+        fetchShippingForState(saved.state);
+      }
+    });
+  }, [isOpen, initialState, initialShippingCharge, fetchShippingForState]);
 
   function handleStateChange(_stateName: string, charge: number) {
     setShippingCharge(charge);
@@ -185,12 +195,13 @@ export default function PurchaseSheet({
 
     setSending(true);
 
-    const grandTotal = product.price + shippingCharge;
+    const grandTotal = (product.price * quantity) + shippingCharge;
 
     const message = generateWhatsAppMessage({
       productName: product.title,
       category: product.categories?.name || "Uncategorized",
       productPrice: product.price,
+      quantity,
       selectedSize,
       selectedColor,
       stateName: formData.state,
@@ -236,6 +247,7 @@ export default function PurchaseSheet({
             selectedSize={selectedSize}
             selectedColor={selectedColor}
             productPrice={product.price}
+            quantity={quantity}
             shippingCharge={shippingCharge}
             shippingLoading={shippingLoading}
             stateName={formData.state}

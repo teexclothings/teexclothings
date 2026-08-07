@@ -228,7 +228,7 @@ export default function ProductsPage() {
                     {prod.categories?.name || "Uncategorized"}
                   </td>
                   <td className="px-6 py-4 font-mono text-black dark:text-white font-semibold">
-                    ${prod.price.toFixed(2)}
+                    ₹{prod.price.toFixed(2)}
                   </td>
                   <td className="px-6 py-4 text-center">
                     <button

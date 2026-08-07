@@ -43,5 +43,35 @@ export default async function ProductDetailPage({ params }: Props) {
     notFound();
   }
 
-  return <ProductDetailsClient product={product || {}} />;
+  // Fetch similar products in the same category (limit 4)
+  const { data: recommended } = await supabase
+    .from("products")
+    .select("*, categories(name)")
+    .eq("active", true)
+    .eq("category_id", product.category_id)
+    .neq("id", product.id)
+    .limit(4);
+
+  let finalRecommended = recommended || [];
+
+  // Fallback to other active products if category is thin
+  if (finalRecommended.length < 4) {
+    const needed = 4 - finalRecommended.length;
+    const { data: fallback } = await supabase
+      .from("products")
+      .select("*, categories(name)")
+      .eq("active", true)
+      .neq("id", product.id)
+      .limit(needed);
+    if (fallback) {
+      finalRecommended = [...finalRecommended, ...fallback];
+    }
+  }
+
+  return (
+    <ProductDetailsClient
+      product={product}
+      recommendedProducts={finalRecommended}
+    />
+  );
 }
