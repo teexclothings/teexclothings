@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, Search, ShoppingBag } from "lucide-react";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import SearchModal from "@/components/ui/SearchModal";
 
 interface HeaderProps {
   settings: {
@@ -15,6 +16,7 @@ interface HeaderProps {
 
 export default function CustomerHeader({ settings }: HeaderProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
@@ -54,6 +56,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
         isScrolled ? "py-3 shadow-xs" : "py-4.5"
       }`}
     >
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
       <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/" className="focus:outline-none flex items-center">
@@ -98,7 +101,7 @@ export default function CustomerHeader({ settings }: HeaderProps) {
           <ThemeToggle />
           <button
             type="button"
-            onClick={() => router.push("/products")}
+            onClick={() => setSearchOpen(true)}
             className="p-1.5 focus:outline-none cursor-pointer text-neutral-700 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
             aria-label="Search Catalog"
           >

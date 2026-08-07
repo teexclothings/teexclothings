@@ -26,13 +26,15 @@ interface Product {
 interface ProductsClientProps {
   initialCategories: Category[];
   initialProducts: Product[];
+  initialSearch?: string;
 }
 
 export default function ProductsClient({
   initialCategories,
   initialProducts,
+  initialSearch = "",
 }: ProductsClientProps) {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortKey, setSortKey] = useState("newest");
 
