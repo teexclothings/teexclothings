@@ -441,61 +441,46 @@ export default function HeroBannersPage() {
             )}
           </div>
 
-          {/* Copy Content Inputs (2-Column Grid) */}
+          {/* Copy Content Inputs */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
-                Headline Title (Optional)
-              </label>
-              <input
-                type="text"
-                value={formTitle}
-                onChange={(e) => setFormTitle(e.target.value)}
-                placeholder="e.g. AUTUMN COLLECTION"
-                className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-xs text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
-                Subtitle (Optional)
+                Badge / Tag (e.g. NEW DROP)
               </label>
               <input
                 type="text"
                 value={formSubtitle}
                 onChange={(e) => setFormSubtitle(e.target.value)}
-                placeholder="e.g. Timeless silhouettes"
+                placeholder="e.g. NEW DROP"
+                className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-xs text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
+                Headline Title
+              </label>
+              <input
+                type="text"
+                value={formTitle}
+                onChange={(e) => setFormTitle(e.target.value)}
+                placeholder="e.g. PREMIUM STREETWEAR"
                 className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-xs text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
-                Button Text (Optional)
-              </label>
-              <input
-                type="text"
-                value={formButtonText}
-                onChange={(e) => setFormButtonText(e.target.value)}
-                placeholder="e.g. SHOP NOW"
-                className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-xs text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
-                Button Link (Optional)
-              </label>
-              <input
-                type="text"
-                value={formButtonLink}
-                onChange={(e) => setFormButtonLink(e.target.value)}
-                placeholder="/products"
-                className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-xs text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
-              />
-            </div>
+          <div>
+            <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
+              Description / Subtitle
+            </label>
+            <input
+              type="text"
+              value={formButtonText}
+              onChange={(e) => setFormButtonText(e.target.value)}
+              placeholder="e.g. Minimal designs. Maximum impact."
+              className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-xs text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
+            />
           </div>
 
           <div className="flex items-center pt-1">
