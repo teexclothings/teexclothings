@@ -4,7 +4,13 @@ import ProductsClient from "@/app/(customer)/products/ProductsClient";
 
 export const revalidate = 0;
 
-export default async function ProductsPage() {
+interface ProductsPageProps {
+  searchParams: Promise<{ search?: string; category?: string }>;
+}
+
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const params = await searchParams;
+  const initialSearch = params.search || "";
   const supabase = await createClient();
 
   // Fetch active categories (First added first)
@@ -30,7 +36,8 @@ export default async function ProductsPage() {
       <ProductsClient
         initialCategories={categories || []}
         initialProducts={products || []}
-      />
+        initialSearch={initialSearch}
+    />
     </Suspense>
   );
 }
