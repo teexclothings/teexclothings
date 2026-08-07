@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import CustomerProductCard from "@/components/ui/CustomerProductCard";
 import { ArrowRight, ChevronLeft, ChevronRight, VolumeX, ShieldCheck, Truck, Sparkles, MessageCircle, Image as ImageIcon, Layers } from "lucide-react";
-import { DEFAULT_WHATSAPP_LINK } from "@/utils/constants";
 
 interface Banner {
   id: string;
