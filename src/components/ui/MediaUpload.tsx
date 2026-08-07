@@ -2,6 +2,8 @@
 
 import React, { useState, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
+import { compressImage } from "@/utils/imageCompressor";
+import { uploadToCloudinary, isCloudinaryConfigured } from "@/utils/cloudinary";
 
 interface MediaUploadProps {
   value: string | string[] | null;
@@ -19,6 +21,7 @@ export default function MediaUpload({
   accept = "image/png, image/jpeg, image/webp",
 }: MediaUploadProps) {
   const [uploading, setUploading] = useState(false);
+  const [statusText, setStatusText] = useState("");
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
@@ -27,35 +30,55 @@ export default function MediaUpload({
     if (files.length === 0) return;
     setUploading(true);
     setProgress(10);
+    setStatusText("Processing...");
 
     const uploadedUrls: string[] = [];
 
     for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      if (!file) continue;
+      const originalFile = files[i];
+      if (!originalFile) continue;
 
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-      const filePath = `${bucket}/${fileName}`;
+      try {
+        setStatusText(`Compressing file ${i + 1} of ${files.length}...`);
+        const compressedFile = await compressImage(originalFile);
 
-      const { error } = await supabase.storage.from(bucket).upload(filePath, file, {
-        cacheControl: "3600",
-        upsert: true,
-      });
+        setStatusText(`Uploading file ${i + 1} of ${files.length}...`);
 
-      if (error) {
-        console.error("Storage upload error:", error);
-        alert(`Failed to upload media: ${error.message}`);
+        let publicUrl = "";
+
+        if (isCloudinaryConfigured()) {
+          // Upload compressed file to Cloudinary
+          publicUrl = await uploadToCloudinary(compressedFile, bucket);
+        } else {
+          // Fallback to Supabase Storage if Cloudinary credentials not updated yet
+          const fileExt = compressedFile.name.split(".").pop();
+          const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+          const filePath = `${bucket}/${fileName}`;
+
+          const { error } = await supabase.storage.from(bucket).upload(filePath, compressedFile, {
+            cacheControl: "3600",
+            upsert: true,
+          });
+
+          if (error) {
+            throw new Error(`Storage upload error: ${error.message}`);
+          }
+
+          const {
+            data: { publicUrl: url },
+          } = supabase.storage.from(bucket).getPublicUrl(filePath);
+
+          publicUrl = url;
+        }
+
+        uploadedUrls.push(publicUrl);
+        setProgress(Math.round(((i + 1) / files.length) * 100));
+      } catch (err: any) {
+        console.error("Upload error:", err);
+        alert(`Failed to upload media: ${err?.message || "Unknown error"}`);
         setUploading(false);
         return;
       }
-
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from(bucket).getPublicUrl(filePath);
-      uploadedUrls.push(publicUrl);
-
-      setProgress(Math.round(((i + 1) / files.length) * 100));
     }
 
     if (multiple) {
@@ -69,6 +92,7 @@ export default function MediaUpload({
 
     setUploading(false);
     setProgress(0);
+    setStatusText("");
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,7 +160,7 @@ export default function MediaUpload({
           onDragOver={onDragOver}
           onDrop={onDrop}
           onClick={triggerInput}
-          className="border border-dashed border-neutral-800 hover:border-neutral-500 bg-neutral-900/50 p-8 rounded-sm text-center cursor-pointer transition-all flex flex-col items-center justify-center space-y-2 select-none"
+          className="border border-dashed border-neutral-800 hover:border-neutral-500 bg-neutral-950/60 hover:bg-neutral-900/40 p-5 rounded-sm text-center cursor-pointer transition-all flex flex-col items-center justify-center space-y-1.5 select-none"
         >
           <input
             type="file"
@@ -148,7 +172,7 @@ export default function MediaUpload({
           />
 
           <span className="text-xs text-neutral-400 tracking-wider">
-            {uploading ? `Uploading ${progress}%...` : "DRAG & DROP MEDIA HERE OR CLICK TO BROWSE"}
+            {uploading ? `${statusText || "Uploading..."} (${progress}%)` : "DRAG & DROP MEDIA HERE OR CLICK TO BROWSE"}
           </span>
 
           {uploading && (

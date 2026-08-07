@@ -11,6 +11,8 @@ interface Banner {
   subtitle: string | null;
   media_url: string;
   media_type: "image" | "video";
+  mobile_media_url?: string | null;
+  mobile_media_type?: "image" | "video" | null;
   button_text: string | null;
   button_link: string | null;
 }
@@ -100,30 +102,69 @@ export default function HomeClient({
                 }`}
               >
                 {/* Media Render background */}
-                {banner.media_type === "video" ? (
-                  <div className="absolute inset-0 h-full w-full bg-black">
-                    <video
-                      src={banner.media_url}
-                      className="h-full w-full object-cover opacity-75"
-                      muted
-                      loop
-                      autoPlay
-                      playsInline
-                    />
-                    {/* Premium video muted indicator */}
-                    <div className="absolute bottom-6 right-6 text-neutral-500 hover:text-white p-2">
-                      <VolumeX size={12} />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="absolute inset-0 h-full w-full">
-                    <img
-                      src={banner.media_url}
-                      alt={banner.title || "Hero banner"}
-                      className="h-full w-full object-cover opacity-80"
-                    />
-                  </div>
-                )}
+                {(() => {
+                  const hasMobileMedia = Boolean(banner.mobile_media_url);
+                  const mobileUrl = banner.mobile_media_url || banner.media_url;
+                  const mobileType = banner.mobile_media_url
+                    ? banner.mobile_media_type || "image"
+                    : banner.media_type;
+
+                  return (
+                    <>
+                      {/* Desktop Media */}
+                      <div className={`absolute inset-0 h-full w-full ${hasMobileMedia ? "hidden sm:block" : ""}`}>
+                        {banner.media_type === "video" ? (
+                          <div className="relative h-full w-full bg-black">
+                            <video
+                              src={banner.media_url}
+                              className="h-full w-full object-cover opacity-75"
+                              muted
+                              loop
+                              autoPlay
+                              playsInline
+                            />
+                            <div className="absolute bottom-6 right-6 text-neutral-500 hover:text-white p-2">
+                              <VolumeX size={12} />
+                            </div>
+                          </div>
+                        ) : (
+                          <img
+                            src={banner.media_url}
+                            alt={banner.title || "Hero banner"}
+                            className="h-full w-full object-cover opacity-80"
+                          />
+                        )}
+                      </div>
+
+                      {/* Mobile Media (if custom mobile banner exists) */}
+                      {hasMobileMedia && (
+                        <div className="absolute inset-0 h-full w-full sm:hidden">
+                          {mobileType === "video" ? (
+                            <div className="relative h-full w-full bg-black">
+                              <video
+                                src={mobileUrl}
+                                className="h-full w-full object-cover opacity-75"
+                                muted
+                                loop
+                                autoPlay
+                                playsInline
+                              />
+                              <div className="absolute bottom-6 right-6 text-neutral-500 hover:text-white p-2">
+                                <VolumeX size={12} />
+                              </div>
+                            </div>
+                          ) : (
+                            <img
+                              src={mobileUrl}
+                              alt={banner.title || "Hero banner"}
+                              className="h-full w-full object-cover opacity-80"
+                            />
+                          )}
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
 
                 {/* Dark Vignette Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/20" />
