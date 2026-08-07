@@ -448,6 +448,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}
         product={product}
+        productSlug={product.slug}
         selectedSize={selectedSize || "Not specified"}
         selectedColor={selectedColor || "Not specified"}
         quantity={quantity}
