@@ -29,10 +29,10 @@ export default function CustomerFooter({ settings }: FooterProps) {
   };
 
   return (
-    <footer className="w-full border-t border-neutral-200 bg-neutral-50 py-10 md:py-14 text-neutral-600 select-none">
+    <footer className="w-full border-t border-neutral-200 dark:border-neutral-850 bg-neutral-50 dark:bg-neutral-950/40 py-10 md:py-14 text-neutral-600 dark:text-neutral-400 select-none">
       <div className="mx-auto max-w-7xl px-6 grid grid-cols-1 gap-6 md:gap-10 md:grid-cols-4">
         {/* Brand block */}
-        <div className="space-y-4 pb-4 md:pb-0 border-b md:border-b-0 border-neutral-200">
+        <div className="space-y-4 pb-4 md:pb-0 border-b md:border-b-0 border-neutral-200 dark:border-neutral-800">
           <Link href="/" className="focus:outline-none block">
             {settings?.logo ? (
               <img
@@ -41,21 +41,21 @@ export default function CustomerFooter({ settings }: FooterProps) {
                 className="h-6 w-auto object-contain"
               />
             ) : (
-              <span className="font-extrabold text-xl tracking-[0.2em] text-black uppercase font-sans">
+              <span className="font-extrabold text-xl tracking-[0.2em] text-black dark:text-white uppercase font-sans">
                 {settings?.shop_name || "TEEX"}
               </span>
             )}
           </Link>
-          <p className="text-xs font-light leading-relaxed tracking-wide text-neutral-500 max-w-xs">
+          <p className="text-xs font-light leading-relaxed tracking-wide text-neutral-500 dark:text-neutral-400 max-w-xs">
             Minimal streetwear crafted for everyday wear. Made with premium quality and attention to detail.
           </p>
-          <div className="flex space-x-3 text-black pt-1">
+          <div className="flex space-x-3 text-black dark:text-white pt-1">
             {settings?.instagram && (
               <a
                 href={settings.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="hover:opacity-75 transition-opacity p-1 bg-neutral-200/60 rounded-full"
+                className="hover:opacity-75 transition-opacity p-1 bg-neutral-200/60 dark:bg-neutral-800 rounded-full"
                 aria-label="Instagram Link"
               >
                 <svg
@@ -80,7 +80,7 @@ export default function CustomerFooter({ settings }: FooterProps) {
                 href={`https://wa.me/${settings.whatsapp.replace(/[^\d]/g, "")}`}
                 target="_blank"
                 rel="noreferrer"
-                className="hover:opacity-75 transition-opacity p-1 bg-neutral-200/60 rounded-full"
+                className="hover:opacity-75 transition-opacity p-1 bg-neutral-200/60 dark:bg-neutral-800 rounded-full"
                 aria-label="WhatsApp Link"
               >
                 <svg
@@ -102,13 +102,13 @@ export default function CustomerFooter({ settings }: FooterProps) {
         </div>
 
         {/* Directory links - SHOP (Collapsible on Mobile) */}
-        <div className="border-b md:border-b-0 border-neutral-200 pb-4 md:pb-0">
+        <div className="border-b md:border-b-0 border-neutral-200 dark:border-neutral-800 pb-4 md:pb-0">
           <button
             type="button"
             onClick={() => toggleSection("shop")}
             className="w-full flex items-center justify-between py-1 text-left focus:outline-none md:cursor-default"
           >
-            <h4 className="text-xs font-extrabold tracking-widest uppercase text-black">
+            <h4 className="text-xs font-extrabold tracking-widest uppercase text-black dark:text-white">
               SHOP
             </h4>
             <ChevronDown
@@ -126,27 +126,27 @@ export default function CustomerFooter({ settings }: FooterProps) {
           >
             <ul className="space-y-2.5 text-[11px] tracking-wider uppercase font-medium">
               <li>
-                <Link href="/products" className="hover:text-black transition-colors">
+                <Link href="/products" className="hover:text-black dark:hover:text-white transition-colors">
                   All Products
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=graphic-tees" className="hover:text-black transition-colors">
+                <Link href="/products?category=graphic-tees" className="hover:text-black dark:hover:text-white transition-colors">
                   Graphic Tees
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=oversized" className="hover:text-black transition-colors">
+                <Link href="/products?category=oversized" className="hover:text-black dark:hover:text-white transition-colors">
                   Oversized
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=striped-tees" className="hover:text-black transition-colors">
+                <Link href="/products?category=striped-tees" className="hover:text-black dark:hover:text-white transition-colors">
                   Striped Tees
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=plain-tees" className="hover:text-black transition-colors">
+                <Link href="/products?category=plain-tees" className="hover:text-black dark:hover:text-white transition-colors">
                   Plain Tees
                 </Link>
               </li>
@@ -155,13 +155,13 @@ export default function CustomerFooter({ settings }: FooterProps) {
         </div>
 
         {/* Directory links - COMPANY (Collapsible on Mobile) */}
-        <div className="border-b md:border-b-0 border-neutral-200 pb-4 md:pb-0">
+        <div className="border-b md:border-b-0 border-neutral-200 dark:border-neutral-800 pb-4 md:pb-0">
           <button
             type="button"
             onClick={() => toggleSection("company")}
             className="w-full flex items-center justify-between py-1 text-left focus:outline-none md:cursor-default"
           >
-            <h4 className="text-xs font-extrabold tracking-widest uppercase text-black">
+            <h4 className="text-xs font-extrabold tracking-widest uppercase text-black dark:text-white">
               COMPANY
             </h4>
             <ChevronDown
@@ -179,27 +179,27 @@ export default function CustomerFooter({ settings }: FooterProps) {
           >
             <ul className="space-y-2.5 text-[11px] tracking-wider uppercase font-medium">
               <li>
-                <Link href="/about" className="hover:text-black transition-colors">
+                <Link href="/about" className="hover:text-black dark:hover:text-white transition-colors">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-black transition-colors">
+                <Link href="/contact" className="hover:text-black dark:hover:text-white transition-colors">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/shipping" className="hover:text-black transition-colors">
+                <Link href="/shipping" className="hover:text-black dark:hover:text-white transition-colors">
                   Shipping Info
                 </Link>
               </li>
               <li>
-                <Link href="/returns" className="hover:text-black transition-colors">
+                <Link href="/returns" className="hover:text-black dark:hover:text-white transition-colors">
                   Returns & Exchange
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-black transition-colors">
+                <Link href="/privacy" className="hover:text-black dark:hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
               </li>
@@ -208,13 +208,13 @@ export default function CustomerFooter({ settings }: FooterProps) {
         </div>
 
         {/* Contact Info - CUSTOMER CARE (Collapsible on Mobile) */}
-        <div className="border-b md:border-b-0 border-neutral-200 pb-4 md:pb-0">
+        <div className="border-b md:border-b-0 border-neutral-200 dark:border-neutral-800 pb-4 md:pb-0">
           <button
             type="button"
             onClick={() => toggleSection("contact")}
             className="w-full flex items-center justify-between py-1 text-left focus:outline-none md:cursor-default"
           >
-            <h4 className="text-xs font-extrabold tracking-widest uppercase text-black">
+            <h4 className="text-xs font-extrabold tracking-widest uppercase text-black dark:text-white">
               CUSTOMER CARE
             </h4>
             <ChevronDown
@@ -230,21 +230,21 @@ export default function CustomerFooter({ settings }: FooterProps) {
               openSections.contact ? "block" : "hidden md:block"
             } pt-3 md:pt-3 transition-all duration-300`}
           >
-            <ul className="space-y-2 text-[11px] tracking-wider font-medium text-neutral-600">
+            <ul className="space-y-2 text-[11px] tracking-wider font-medium text-neutral-600 dark:text-neutral-400">
               <li>WhatsApp</li>
-              <li className="font-semibold text-black">
+              <li className="font-semibold text-black dark:text-white">
                 {settings?.whatsapp || settings?.phone || "+91 (98765) 43210"}
               </li>
               <li className="pt-1">Instagram</li>
-              <li className="font-semibold text-black">@_teex</li>
+              <li className="font-semibold text-black dark:text-white">@_teex</li>
               <li className="pt-1">Email</li>
-              <li className="font-semibold text-black">{settings?.email || "teexclothings@gmail.com"}</li>
+              <li className="font-semibold text-black dark:text-white">{settings?.email || "teexclothings@gmail.com"}</li>
             </ul>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 border-t border-neutral-200 mt-8 md:mt-12 pt-6 flex flex-col items-center justify-center text-center gap-1.5 text-[10px] tracking-widest uppercase text-neutral-500 font-medium">
+      <div className="mx-auto max-w-7xl px-6 border-t border-neutral-200 dark:border-neutral-850 mt-8 md:mt-12 pt-6 flex flex-col items-center justify-center text-center gap-1.5 text-[10px] tracking-widest uppercase text-neutral-500 dark:text-neutral-400 font-medium">
         <span suppressHydrationWarning>
           © {new Date().getFullYear()} {settings?.shop_name || "TEEX"}. ALL RIGHTS RESERVED.
         </span>
@@ -254,7 +254,7 @@ export default function CustomerFooter({ settings }: FooterProps) {
             href="https://www.ekodrix.com"
             target="_blank"
             rel="noreferrer"
-            className="font-bold text-black hover:underline transition-all"
+            className="font-bold text-black dark:text-white hover:underline transition-all"
           >
             Ekodrix
           </a>

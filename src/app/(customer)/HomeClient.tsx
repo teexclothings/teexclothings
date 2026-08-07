@@ -112,31 +112,31 @@ export default function HomeClient({
   const productsWithImages = initialProducts.filter((p) => p.images && p.images.length > 0);
 
   return (
-    <div className="space-y-16 pb-20 bg-white">
+    <div className="space-y-16 pb-20 bg-transparent">
       {/* 1. HERO BANNER SECTION */}
       <section
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
-        className="relative w-full aspect-[16/9] md:aspect-[21/9] min-h-[460px] max-h-[640px] bg-neutral-100 overflow-hidden select-none"
+        className="relative w-full aspect-[16/9] md:aspect-[21/9] min-h-[460px] max-h-[640px] bg-neutral-100 dark:bg-neutral-900 overflow-hidden select-none"
       >
         {initialBanners.length === 0 ? (
           /* Default Banner Placeholder layout if no banner is added in Admin yet */
-          <div className="relative inset-0 h-full w-full flex flex-col md:flex-row items-center justify-between px-8 md:px-16 py-12 bg-neutral-100">
+          <div className="relative inset-0 h-full w-full flex flex-col md:flex-row items-center justify-between px-8 md:px-16 py-12 bg-neutral-100 dark:bg-neutral-900">
             <div className="max-w-xl space-y-4 z-10 text-left">
               <span className="text-xs font-bold tracking-[0.25em] text-neutral-500 uppercase">
                 NEW DROP
               </span>
-              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-black uppercase leading-none">
+              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-black dark:text-white uppercase leading-none">
                 PREMIUM <br /> STREETWEAR
               </h1>
-              <p className="text-sm font-medium text-neutral-600">
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                 Minimal designs. Maximum impact.
               </p>
               <div className="pt-2">
                 <Link
                   href="/products"
-                  className="inline-flex items-center space-x-3 bg-black text-white px-7 py-3 text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 transition-all rounded-xs"
+                  className="inline-flex items-center space-x-3 bg-black text-white dark:bg-white dark:text-black px-7 py-3 text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all rounded-xs"
                 >
                   <span>EXPLORE COLLECTION</span>
                   <ArrowRight size={14} />
@@ -145,10 +145,10 @@ export default function HomeClient({
             </div>
 
             {/* Pure SVG Placeholder Frame */}
-            <div className="hidden md:flex w-1/2 h-full relative items-center justify-center bg-neutral-200/60 border border-neutral-300 rounded-xs">
+            <div className="hidden md:flex w-1/2 h-full relative items-center justify-center bg-neutral-200/60 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-xs">
               <div className="flex flex-col items-center justify-center space-y-2 text-neutral-400">
                 <ImageIcon size={48} strokeWidth={1} />
-                <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-500">
+                <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-500 dark:text-neutral-400">
                   HERO BANNER MEDIA PLACEHOLDER
                 </span>
                 <span className="text-[9px] text-neutral-400">
@@ -230,18 +230,18 @@ export default function HomeClient({
                 })()}
 
                 {/* Light Overlay gradient for high copy legibility */}
-                <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/40 to-transparent sm:from-white/80" />
+                <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/40 to-transparent sm:from-white/80 dark:from-black/90 dark:via-black/40" />
 
                 {/* Banner Content Copy */}
                 <div className="absolute inset-0 flex items-center justify-start px-8 md:px-16 text-left">
                   <div className="max-w-xl space-y-4 animate-slide-up">
                     {banner.subtitle && (
-                      <span className="block text-xs font-bold tracking-[0.25em] text-neutral-600 uppercase">
+                      <span className="block text-xs font-bold tracking-[0.25em] text-neutral-600 dark:text-neutral-450 uppercase">
                         {banner.subtitle}
                       </span>
                     )}
                     {banner.title && (
-                      <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-black uppercase leading-tight">
+                      <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-black dark:text-white uppercase leading-tight">
                         {banner.title}
                       </h1>
                     )}
@@ -249,7 +249,7 @@ export default function HomeClient({
                       <div className="pt-2">
                         <Link
                           href={banner.button_link || "/products"}
-                          className="inline-flex items-center space-x-3 bg-black text-white px-7 py-3 text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 transition-all rounded-xs shadow-xs"
+                          className="inline-flex items-center space-x-3 bg-black text-white dark:bg-white dark:text-black px-7 py-3 text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all rounded-xs shadow-xs"
                         >
                           <span>{banner.button_text}</span>
                           <ArrowRight size={14} />
@@ -268,14 +268,14 @@ export default function HomeClient({
           <>
             <button
               onClick={handlePrevBanner}
-              className="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 text-black/60 hover:text-black transition-colors focus:outline-none cursor-pointer"
+              className="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white transition-colors focus:outline-none cursor-pointer"
               aria-label="Previous Slide"
             >
               <ChevronLeft size={24} />
             </button>
             <button
               onClick={handleNextBanner}
-              className="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 text-black/60 hover:text-black transition-colors focus:outline-none cursor-pointer"
+              className="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white transition-colors focus:outline-none cursor-pointer"
               aria-label="Next Slide"
             >
               <ChevronRight size={24} />
@@ -288,7 +288,7 @@ export default function HomeClient({
                   onClick={() => setActiveBanner(index)}
                   className={`transition-all cursor-pointer ${
                     index === activeBanner
-                      ? "h-1 w-6 bg-black rounded-full"
+                      ? "h-1 w-6 bg-black dark:bg-white rounded-full"
                       : "h-2 w-2 rounded-full bg-neutral-400 hover:bg-neutral-600"
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
@@ -301,18 +301,18 @@ export default function HomeClient({
 
       {/* 2. CATEGORIES SECTION - FIND YOUR STYLE */}
       <section className="mx-auto max-w-7xl px-6 space-y-6">
-        <div className="flex items-end justify-between border-b border-neutral-200 pb-3">
+        <div className="flex items-end justify-between border-b border-neutral-200 dark:border-neutral-850 pb-3">
           <div>
-            <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-500 uppercase">
+            <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-500 dark:text-neutral-400 uppercase">
               SHOP BY COLLECTION
             </span>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-black uppercase mt-0.5 whitespace-nowrap">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-black dark:text-white uppercase mt-0.5 whitespace-nowrap">
               FIND YOUR STYLE
             </h2>
           </div>
           <Link
             href="/products"
-            className="hidden md:inline-flex items-center space-x-1.5 text-xs font-bold tracking-wider uppercase text-black hover:text-neutral-600 transition-colors"
+            className="hidden md:inline-flex items-center space-x-1.5 text-xs font-bold tracking-wider uppercase text-black dark:text-white hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors"
           >
             <span>VIEW ALL COLLECTIONS</span>
             <ArrowRight size={14} />
@@ -321,7 +321,7 @@ export default function HomeClient({
 
         {/* Dynamic Categories Display (Desktop Grid + Mobile Circular Avatars) */}
         {initialCategories.length === 0 ? (
-          <div className="rounded-xs border border-neutral-200 bg-neutral-50 p-12 text-center text-xs text-neutral-500 uppercase">
+          <div className="rounded-xs border border-neutral-200 dark:border-neutral-850 bg-neutral-50 dark:bg-neutral-900 p-12 text-center text-xs text-neutral-500 dark:text-neutral-400 uppercase">
             No categories defined in database.
           </div>
         ) : (
@@ -332,7 +332,7 @@ export default function HomeClient({
                 <Link
                   key={cat.id}
                   href={`/products?category=${cat.id}`}
-                  className="group relative aspect-[3/4] w-full overflow-hidden bg-neutral-900 rounded-xs border border-neutral-200 block select-none"
+                  className="group relative aspect-[3/4] w-full overflow-hidden bg-neutral-900 rounded-xs border border-neutral-200 dark:border-neutral-850 block select-none"
                 >
                   {cat.image_url ? (
                     <img
@@ -359,7 +359,7 @@ export default function HomeClient({
               ))}
             </div>
 
-            {/* Mobile Circular Avatars Layout (Matching attached design) */}
+            {/* Mobile Circular Avatars Layout (Matching attached reference design) */}
             <div className="flex md:hidden space-x-6 overflow-x-auto pb-4 pt-1 select-none scrollbar-none items-start">
               {initialCategories.map((cat) => (
                 <Link
@@ -368,7 +368,7 @@ export default function HomeClient({
                   className="group flex flex-col items-center flex-shrink-0 w-20 sm:w-24 focus:outline-none"
                 >
                   {/* Circle Image Avatar */}
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border border-neutral-200 bg-neutral-100 shadow-2xs group-hover:border-black transition-all flex items-center justify-center">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 shadow-2xs group-hover:border-black dark:group-hover:border-white transition-all flex items-center justify-center">
                     {cat.image_url ? (
                       <img
                         src={cat.image_url}
@@ -376,14 +376,14 @@ export default function HomeClient({
                         className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
-                      <div className="h-full w-full bg-neutral-200 flex items-center justify-center text-neutral-500">
+                      <div className="h-full w-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400">
                         <Layers size={22} strokeWidth={1.2} />
                       </div>
                     )}
                   </div>
 
                   {/* Centered Category Label Below Circle */}
-                  <span className="text-[10px] font-extrabold tracking-wider uppercase text-black text-center mt-2.5 group-hover:text-neutral-600 transition-colors leading-tight line-clamp-2 px-0.5">
+                  <span className="text-[10px] font-extrabold tracking-wider uppercase text-black dark:text-white text-center mt-2.5 group-hover:text-neutral-600 dark:group-hover:text-neutral-400 transition-colors leading-tight line-clamp-2 px-0.5">
                     {cat.name}
                   </span>
                 </Link>
@@ -395,18 +395,18 @@ export default function HomeClient({
 
       {/* 3. NEW ARRIVALS / JUST LANDED PRODUCT GRID */}
       <section className="mx-auto max-w-7xl px-6 space-y-6">
-        <div className="flex items-end justify-between border-b border-neutral-200 pb-3">
+        <div className="flex items-end justify-between border-b border-neutral-200 dark:border-neutral-850 pb-3">
           <div>
-            <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-500 uppercase">
+            <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-500 dark:text-neutral-400 uppercase">
               NEW ARRIVALS
             </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-black uppercase mt-0.5">
+            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-black dark:text-white uppercase mt-0.5">
               JUST LANDED
             </h2>
           </div>
           <Link
             href="/products"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold tracking-wider uppercase text-black hover:text-neutral-600 transition-colors whitespace-nowrap"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold tracking-wider uppercase text-black dark:text-white hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors whitespace-nowrap"
           >
             <span>VIEW ALL<span className="hidden sm:inline"> PRODUCTS</span></span>
             <ArrowRight size={14} />
@@ -414,7 +414,7 @@ export default function HomeClient({
         </div>
 
         {initialProducts.length === 0 ? (
-          <div className="rounded-xs border border-neutral-200 bg-neutral-50 p-12 text-center text-xs text-neutral-500 uppercase">
+          <div className="rounded-xs border border-neutral-200 dark:border-neutral-850 bg-neutral-50 dark:bg-neutral-900 p-12 text-center text-xs text-neutral-500 dark:text-neutral-400 uppercase">
             No products available yet in catalog.
           </div>
         ) : (
@@ -428,31 +428,31 @@ export default function HomeClient({
 
       {/* 4. VALUE PROPOSITIONS / FEATURES BAR */}
       <section className="mx-auto max-w-7xl px-3 sm:px-6">
-        <div className="grid grid-cols-3 gap-1 sm:gap-6 rounded-xs border border-neutral-200 bg-neutral-50/80 p-3 sm:p-8 text-center">
+        <div className="grid grid-cols-3 gap-1 sm:gap-6 rounded-xs border border-neutral-200 dark:border-neutral-850 bg-neutral-50/80 dark:bg-neutral-900/50 p-3 sm:p-8 text-center">
           <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-1 sm:px-4">
-            <Sparkles className="text-black mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
-            <h3 className="text-[9px] sm:text-xs font-extrabold tracking-wider uppercase text-black leading-tight">
+            <Sparkles className="text-black dark:text-white mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
+            <h3 className="text-[9px] sm:text-xs font-extrabold tracking-wider uppercase text-black dark:text-white leading-tight">
               PREMIUM QUALITY
             </h3>
-            <p className="text-[8px] sm:text-xs font-light text-neutral-500 max-w-xs leading-tight sm:leading-relaxed">
+            <p className="text-[8px] sm:text-xs font-light text-neutral-500 dark:text-neutral-400 max-w-xs leading-tight sm:leading-relaxed">
               100% premium cotton fabrics for all-day comfort.
             </p>
           </div>
-          <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-1 sm:px-4 border-l border-neutral-200">
-            <RefreshCw className="text-black mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
-            <h3 className="text-[9px] sm:text-xs font-extrabold tracking-wider uppercase text-black leading-tight">
+          <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-1 sm:px-4 border-l border-neutral-200 dark:border-neutral-800">
+            <RefreshCw className="text-black dark:text-white mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
+            <h3 className="text-[9px] sm:text-xs font-extrabold tracking-wider uppercase text-black dark:text-white leading-tight">
               EASY RETURNS
             </h3>
-            <p className="text-[8px] sm:text-xs font-light text-neutral-500 max-w-xs leading-tight sm:leading-relaxed">
+            <p className="text-[8px] sm:text-xs font-light text-neutral-500 dark:text-neutral-400 max-w-xs leading-tight sm:leading-relaxed">
               No questions asked 7-day return policy.
             </p>
           </div>
-          <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-1 sm:px-4 border-l border-neutral-200">
-            <ShieldCheck className="text-black mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
-            <h3 className="text-[9px] sm:text-xs font-extrabold tracking-wider uppercase text-black leading-tight">
+          <div className="flex flex-col items-center space-y-1 sm:space-y-2 px-1 sm:px-4 border-l border-neutral-200 dark:border-neutral-800">
+            <ShieldCheck className="text-black dark:text-white mb-1 w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
+            <h3 className="text-[9px] sm:text-xs font-extrabold tracking-wider uppercase text-black dark:text-white leading-tight">
               SECURE ORDERING
             </h3>
-            <p className="text-[8px] sm:text-xs font-light text-neutral-500 max-w-xs leading-tight sm:leading-relaxed">
+            <p className="text-[8px] sm:text-xs font-light text-neutral-500 dark:text-neutral-400 max-w-xs leading-tight sm:leading-relaxed">
               Order directly on WhatsApp 100% safe & secure.
             </p>
           </div>
@@ -461,12 +461,12 @@ export default function HomeClient({
 
       {/* 5. SHOP THE LOOK / INSTAGRAM GALLERY */}
       <section className="mx-auto max-w-7xl px-6 space-y-6">
-        <div className="flex items-end justify-between border-b border-neutral-200 pb-3">
+        <div className="flex items-end justify-between border-b border-neutral-200 dark:border-neutral-850 pb-3">
           <div>
-            <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-500 uppercase">
+            <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-500 dark:text-neutral-400 uppercase">
               SHOP THE LOOK
             </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-black uppercase mt-0.5">
+            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-black dark:text-white uppercase mt-0.5">
               @_TEEX
             </h2>
           </div>
@@ -474,7 +474,7 @@ export default function HomeClient({
             href="https://instagram.com"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center space-x-1.5 md:space-x-2 border-0 md:border md:border-neutral-300 bg-transparent md:bg-white p-0 md:px-4 md:py-2 text-xs font-bold tracking-wider uppercase text-black hover:opacity-80 md:hover:bg-neutral-100 transition-colors rounded-xs"
+            className="inline-flex items-center space-x-1.5 md:space-x-2 border-0 md:border md:border-neutral-300 dark:md:border-neutral-700 bg-transparent md:bg-white dark:md:bg-neutral-900 p-0 md:px-4 md:py-2 text-xs font-bold tracking-wider uppercase text-black dark:text-white hover:opacity-80 md:hover:bg-neutral-100 dark:md:hover:bg-neutral-800 transition-colors rounded-xs"
           >
             <span>FOLLOW US<span className="hidden md:inline"> ON INSTAGRAM</span></span>
             <svg
@@ -504,7 +504,7 @@ export default function HomeClient({
             return (
               <div
                 key={idx}
-                className="group relative aspect-square w-full overflow-hidden bg-neutral-100 border border-neutral-200/60 rounded-xs flex items-center justify-center"
+                className="group relative aspect-square w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800/60 rounded-xs flex items-center justify-center"
               >
                 {imgUrl ? (
                   <img
@@ -554,7 +554,7 @@ export default function HomeClient({
             return (
               <div
                 key={idx}
-                className="group relative w-36 aspect-[3/4] flex-shrink-0 snap-start overflow-hidden bg-neutral-100 border border-neutral-200/60 rounded-xs flex items-center justify-center"
+                className="group relative w-36 aspect-[3/4] flex-shrink-0 snap-start overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800/60 rounded-xs flex items-center justify-center"
               >
                 {imgUrl ? (
                   <img
@@ -578,16 +578,16 @@ export default function HomeClient({
 
       {/* 6. WHATSAPP ORDER CTA SECTION */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="relative overflow-hidden rounded-xs border border-neutral-200 bg-gradient-to-r from-neutral-50 via-white to-neutral-100 p-5 sm:p-8 md:p-12 flex flex-row items-center justify-between gap-3 sm:gap-6">
+        <div className="relative overflow-hidden rounded-xs border border-neutral-200 dark:border-neutral-850 bg-gradient-to-r from-neutral-50 via-white to-neutral-100 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 p-5 sm:p-8 md:p-12 flex flex-row items-center justify-between gap-3 sm:gap-6">
           {/* Left Text Content */}
           <div className="w-7/12 sm:w-1/2 space-y-2 sm:space-y-3 text-left z-10">
-            <span className="block text-[9px] sm:text-[10px] font-bold tracking-[0.2em] sm:tracking-[0.25em] text-neutral-500 uppercase">
+            <span className="block text-[9px] sm:text-[10px] font-bold tracking-[0.2em] sm:tracking-[0.25em] text-neutral-500 dark:text-neutral-400 uppercase">
               HAVE QUESTIONS?
             </span>
-            <h2 className="text-base sm:text-2xl md:text-3xl font-extrabold tracking-tight text-black uppercase leading-tight">
+            <h2 className="text-base sm:text-2xl md:text-3xl font-extrabold tracking-tight text-black dark:text-white uppercase leading-tight">
               ORDER ON WHATSAPP
             </h2>
-            <p className="text-[10px] sm:text-xs font-light text-neutral-600 leading-normal sm:leading-relaxed">
+            <p className="text-[10px] sm:text-xs font-light text-neutral-600 dark:text-neutral-400 leading-normal sm:leading-relaxed">
               Chat with us directly and place your order in seconds.
             </p>
             <div className="pt-1">
@@ -595,7 +595,7 @@ export default function HomeClient({
                 href="https://wa.me/919876543210"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center space-x-2 bg-black text-white px-3.5 py-2 sm:px-6 sm:py-2.5 text-[10px] sm:text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 transition-all rounded-xs shadow-xs"
+                className="inline-flex items-center space-x-2 bg-black text-white dark:bg-white dark:text-black px-3.5 py-2 sm:px-6 sm:py-2.5 text-[10px] sm:text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all rounded-xs shadow-xs"
               >
                 <span>CHAT NOW</span>
                 <MessageCircle size={13} className="sm:w-[15px] sm:h-[15px]" />

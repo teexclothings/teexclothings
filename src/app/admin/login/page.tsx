@@ -22,18 +22,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-950 px-4 text-white">
-      <div className="w-full max-w-md space-y-8 border border-neutral-800 bg-neutral-900 p-8 rounded-sm shadow-2xl">
+    <div className="flex min-h-screen items-center justify-center bg-neutral-100 dark:bg-neutral-950 px-4 text-black dark:text-white">
+      <div className="w-full max-w-md space-y-8 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 p-8 rounded-sm shadow-2xl">
         <div className="text-center">
           <h2 className="font-serif-luxury text-3xl font-light tracking-widest uppercase">TEEX</h2>
-          <p className="mt-2 text-xs tracking-[0.25em] text-neutral-400 uppercase">
+          <p className="mt-2 text-xs tracking-[0.25em] text-neutral-600 dark:text-neutral-400 uppercase">
             Admin Console Login
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           {error && (
-            <div className="border border-neutral-800 bg-neutral-950 p-3 text-xs tracking-wide text-red-500 rounded-sm">
+            <div className="border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 p-3 text-xs tracking-wide text-red-600 dark:text-red-500 rounded-sm">
               {error}
             </div>
           )}
@@ -42,7 +42,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-[10px] font-light tracking-widest uppercase text-neutral-400"
+                className="block text-[10px] font-light tracking-widest uppercase text-neutral-600 dark:text-neutral-400"
               >
                 Email Address
               </label>
@@ -53,7 +53,7 @@ export default function LoginPage() {
                 required
                 autoComplete="email"
                 disabled={isPending}
-                className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white placeholder-neutral-600 transition-colors focus:border-white focus:outline-none"
+                className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-sm text-black dark:text-white placeholder-neutral-600 transition-colors focus:border-black dark:focus:border-white focus:outline-none"
                 placeholder="admin@teexclothings.com"
               />
             </div>
@@ -61,7 +61,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-[10px] font-light tracking-widest uppercase text-neutral-400"
+                className="block text-[10px] font-light tracking-widest uppercase text-neutral-600 dark:text-neutral-400"
               >
                 Password
               </label>
@@ -72,7 +72,7 @@ export default function LoginPage() {
                 required
                 autoComplete="current-password"
                 disabled={isPending}
-                className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white placeholder-neutral-600 transition-colors focus:border-white focus:outline-none"
+                className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-sm text-black dark:text-white placeholder-neutral-600 transition-colors focus:border-black dark:focus:border-white focus:outline-none"
                 placeholder="••••••••"
               />
             </div>
@@ -85,10 +85,10 @@ export default function LoginPage() {
                 name="remember"
                 type="checkbox"
                 disabled={isPending}
-                className="h-4 w-4 accent-white"
+                className="h-4 w-4 accent-black dark:accent-white"
                 defaultChecked
               />
-              <label htmlFor="remember" className="ml-2 font-light text-neutral-400">
+              <label htmlFor="remember" className="ml-2 font-light text-neutral-600 dark:text-neutral-400">
                 Remember session
               </label>
             </div>
@@ -99,7 +99,7 @@ export default function LoginPage() {
                 onClick={() =>
                   alert("Password recovery is managed by the administrator in the Supabase console.")
                 }
-                className="text-neutral-400 transition-colors hover:text-white"
+                className="text-neutral-600 dark:text-neutral-400 transition-colors hover:text-black dark:text-white"
               >
                 Forgot Password?
               </a>
@@ -110,7 +110,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="flex w-full justify-center rounded-sm bg-white px-4 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-black transition-colors hover:bg-neutral-200 disabled:bg-neutral-600 disabled:text-neutral-300"
+              className="flex w-full justify-center rounded-sm bg-black dark:bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-white dark:text-black transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:bg-neutral-600 disabled:text-neutral-700 dark:text-neutral-300"
             >
               {isPending ? "Authenticating..." : "Sign In"}
             </button>

@@ -41,12 +41,12 @@ export default function FormInput({
         maxLength={maxLength}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`w-full bg-neutral-900 border rounded-sm px-4 py-3 text-sm text-white placeholder-neutral-600 font-light tracking-wide transition-colors focus:outline-none focus:border-white ${
-          error ? "border-red-800" : "border-neutral-800 hover:border-neutral-600"
+        className={`w-full bg-neutral-50 dark:bg-neutral-900 border rounded-sm px-4 py-3 text-sm text-black dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 font-light tracking-wide transition-colors focus:outline-none focus:border-black dark:focus:border-white ${
+          error ? "border-red-800 dark:border-red-500" : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-350 dark:hover:border-neutral-600"
         }`}
       />
       {error && (
-        <p id={`${id}-error`} className="text-[10px] text-red-400 font-light tracking-wide" role="alert">
+        <p id={`${id}-error`} className="text-[10px] text-red-650 dark:text-red-400 font-light tracking-wide" role="alert">
           {error}
         </p>
       )}

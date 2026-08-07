@@ -18,7 +18,7 @@ export default function DeliveryForm({ formData, setFormData, errors, onStateCha
 
   return (
     <div className="space-y-4">
-      <h3 className="text-[9px] uppercase tracking-widest font-semibold text-neutral-500 border-b border-neutral-900 pb-2">
+      <h3 className="text-[9px] uppercase tracking-widest font-semibold text-neutral-500 border-b border-neutral-200 dark:border-neutral-900 pb-2">
         Delivery Details
       </h3>
 

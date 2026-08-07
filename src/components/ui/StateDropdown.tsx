@@ -78,9 +78,9 @@ export default function StateDropdown({ value, onChange, error }: StateDropdownP
         <span className="block text-[9px] uppercase tracking-widest font-semibold text-neutral-500">
           State
         </span>
-        <div className="flex items-center space-x-2 bg-neutral-900 border border-neutral-800 rounded-sm px-4 py-3">
+        <div className="flex items-center space-x-2 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-sm px-4 py-3">
           <Loader2 size={14} className="animate-spin text-neutral-500" />
-          <span className="text-xs text-neutral-600 font-light">Loading states…</span>
+          <span className="text-xs text-neutral-500 dark:text-neutral-600 font-light">Loading states…</span>
         </div>
       </div>
     );
@@ -92,8 +92,8 @@ export default function StateDropdown({ value, onChange, error }: StateDropdownP
         <span className="block text-[9px] uppercase tracking-widest font-semibold text-neutral-500">
           State
         </span>
-        <div className="bg-neutral-900 border border-red-900 rounded-sm px-4 py-3">
-          <span className="text-xs text-red-400 font-light">Failed to load states. Please refresh.</span>
+        <div className="bg-neutral-50 dark:bg-neutral-900 border border-red-200 dark:border-red-900 rounded-sm px-4 py-3">
+          <span className="text-xs text-red-500 dark:text-red-400 font-light">Failed to load states. Please refresh.</span>
         </div>
       </div>
     );
@@ -111,25 +111,25 @@ export default function StateDropdown({ value, onChange, error }: StateDropdownP
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-haspopup="listbox"
-        className={`w-full flex items-center justify-between bg-neutral-900 border rounded-sm px-4 py-3 text-sm font-light tracking-wide transition-colors cursor-pointer focus:outline-none focus:border-white ${
-          error ? "border-red-800" : "border-neutral-800 hover:border-neutral-600"
-        } ${value ? "text-white" : "text-neutral-600"}`}
+        className={`w-full flex items-center justify-between bg-neutral-50 dark:bg-neutral-900 border rounded-sm px-4 py-3 text-sm font-light tracking-wide transition-colors cursor-pointer focus:outline-none focus:border-black dark:focus:border-white ${
+          error ? "border-red-800 dark:border-red-500" : "border-neutral-200 dark:border-neutral-850 hover:border-neutral-350 dark:hover:border-neutral-600"
+        } ${value ? "text-black dark:text-white" : "text-neutral-400 dark:text-neutral-600"}`}
       >
         <span>{value || "Select your state"}</span>
         <ChevronDown size={14} className={`text-neutral-500 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
       {error && (
-        <p className="text-[10px] text-red-400 font-light tracking-wide" role="alert">
+        <p className="text-[10px] text-red-650 dark:text-red-400 font-light tracking-wide" role="alert">
           {error}
         </p>
       )}
 
       {/* Dropdown panel */}
       {open && (
-        <div className="absolute z-50 left-0 right-0 mt-1 bg-neutral-900 border border-neutral-800 rounded-sm shadow-2xl animate-fade-in max-h-60 flex flex-col">
+        <div className="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-sm shadow-2xl animate-fade-in max-h-60 flex flex-col">
           {/* Search */}
-          <div className="flex items-center space-x-2 px-3 py-2 border-b border-neutral-800">
+          <div className="flex items-center space-x-2 px-3 py-2 border-b border-neutral-100 dark:border-neutral-800">
             <Search size={12} className="text-neutral-500" />
             <input
               ref={searchRef}
@@ -137,7 +137,7 @@ export default function StateDropdown({ value, onChange, error }: StateDropdownP
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search state…"
-              className="flex-1 bg-transparent text-xs text-white placeholder-neutral-600 outline-none"
+              className="flex-1 bg-transparent text-xs text-black dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 outline-none"
             />
           </div>
 
@@ -153,12 +153,12 @@ export default function StateDropdown({ value, onChange, error }: StateDropdownP
                     role="option"
                     aria-selected={value === s.state_name}
                     onClick={() => handleSelect(s)}
-                    className={`w-full text-left px-4 py-2.5 text-xs font-light tracking-wide transition-colors cursor-pointer hover:bg-neutral-800 ${
-                      value === s.state_name ? "text-white bg-neutral-800" : "text-neutral-400"
+                    className={`w-full text-left px-4 py-2.5 text-xs font-light tracking-wide transition-colors cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800 ${
+                      value === s.state_name ? "text-black dark:text-white bg-neutral-50 dark:bg-neutral-800 font-semibold" : "text-neutral-600 dark:text-neutral-400"
                     }`}
                   >
                     <span>{s.state_name}</span>
-                    <span className="float-right text-neutral-600">₹{s.shipping_charge.toFixed(2)}</span>
+                    <span className="float-right text-neutral-500 dark:text-neutral-500">₹{s.shipping_charge.toFixed(2)}</span>
                   </button>
                 </li>
               ))

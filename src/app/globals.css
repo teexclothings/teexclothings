@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #000000;
@@ -16,6 +18,7 @@
   --color-foreground: var(--foreground);
   --color-muted-foreground: var(--muted-foreground);
   --color-border-primary: var(--border);
+  --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   
@@ -58,15 +61,13 @@
   100% { transform: scale(1); }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #000000;
-    --foreground: #ffffff;
-    --muted-foreground: #a3a3a3;
-    --border: #262626;
-    --accent: #eeeeee;
-    --accent-foreground: #000000;
-  }
+.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+  --muted-foreground: #a3a3a3;
+  --border: #262626;
+  --accent: #eeeeee;
+  --accent-foreground: #000000;
 }
 
 /* Base resets for luxury typography and smooth user experience */
