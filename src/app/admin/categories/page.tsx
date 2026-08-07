@@ -4,13 +4,15 @@ import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { TableSkeleton } from "@/components/ui/Skeletons";
 import Modal from "@/components/ui/Modal";
+import MediaUpload from "@/components/ui/MediaUpload";
 import { useToast } from "@/context/ToastContext";
-import { Plus, Search, Trash2, Edit2, CheckCircle2, XCircle, FolderTree } from "lucide-react";
+import { Plus, Search, Trash2, Edit2, CheckCircle2, XCircle, FolderTree, Image as ImageIcon } from "lucide-react";
 
 interface Category {
   id: string;
   name: string;
   slug: string;
+  image_url: string | null;
   active: boolean;
   created_at: string;
   updated_at: string;
@@ -29,6 +31,7 @@ export default function CategoriesPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [formName, setFormName] = useState("");
   const [formSlug, setFormSlug] = useState("");
+  const [formImageUrl, setFormImageUrl] = useState<string | null>(null);
   const [formActive, setFormActive] = useState(true);
   const [formLoading, setFormLoading] = useState(false);
 
@@ -80,6 +83,7 @@ export default function CategoriesPage() {
     setSelectedId(null);
     setFormName("");
     setFormSlug("");
+    setFormImageUrl(null);
     setFormActive(true);
     setModalOpen(true);
   };
@@ -89,6 +93,7 @@ export default function CategoriesPage() {
     setSelectedId(category.id);
     setFormName(category.name);
     setFormSlug(category.slug);
+    setFormImageUrl(category.image_url);
     setFormActive(category.active);
     setModalOpen(true);
   };
@@ -105,7 +110,7 @@ export default function CategoriesPage() {
     if (isEditing && selectedId) {
       const { error } = await supabase
         .from("categories")
-        .update({ name: formName, slug: formSlug, active: formActive })
+        .update({ name: formName, slug: formSlug, image_url: formImageUrl, active: formActive })
         .eq("id", selectedId);
 
       if (error) {
@@ -130,7 +135,7 @@ export default function CategoriesPage() {
 
       const { error } = await supabase
         .from("categories")
-        .insert([{ name: formName, slug: formSlug, active: formActive }]);
+        .insert([{ name: formName, slug: formSlug, image_url: formImageUrl, active: formActive }]);
 
       if (error) {
         showToast(error.message, "error");
@@ -241,6 +246,7 @@ export default function CategoriesPage() {
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="border-b border-neutral-800 bg-neutral-950 text-neutral-400 tracking-widest uppercase">
+                  <th className="px-6 py-4 font-light">Image</th>
                   <th className="px-6 py-4 font-light">Name</th>
                   <th className="px-6 py-4 font-light">Slug</th>
                   <th className="px-6 py-4 text-center font-light">Status</th>
@@ -250,6 +256,19 @@ export default function CategoriesPage() {
               <tbody className="divide-y divide-neutral-800">
                 {filtered.map((category) => (
                   <tr key={category.id} className="transition-colors hover:bg-neutral-800/20">
+                    <td className="px-6 py-3">
+                      {category.image_url ? (
+                        <img
+                          src={category.image_url}
+                          alt={category.name}
+                          className="h-10 w-10 object-cover rounded-sm border border-neutral-800 bg-neutral-950"
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded-sm border border-neutral-800 bg-neutral-950 flex items-center justify-center text-neutral-600">
+                          <ImageIcon size={16} />
+                        </div>
+                      )}
+                    </td>
                     <td className="px-6 py-4 font-medium text-white">{category.name}</td>
                     <td className="px-6 py-4 font-mono text-neutral-400">{category.slug}</td>
                     <td className="px-6 py-4 text-center">
@@ -299,6 +318,17 @@ export default function CategoriesPage() {
       >
         <form onSubmit={handleSave} className="space-y-4">
           <div>
+            <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase mb-1">
+              Category Image
+            </label>
+            <MediaUpload
+              bucket="products"
+              value={formImageUrl}
+              onChange={(val) => setFormImageUrl(val as string | null)}
+            />
+          </div>
+
+          <div>
             <label className="block text-[10px] font-light tracking-widest text-neutral-400 uppercase">
               Category Name
             </label>
@@ -307,7 +337,7 @@ export default function CategoriesPage() {
               required
               value={formName}
               onChange={handleNameChange}
-              placeholder="e.g. Autumn / Winter"
+              placeholder="e.g. Graphic Tees"
               className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white focus:border-neutral-500 focus:outline-none"
             />
           </div>
@@ -321,7 +351,7 @@ export default function CategoriesPage() {
               required
               value={formSlug}
               onChange={(e) => setFormSlug(e.target.value.toLowerCase().replace(/\s+/g, "-"))}
-              placeholder="e.g. autumn-winter"
+              placeholder="e.g. graphic-tees"
               className="mt-1 block w-full rounded-sm border border-neutral-800 bg-neutral-950 px-3 py-2 font-mono text-sm text-white focus:border-neutral-500 focus:outline-none"
             />
           </div>

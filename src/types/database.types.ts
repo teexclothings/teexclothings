@@ -43,6 +43,7 @@ export interface Database {
           id: string;
           name: string;
           slug: string;
+          image_url: string | null;
           active: boolean;
           created_at: string;
           updated_at: string;
@@ -51,6 +52,7 @@ export interface Database {
           id?: string;
           name: string;
           slug: string;
+          image_url?: string | null;
           active?: boolean;
           created_at?: string;
           updated_at?: string;
@@ -59,6 +61,7 @@ export interface Database {
           id?: string;
           name?: string;
           slug?: string;
+          image_url?: string | null;
           active?: boolean;
           created_at?: string;
           updated_at?: string;
