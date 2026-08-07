@@ -110,7 +110,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="flex w-full justify-center rounded-sm bg-black dark:bg-white px-4 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-black dark:text-white dark:text-black transition-colors hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-200 disabled:bg-neutral-600 disabled:text-neutral-700 dark:text-neutral-300"
+              className="flex w-full justify-center rounded-sm bg-black dark:bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-white dark:text-black transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:bg-neutral-600 disabled:text-neutral-700 dark:text-neutral-300"
             >
               {isPending ? "Authenticating..." : "Sign In"}
             </button>

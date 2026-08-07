@@ -195,7 +195,7 @@ export default function ShippingPage() {
         </div>
         <button
           onClick={handleOpenAdd}
-          className="flex cursor-pointer items-center justify-center space-x-2 bg-black dark:bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-black dark:text-white dark:text-black transition-colors hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm select-none"
+          className="flex cursor-pointer items-center justify-center space-x-2 bg-black dark:bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-white dark:text-black transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm select-none"
         >
           <Plus size={14} />
           <span>Add State</span>
@@ -241,7 +241,7 @@ export default function ShippingPage() {
               </thead>
               <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                 {filtered.map((rule) => (
-                  <tr key={rule.id} className="transition-colors hover:bg-neutral-100 dark:bg-neutral-800/20">
+                  <tr key={rule.id} className="transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800/50 dark:bg-neutral-850/10">
                     <td className="px-6 py-4 font-medium text-black dark:text-white">{rule.state_name}</td>
                     <td className="px-6 py-4 font-mono text-neutral-600 dark:text-neutral-400">
                       ₹{rule.shipping_charge.toFixed(2)}

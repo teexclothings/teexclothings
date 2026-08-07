@@ -120,7 +120,7 @@ export default function StateDropdown({ value, onChange, error }: StateDropdownP
       </button>
 
       {error && (
-        <p className="text-[10px] text-red-500 dark:text-red-400 font-light tracking-wide" role="alert">
+        <p className="text-[10px] text-red-650 dark:text-red-400 font-light tracking-wide" role="alert">
           {error}
         </p>
       )}

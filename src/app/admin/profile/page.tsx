@@ -165,7 +165,7 @@ export default function ProfilePage() {
             <button
               type="submit"
               disabled={saving}
-              className="flex cursor-pointer items-center justify-center space-x-2 bg-white text-black px-6 py-2.5 text-xs font-semibold uppercase tracking-widest hover:bg-neutral-200 disabled:bg-neutral-600 disabled:text-neutral-700 dark:text-neutral-300 rounded-sm select-none"
+              className="flex cursor-pointer items-center justify-center space-x-2 bg-black dark:bg-white text-white dark:text-black px-6 py-2.5 text-xs font-semibold uppercase tracking-widest hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:opacity-50 rounded-sm select-none"
             >
               <Save size={14} />
               <span>{saving ? "Saving..." : "Update Profile"}</span>
@@ -213,7 +213,7 @@ export default function ProfilePage() {
             <button
               type="submit"
               disabled={passwordSaving}
-              className="flex cursor-pointer items-center justify-center space-x-2 border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 text-black dark:text-white px-6 py-2.5 text-xs font-semibold uppercase tracking-widest hover:border-neutral-500 hover:bg-neutral-50 dark:bg-neutral-900 disabled:border-neutral-200 dark:border-neutral-800 disabled:text-neutral-500 rounded-sm select-none"
+              className="flex cursor-pointer items-center justify-center space-x-2 border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 text-black dark:text-white px-6 py-2.5 text-xs font-semibold uppercase tracking-widest hover:bg-neutral-200 dark:hover:bg-neutral-900 disabled:opacity-50 rounded-sm select-none"
             >
               <Key size={14} />
               <span>{passwordSaving ? "Updating..." : "Update Password"}</span>

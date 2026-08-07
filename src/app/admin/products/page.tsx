@@ -151,7 +151,7 @@ export default function ProductsPage() {
         </div>
         <Link
           href="/admin/products/new"
-          className="flex cursor-pointer items-center justify-center space-x-2 bg-black dark:bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-black dark:text-white dark:text-black transition-colors hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm select-none"
+          className="flex cursor-pointer items-center justify-center space-x-2 bg-black dark:bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-white dark:text-black transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm select-none"
         >
           <Plus size={14} />
           <span>Add Product</span>
@@ -214,8 +214,8 @@ export default function ProductsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-              {filtered.map((prod) => (
-                <tr key={prod.id} className="transition-colors hover:bg-neutral-100 dark:bg-neutral-800/20">
+               {filtered.map((prod) => (
+                <tr key={prod.id} className="transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800/50 dark:bg-neutral-850/10">
                   <td className="px-6 py-4 font-medium text-black dark:text-white">
                     <div>
                       <div className="font-semibold text-black dark:text-white">{prod.title}</div>

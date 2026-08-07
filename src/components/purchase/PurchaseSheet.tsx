@@ -238,58 +238,64 @@ export default function PurchaseSheet({
           <p className="text-xs text-red-400 font-light">Failed to load store settings. Please try again.</p>
         </div>
       ) : (
-        <>
-          {/* Order Summary */}
-          <OrderSummaryCard
-            productImage={productImage}
-            productName={product.title}
-            category={product.categories?.name || ""}
-            selectedSize={selectedSize}
-            selectedColor={selectedColor}
-            productPrice={product.price}
-            quantity={quantity}
-            shippingCharge={shippingCharge}
-            shippingLoading={shippingLoading}
-            stateName={formData.state}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+          {/* Left column: Summary */}
+          <div className="space-y-6">
+            <OrderSummaryCard
+              productImage={productImage}
+              productName={product.title}
+              category={product.categories?.name || ""}
+              selectedSize={selectedSize}
+              selectedColor={selectedColor}
+              productPrice={product.price}
+              quantity={quantity}
+              shippingCharge={shippingCharge}
+              shippingLoading={shippingLoading}
+              stateName={formData.state}
+            />
+          </div>
 
-          {/* Delivery Form */}
-          <DeliveryForm
-            formData={formData}
-            setFormData={setFormData}
-            errors={errors}
-            onStateChange={handleStateChange}
-          />
+          {/* Right column: Form and Actions */}
+          <div className="space-y-6">
+            <DeliveryForm
+              formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              onStateChange={handleStateChange}
+            />
 
-          {/* Global error */}
-          {errors._global && (
-            <div className="flex items-center space-x-2 bg-red-950/50 border border-red-900 rounded-sm px-4 py-3">
-              <AlertTriangle size={14} className="text-red-400 flex-shrink-0" />
-              <p className="text-[10px] text-red-400 font-light">{errors._global}</p>
-            </div>
-          )}
-
-          {/* Send button */}
-          <button
-            type="button"
-            onClick={handleSend}
-            disabled={sending}
-            className="w-full flex items-center justify-center space-x-2 bg-green-700 hover:bg-green-600 text-white px-6 py-4 text-xs font-semibold tracking-widest uppercase transition-all rounded-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:animate-scale-tap"
-          >
-            {sending ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              <>
-                <MessageSquare size={16} />
-                <span>Send via WhatsApp</span>
-              </>
+            {/* Global error */}
+            {errors._global && (
+              <div className="flex items-center space-x-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-sm px-4 py-3">
+                <AlertTriangle size={14} className="text-red-650 dark:text-red-400 flex-shrink-0" />
+                <p className="text-[10px] text-red-850 dark:text-red-400 font-light">{errors._global}</p>
+              </div>
             )}
-          </button>
 
-          <p className="text-[8px] text-neutral-600 font-light text-center tracking-wider uppercase">
-            Your order details will be sent to our WhatsApp for confirmation
-          </p>
-        </>
+            {/* Send button */}
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={handleSend}
+                disabled={sending}
+                className="w-full flex items-center justify-center space-x-2 bg-green-700 hover:bg-green-600 text-white px-6 py-4 text-xs font-semibold tracking-widest uppercase transition-all rounded-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:animate-scale-tap"
+              >
+                {sending ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <>
+                    <MessageSquare size={16} />
+                    <span>Send via WhatsApp</span>
+                  </>
+                )}
+              </button>
+
+              <p className="text-[8px] text-neutral-600 font-light text-center tracking-wider uppercase">
+                Your order details will be sent to our WhatsApp for confirmation
+              </p>
+            </div>
+          </div>
+        </div>
       )}
     </BottomSheet>
   );
