@@ -58,7 +58,7 @@ export default function CustomerProductCard({ product }: ProductCardProps) {
             )}
             {product.featured && !product.is_out_of_stock && (
               <span className="bg-black dark:bg-white text-white dark:text-black text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-xs shadow-sm">
-                FEATURED
+                BEST SELLER
               </span>
             )}
           </div>

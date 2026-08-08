@@ -234,7 +234,7 @@ export default function ProductsPage() {
                 <th className="px-6 py-4 font-light">Original Price</th>
                 <th className="px-6 py-4 font-light">Selling Price</th>
                 <th className="px-6 py-4 text-center font-light">Stock</th>
-                <th className="px-6 py-4 text-center font-light">Featured</th>
+                <th className="px-6 py-4 text-center font-light">Best Seller</th>
                 <th className="px-6 py-4 text-center font-light">Status</th>
                 <th className="px-6 py-4 text-right font-light">Actions</th>
               </tr>
