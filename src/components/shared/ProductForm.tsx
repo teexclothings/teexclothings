@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { useToast } from "@/context/ToastContext";
 import MediaUpload from "@/components/ui/MediaUpload";
+import CustomSelect from "@/components/ui/CustomSelect";
 import { FormSkeleton } from "@/components/ui/Skeletons";
 import { Save, Plus } from "lucide-react";
 
@@ -308,22 +309,19 @@ export default function ProductForm({ productId }: ProductFormProps) {
           </div>
 
           <div>
-            <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
+            <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase mb-1">
               Category Placement <span className="text-red-500">*</span>
             </label>
-            <select
-              required
+            <CustomSelect
               value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-              className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2.5 text-sm text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none cursor-pointer"
-            >
-              <option value="">Select Category</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setCategoryId(val)}
+              placeholder="Select Category"
+              className="w-full"
+              options={categories.map((c) => ({
+                value: c.id,
+                label: c.name,
+              }))}
+            />
           </div>
         </div>
       </div>

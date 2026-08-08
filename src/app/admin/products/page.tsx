@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 import { TableSkeleton } from "@/components/ui/Skeletons";
 import Modal from "@/components/ui/Modal";
 import { useToast } from "@/context/ToastContext";
+import CustomSelect from "@/components/ui/CustomSelect";
 import { Plus, Search, Trash2, Edit2, Star, CheckCircle2, XCircle, ShoppingBag } from "lucide-react";
 
 interface Product {
@@ -198,18 +199,14 @@ export default function ProductsPage() {
         </div>
 
         <div>
-          <select
+          <CustomSelect
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs tracking-wider uppercase px-4 py-2.5 text-black dark:text-white rounded-sm focus:outline-none focus:border-black dark:focus:border-neutral-500 cursor-pointer"
-          >
-            <option value="">All Categories</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => setSelectedCategory(val)}
+            options={[
+              { value: "", label: "All Categories" },
+              ...categories.map((c) => ({ value: c.id, label: c.name })),
+            ]}
+          />
         </div>
       </div>
 
