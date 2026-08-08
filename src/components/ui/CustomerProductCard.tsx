@@ -9,7 +9,10 @@ interface ProductCardProps {
     id: string;
     title: string;
     slug: string;
-    price: number;
+    original_price?: number;
+    selling_price?: number | null;
+    price?: number; // legacy fallback
+    is_out_of_stock?: boolean;
     featured: boolean;
     images: string[];
     categories?: {
@@ -22,6 +25,18 @@ export default function CustomerProductCard({ product }: ProductCardProps) {
   const [liked, setLiked] = useState(false);
   const primaryImage = product.images?.[0];
 
+  const origPrice = product.original_price ?? product.price ?? 0;
+  const sellingPrice = product.selling_price;
+
+  const hasOffer =
+    sellingPrice !== undefined &&
+    sellingPrice !== null &&
+    sellingPrice < origPrice;
+
+  const discountPercentage = hasOffer
+    ? Math.round(((origPrice - sellingPrice!) / origPrice) * 100)
+    : 0;
+
   return (
     <div className="group relative block select-none">
       <Link
@@ -29,19 +44,33 @@ export default function CustomerProductCard({ product }: ProductCardProps) {
         className="block focus:outline-none"
       >
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-850 rounded-xs flex items-center justify-center">
-          {/* NEW / FEATURED Badge */}
-          {product.featured && (
-            <span className="absolute top-2.5 left-2.5 z-10 bg-black dark:bg-white text-white dark:text-black text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-xs">
-              FEATURED
-            </span>
-          )}
+          {/* Top Left Badges */}
+          <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1 items-start">
+            {product.is_out_of_stock && (
+              <span className="bg-red-600 text-white text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-xs shadow-sm">
+                OUT OF STOCK
+              </span>
+            )}
+            {hasOffer && !product.is_out_of_stock && (
+              <span className="bg-emerald-600 text-white text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-xs shadow-sm">
+                {discountPercentage}% OFF
+              </span>
+            )}
+            {product.featured && !product.is_out_of_stock && (
+              <span className="bg-black dark:bg-white text-white dark:text-black text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-xs shadow-sm">
+                FEATURED
+              </span>
+            )}
+          </div>
 
           {/* Primary Image or Clean SVG Placeholder */}
           {primaryImage ? (
             <img
               src={primaryImage}
               alt={product.title}
-              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              className={`h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 ${
+                product.is_out_of_stock ? "opacity-60 grayscale-[30%]" : ""
+              }`}
               loading="lazy"
             />
           ) : (
@@ -78,9 +107,24 @@ export default function CustomerProductCard({ product }: ProductCardProps) {
             {product.title}
           </h3>
         </Link>
-        <p className="text-xs font-bold text-neutral-800 dark:text-neutral-200 tracking-tight">
-          ₹{Math.round(product.price)}
-        </p>
+        
+        {/* Pricing section with strikethrough logic */}
+        <div className="flex items-baseline space-x-2">
+          {hasOffer ? (
+            <>
+              <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">
+                ₹{Math.round(sellingPrice!)}
+              </p>
+              <p className="text-[11px] font-normal text-neutral-400 dark:text-neutral-500 line-through tracking-tight">
+                ₹{Math.round(origPrice)}
+              </p>
+            </>
+          ) : (
+            <p className="text-xs font-bold text-neutral-800 dark:text-neutral-200 tracking-tight">
+              ₹{Math.round(origPrice)}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
