@@ -316,10 +316,11 @@ export default function HeroBannersPage() {
                   <div className="absolute top-2 right-2 flex space-x-1.5">
                     <button
                       onClick={() => handleToggleActive(banner)}
+                      title={banner.active ? "Active" : "Disabled"}
                       className={`p-1.5 rounded-sm focus:outline-none shadow-md cursor-pointer ${
                         banner.active
-                          ? "bg-white text-black"
-                          : "bg-neutral-50 dark:bg-neutral-900 text-neutral-500 border border-neutral-200 dark:border-neutral-800"
+                          ? "bg-white text-emerald-600 dark:bg-neutral-900 dark:text-emerald-400"
+                          : "bg-white text-red-600 dark:bg-neutral-900 dark:text-red-400 border border-neutral-200 dark:border-neutral-800"
                       }`}
                     >
                       {banner.active ? <CheckCircle2 size={14} /> : <XCircle size={14} />}

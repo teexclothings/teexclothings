@@ -334,7 +334,9 @@ export default function ProductsPage() {
                       <button
                         onClick={() => handleToggleActive(prod)}
                         className={`inline-flex items-center space-x-1.5 focus:outline-none cursor-pointer ${
-                          prod.active ? "text-black dark:text-white" : "text-neutral-600"
+                          prod.active
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-red-600 dark:text-red-400"
                         }`}
                       >
                         {prod.active ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
