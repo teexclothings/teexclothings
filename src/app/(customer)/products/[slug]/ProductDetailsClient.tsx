@@ -272,7 +272,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               {!product.is_out_of_stock && !hasOffer && product.featured && (
                 <span className="absolute top-4 left-4 z-10 bg-white text-black text-[8px] font-semibold tracking-widest uppercase px-2 py-0.5 rounded-sm flex items-center space-x-1 shadow-md">
                   <Star size={8} fill="currentColor" />
-                  <span>Featured</span>
+                  <span>Best Seller</span>
                 </span>
               )}
 
