@@ -14,7 +14,10 @@ interface Product {
   title: string;
   slug: string;
   description: string | null;
-  price: number;
+  original_price?: number;
+  selling_price?: number | null;
+  price?: number; // legacy fallback
+  is_out_of_stock?: boolean;
   featured: boolean;
   images: string[];
   sizes: string[];
@@ -42,6 +45,20 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
   const [shippingCharge, setShippingCharge] = useState<number | null>(null);
   const [toastError, setToastError] = useState("");
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const origPrice = product.original_price ?? product.price ?? 0;
+  const sellingPrice = product.selling_price;
+
+  const hasOffer =
+    sellingPrice !== undefined &&
+    sellingPrice !== null &&
+    sellingPrice < origPrice;
+
+  const effectivePrice = hasOffer ? sellingPrice! : origPrice;
+
+  const discountPercentage = hasOffer
+    ? Math.round(((origPrice - sellingPrice!) / origPrice) * 100)
+    : 0;
 
   useEffect(() => {
     return () => {
@@ -160,6 +177,8 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
   }, []);
 
   function handleBuyNow() {
+    if (product.is_out_of_stock) return;
+
     let hasError = false;
     setSizeError("");
     setColorError("");
@@ -228,7 +247,17 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               onMouseLeave={handleMouseLeave}
               onClick={handleImageClick}
             >
-              {product.featured && (
+              {product.is_out_of_stock && (
+                <span className="absolute top-4 left-4 z-10 bg-red-600 text-white text-[9px] font-bold tracking-widest uppercase px-3 py-1 rounded-sm shadow-md">
+                  OUT OF STOCK
+                </span>
+              )}
+              {!product.is_out_of_stock && hasOffer && (
+                <span className="absolute top-4 left-4 z-10 bg-emerald-600 text-white text-[9px] font-bold tracking-widest uppercase px-3 py-1 rounded-sm shadow-md">
+                  {discountPercentage}% OFF SPECIAL OFFER
+                </span>
+              )}
+              {!product.is_out_of_stock && !hasOffer && product.featured && (
                 <span className="absolute top-4 left-4 z-10 bg-white text-black text-[8px] font-semibold tracking-widest uppercase px-2 py-0.5 rounded-sm flex items-center space-x-1 shadow-md">
                   <Star size={8} fill="currentColor" />
                   <span>Featured</span>
@@ -253,7 +282,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                 alt={product.title}
                 className={`w-full h-full transition-all duration-500 object-contain ${
                   zoomed ? "scale-150" : ""
-                }`}
+                } ${product.is_out_of_stock ? "opacity-60 grayscale-[25%]" : ""}`}
                 draggable={false}
               />
 
@@ -349,9 +378,27 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               <h1 className="font-serif-luxury text-3xl font-light tracking-wide text-black dark:text-white uppercase leading-tight sm:text-4xl">
                 {product.title}
               </h1>
-              <p className="hidden md:block text-xl font-mono font-medium text-black dark:text-white">
-                ₹{product.price.toFixed(2)}
-              </p>
+              
+              {/* Desktop Price Display */}
+              <div className="hidden md:flex items-baseline space-x-3">
+                {hasOffer ? (
+                  <>
+                    <p className="text-2xl font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                      ₹{effectivePrice.toFixed(2)}
+                    </p>
+                    <p className="text-lg font-mono font-normal text-neutral-400 dark:text-neutral-500 line-through">
+                      ₹{origPrice.toFixed(2)}
+                    </p>
+                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded-xs border border-emerald-500/20">
+                      Save ₹{(origPrice - effectivePrice).toFixed(0)} ({discountPercentage}%)
+                    </span>
+                  </>
+                ) : (
+                  <p className="text-xl font-mono font-medium text-black dark:text-white">
+                    ₹{origPrice.toFixed(2)}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="h-[1px] bg-neutral-250 dark:bg-neutral-850" />
@@ -366,6 +413,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                   {product.sizes.map((sz) => (
                     <button
                       key={sz}
+                      disabled={product.is_out_of_stock}
                       onClick={() => {
                         setSelectedSize(sz);
                         setSizeError("");
@@ -374,7 +422,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                         selectedSize === sz
                           ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white"
                           : "bg-transparent text-neutral-600 dark:text-neutral-450 border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 hover:text-black dark:hover:text-white"
-                      }`}
+                      } ${product.is_out_of_stock ? "opacity-50 cursor-not-allowed" : ""}`}
                     >
                       {sz}
                     </button>
@@ -398,6 +446,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                   {product.colors.map((col) => (
                     <button
                       key={col}
+                      disabled={product.is_out_of_stock}
                       onClick={() => {
                         setSelectedColor(col);
                         setColorError("");
@@ -406,7 +455,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                         selectedColor === col
                           ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white"
                           : "bg-transparent text-neutral-600 dark:text-neutral-450 border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 hover:text-black dark:hover:text-white"
-                      }`}
+                      } ${product.is_out_of_stock ? "opacity-50 cursor-not-allowed" : ""}`}
                     >
                       {col}
                     </button>
@@ -420,14 +469,27 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               </div>
             )}
 
-            {/* Mobile-only Price (shown after size and color selection) */}
+            {/* Mobile-only Price */}
             <div className="md:hidden space-y-1">
               <h4 className="text-[9px] uppercase tracking-widest text-neutral-500 font-semibold">
                 Price
               </h4>
-              <p className="text-2xl font-mono font-semibold text-black dark:text-white">
-                ₹{product.price.toFixed(2)}
-              </p>
+              <div className="flex items-baseline space-x-2">
+                {hasOffer ? (
+                  <>
+                    <p className="text-2xl font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                      ₹{effectivePrice.toFixed(2)}
+                    </p>
+                    <p className="text-base font-mono font-normal text-neutral-400 line-through">
+                      ₹{origPrice.toFixed(2)}
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-2xl font-mono font-semibold text-black dark:text-white">
+                    ₹{origPrice.toFixed(2)}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Quantity picker */}
@@ -439,7 +501,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                 <button
                   type="button"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  disabled={quantity <= 1}
+                  disabled={quantity <= 1 || product.is_out_of_stock}
                   className="w-8 h-8 flex items-center justify-center border border-neutral-350 dark:border-neutral-800 rounded-sm text-neutral-500 hover:text-black dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors active:animate-scale-tap"
                   aria-label="Decrease quantity"
                 >
@@ -451,7 +513,8 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                 <button
                   type="button"
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-8 h-8 flex items-center justify-center border border-neutral-350 dark:border-neutral-800 rounded-sm text-neutral-500 hover:text-black dark:hover:text-white cursor-pointer transition-colors active:animate-scale-tap"
+                  disabled={product.is_out_of_stock}
+                  className="w-8 h-8 flex items-center justify-center border border-neutral-350 dark:border-neutral-800 rounded-sm text-neutral-500 hover:text-black dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors active:animate-scale-tap"
                   aria-label="Increase quantity"
                 >
                   +
@@ -481,7 +544,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                     Subtotal ({quantity} {quantity === 1 ? "item" : "items"})
                   </span>
                   <span className="text-black dark:text-white font-mono">
-                    ₹{(product.price * quantity).toFixed(2)}
+                    ₹{(effectivePrice * quantity).toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -500,7 +563,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                 <div className="flex justify-between text-sm font-medium">
                   <span className="text-black dark:text-white uppercase tracking-wider text-xs">Total Estimate</span>
                   <span className="text-black dark:text-white font-mono">
-                    ₹{(product.price * quantity + (shippingCharge ?? 0)).toFixed(2)}
+                    ₹{(effectivePrice * quantity + (shippingCharge ?? 0)).toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -518,16 +581,26 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               </div>
             )}
 
-            {/* Sticky Buy Now button */}
+            {/* Sticky Buy Now button / Out of Stock Banner */}
             <div className="sticky bottom-0 z-40 bg-white dark:bg-black py-4 border-t border-neutral-200 dark:border-neutral-850 safe-area-bottom w-full max-w-md">
-              <button
-                type="button"
-                onClick={handleBuyNow}
-                className="flex w-full items-center justify-center space-x-2 bg-black dark:bg-white text-white dark:text-black py-4 text-[10px] font-semibold tracking-widest uppercase transition-all hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm cursor-pointer active:animate-scale-tap"
-              >
-                <ShoppingBag size={14} />
-                <span>Buy Now</span>
-              </button>
+              {product.is_out_of_stock ? (
+                <button
+                  type="button"
+                  disabled
+                  className="flex w-full items-center justify-center space-x-2 bg-neutral-300 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 py-4 text-[10px] font-semibold tracking-widest uppercase rounded-sm cursor-not-allowed select-none"
+                >
+                  <span>OUT OF STOCK</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleBuyNow}
+                  className="flex w-full items-center justify-center space-x-2 bg-black dark:bg-white text-white dark:text-black py-4 text-[10px] font-semibold tracking-widest uppercase transition-all hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm cursor-pointer active:animate-scale-tap"
+                >
+                  <ShoppingBag size={14} />
+                  <span>Buy Now</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
