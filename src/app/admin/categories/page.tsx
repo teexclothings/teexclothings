@@ -275,7 +275,9 @@ export default function CategoriesPage() {
                       <button
                         onClick={() => handleToggleActive(category)}
                         className={`inline-flex items-center space-x-1.5 focus:outline-none cursor-pointer ${
-                          category.active ? "text-black dark:text-white" : "text-neutral-600"
+                          category.active
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-red-600 dark:text-red-400"
                         }`}
                       >
                         {category.active ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
