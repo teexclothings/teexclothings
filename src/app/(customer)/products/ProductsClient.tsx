@@ -93,7 +93,7 @@ export default function ProductsClient({
   });
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-12 space-y-10 flex-1 flex flex-col justify-start bg-transparent text-foreground">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12 space-y-8 sm:space-y-10 flex-1 flex flex-col justify-start bg-transparent text-foreground">
       {/* Header and overview */}
       <div className="border-b border-neutral-200 dark:border-neutral-850 pb-6">
         <span className="text-[10px] font-bold tracking-[0.25em] text-neutral-500 uppercase">
@@ -121,11 +121,11 @@ export default function ProductsClient({
         </div>
 
         {/* Curation Selectors */}
-        <div className="flex space-x-3">
+        <div className="flex space-x-2 sm:space-x-3 w-full md:w-auto">
           <select
             value={selectedCategory}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs tracking-widest uppercase px-4 py-3 text-neutral-700 dark:text-neutral-300 rounded-xs focus:outline-none focus:border-black dark:focus:border-white cursor-pointer font-bold"
+            className="flex-1 sm:flex-initial min-w-0 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-[10px] sm:text-xs tracking-wider uppercase px-2.5 sm:px-4 py-3 text-neutral-700 dark:text-neutral-300 rounded-xs focus:outline-none focus:border-black dark:focus:border-white cursor-pointer font-bold truncate"
           >
             <option value="" className="bg-white dark:bg-neutral-900 text-black dark:text-white">
               All Collections
@@ -144,7 +144,7 @@ export default function ProductsClient({
           <select
             value={sortKey}
             onChange={(e) => setSortKey(e.target.value)}
-            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs tracking-widest uppercase px-4 py-3 text-neutral-700 dark:text-neutral-300 rounded-xs focus:outline-none focus:border-black dark:focus:border-white cursor-pointer font-bold"
+            className="flex-1 sm:flex-initial min-w-0 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-[10px] sm:text-xs tracking-wider uppercase px-2.5 sm:px-4 py-3 text-neutral-700 dark:text-neutral-300 rounded-xs focus:outline-none focus:border-black dark:focus:border-white cursor-pointer font-bold truncate"
           >
             <option value="newest" className="bg-white dark:bg-neutral-900 text-black dark:text-white">
               Sort: Newest
