@@ -500,7 +500,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
             htmlFor="prod-featured"
             className="ml-2 text-xs font-light text-neutral-600 dark:text-neutral-400 cursor-pointer"
           >
-            Mark product as Featured (appears on homepage promo grids)
+            Mark product as Best Seller (displays BEST SELLER badge & filter option)
           </label>
         </div>
 
