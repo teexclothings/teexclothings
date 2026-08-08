@@ -594,8 +594,8 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               </div>
             )}
 
-            {/* Sticky Buy Now button / Out of Stock Banner */}
-            <div className="sticky bottom-0 z-40 bg-white dark:bg-black py-4 border-t border-neutral-200 dark:border-neutral-850 safe-area-bottom w-full max-w-md">
+            {/* Desktop Buy Now button / Out of Stock Banner */}
+            <div className="hidden md:block sticky bottom-0 z-40 bg-white dark:bg-black py-4 border-t border-neutral-200 dark:border-neutral-850 safe-area-bottom w-full max-w-md">
               {product.is_out_of_stock ? (
                 <button
                   type="button"
@@ -617,6 +617,28 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Fixed Mobile Bottom Bar for Buy Now */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-black/95 backdrop-blur-md px-4 py-3 border-t border-neutral-200 dark:border-neutral-850 shadow-2xl safe-area-bottom">
+        {product.is_out_of_stock ? (
+          <button
+            type="button"
+            disabled
+            className="flex w-full items-center justify-center space-x-2 bg-neutral-300 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 py-3.5 text-xs font-bold tracking-widest uppercase rounded-sm cursor-not-allowed select-none"
+          >
+            <span>OUT OF STOCK</span>
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={handleBuyNow}
+            className="flex w-full items-center justify-center space-x-2 bg-black dark:bg-white text-white dark:text-black py-3.5 text-xs font-bold tracking-widest uppercase transition-all hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-sm cursor-pointer active:animate-scale-tap shadow-lg"
+          >
+            <ShoppingBag size={16} />
+            <span>Buy Now</span>
+          </button>
+        )}
       </div>
 
       {/* Recommended Products */}
