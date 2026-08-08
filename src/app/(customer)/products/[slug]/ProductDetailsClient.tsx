@@ -233,7 +233,19 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
+        {/* Mobile-only Top Category and Product Name */}
+        <div className="md:hidden space-y-1 select-none">
+          {product.categories?.name && (
+            <span className="text-[9px] tracking-[0.2em] text-neutral-500 uppercase font-medium block">
+              {product.categories.name}
+            </span>
+          )}
+          <h1 className="font-serif-luxury text-xl font-normal tracking-wide text-black dark:text-white uppercase leading-snug">
+            {product.title}
+          </h1>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 md:gap-12 md:grid-cols-2">
           {/* Left side: Images Gallery */}
           <div className="space-y-4 max-w-full overflow-hidden">
             <div
@@ -369,7 +381,8 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
 
           {/* Right side: Product info */}
           <div id="product-info-column" className="space-y-8 select-none md:sticky md:top-24 self-start">
-            <div className="space-y-3">
+            {/* Desktop Category and Title Header */}
+            <div className="hidden md:block space-y-3">
               {product.categories?.name && (
                 <span className="text-[10px] tracking-[0.25em] text-neutral-500 uppercase font-light">
                   {product.categories.name}
@@ -380,7 +393,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               </h1>
               
               {/* Desktop Price Display */}
-              <div className="hidden md:flex items-baseline space-x-3">
+              <div className="flex items-baseline space-x-3">
                 {hasOffer ? (
                   <>
                     <p className="text-2xl font-mono font-semibold text-emerald-600 dark:text-emerald-400">
@@ -401,15 +414,15 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
               </div>
             </div>
 
-            <div className="h-[1px] bg-neutral-250 dark:bg-neutral-850" />
+            <div className="hidden md:block h-[1px] bg-neutral-250 dark:bg-neutral-850" />
 
             {/* Size picker */}
             {product.sizes.length > 0 && (
               <div className="space-y-3">
-                <h4 className="text-[9px] uppercase tracking-widest text-neutral-500 font-semibold">
+                <h4 className="text-[10px] sm:text-[9px] uppercase tracking-widest text-neutral-500 font-semibold">
                   Select Size
                 </h4>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2.5">
                   {product.sizes.map((sz) => (
                     <button
                       key={sz}
@@ -418,7 +431,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                         setSelectedSize(sz);
                         setSizeError("");
                       }}
-                      className={`px-4 py-2 border text-[9px] font-mono font-semibold uppercase rounded-sm transition-all cursor-pointer active:animate-scale-tap ${
+                      className={`px-5 sm:px-4 py-2.5 sm:py-2 border text-xs sm:text-[9px] font-mono font-semibold uppercase rounded-sm transition-all cursor-pointer active:animate-scale-tap ${
                         selectedSize === sz
                           ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white"
                           : "bg-transparent text-neutral-600 dark:text-neutral-450 border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 hover:text-black dark:hover:text-white"
@@ -439,10 +452,10 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
             {/* Color picker */}
             {product.colors.length > 0 && (
               <div className="space-y-3">
-                <h4 className="text-[9px] uppercase tracking-widest text-neutral-500 font-semibold">
+                <h4 className="text-[10px] sm:text-[9px] uppercase tracking-widest text-neutral-500 font-semibold">
                   Available Colors
                 </h4>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2.5">
                   {product.colors.map((col) => (
                     <button
                       key={col}
@@ -451,7 +464,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                         setSelectedColor(col);
                         setColorError("");
                       }}
-                      className={`px-4 py-2 border text-[9px] uppercase tracking-widest font-semibold rounded-sm transition-all cursor-pointer active:animate-scale-tap ${
+                      className={`px-5 sm:px-4 py-2.5 sm:py-2 border text-xs sm:text-[9px] uppercase tracking-widest font-semibold rounded-sm transition-all cursor-pointer active:animate-scale-tap ${
                         selectedColor === col
                           ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white"
                           : "bg-transparent text-neutral-600 dark:text-neutral-450 border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 hover:text-black dark:hover:text-white"
