@@ -235,9 +235,9 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
 
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
           {/* Left side: Images Gallery */}
-          <div className="space-y-4">
+          <div className="space-y-4 max-w-full overflow-hidden">
             <div
-              className="group relative h-[400px] sm:h-[500px] md:h-[600px] w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 rounded-sm overflow-hidden select-none cursor-pointer flex items-center justify-center"
+              className="group relative h-[400px] sm:h-[500px] md:h-[600px] w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 rounded-sm overflow-hidden select-none cursor-pointer flex items-center justify-center touch-pan-y"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
