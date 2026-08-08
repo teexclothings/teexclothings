@@ -43,6 +43,10 @@ export const metadata: Metadata = {
     title: "TEEX | Premium Luxury Clothing",
     description: "Discover timeless minimalist silhouettes and premium quality clothing.",
   },
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
   robots: {
     index: true,
     follow: true,
