@@ -73,7 +73,9 @@ export interface Database {
           title: string;
           slug: string;
           description: string | null;
-          price: number;
+          original_price: number;
+          selling_price: number | null;
+          is_out_of_stock: boolean;
           category_id: string;
           sizes: string[];
           colors: string[];
@@ -88,7 +90,9 @@ export interface Database {
           title: string;
           slug: string;
           description?: string | null;
-          price: number;
+          original_price: number;
+          selling_price?: number | null;
+          is_out_of_stock?: boolean;
           category_id: string;
           sizes?: string[];
           colors?: string[];
@@ -103,7 +107,9 @@ export interface Database {
           title?: string;
           slug?: string;
           description?: string | null;
-          price?: number;
+          original_price?: number;
+          selling_price?: number | null;
+          is_out_of_stock?: boolean;
           category_id?: string;
           sizes?: string[];
           colors?: string[];

@@ -13,7 +13,9 @@ interface Product {
   title: string;
   slug: string;
   description: string | null;
-  price: number;
+  original_price: number;
+  selling_price: number | null;
+  is_out_of_stock: boolean;
   category_id: string;
   sizes: string[];
   colors: string[];
@@ -61,7 +63,12 @@ export default function ProductsPage() {
     if (error) {
       showToast(error.message, "error");
     } else {
-      setProducts((prodData as unknown as Product[]) || []);
+      // Map backward compatibility for price -> original_price if legacy
+      const mapped = ((prodData as unknown as Product[]) || []).map((p) => ({
+        ...p,
+        original_price: p.original_price ?? (p as unknown as { price: number }).price ?? 0,
+      }));
+      setProducts(mapped);
     }
 
     setLoading(false);
@@ -84,6 +91,23 @@ export default function ProductsPage() {
       showToast(error.message, "error");
     } else {
       showToast(`Product ${product.active ? "disabled" : "enabled"} successfully.`, "success");
+      fetchData();
+    }
+  };
+
+  const handleToggleStock = async (product: Product) => {
+    const { error } = await supabase
+      .from("products")
+      .update({ is_out_of_stock: !product.is_out_of_stock })
+      .eq("id", product.id);
+
+    if (error) {
+      showToast(error.message, "error");
+    } else {
+      showToast(
+        `Product marked as ${!product.is_out_of_stock ? "OUT OF STOCK" : "IN STOCK"}.`,
+        "success"
+      );
       fetchData();
     }
   };
@@ -207,70 +231,122 @@ export default function ProductsPage() {
               <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400 tracking-widest uppercase font-light">
                 <th className="px-6 py-4 font-light">Title</th>
                 <th className="px-6 py-4 font-light">Category</th>
-                <th className="px-6 py-4 font-light">Price</th>
+                <th className="px-6 py-4 font-light">Original Price</th>
+                <th className="px-6 py-4 font-light">Selling Price</th>
+                <th className="px-6 py-4 text-center font-light">Stock</th>
                 <th className="px-6 py-4 text-center font-light">Featured</th>
                 <th className="px-6 py-4 text-center font-light">Status</th>
                 <th className="px-6 py-4 text-right font-light">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-               {filtered.map((prod) => (
-                <tr key={prod.id} className="transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800/50 dark:bg-neutral-850/10">
-                  <td className="px-6 py-4 font-medium text-black dark:text-white">
-                    <div>
-                      <div className="font-semibold text-black dark:text-white">{prod.title}</div>
-                      <div className="text-[10px] text-neutral-500 font-mono mt-0.5">
-                        {prod.slug}
+               {filtered.map((prod) => {
+                const origPrice = prod.original_price ?? (prod as unknown as { price: number }).price ?? 0;
+                const hasOffer = prod.selling_price !== null && prod.selling_price !== undefined && prod.selling_price < origPrice;
+                const discount = hasOffer ? Math.round(((origPrice - prod.selling_price!) / origPrice) * 100) : 0;
+                return (
+                  <tr key={prod.id} className="transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800/50 dark:bg-neutral-850/10">
+                    <td className="px-6 py-4 font-medium text-black dark:text-white">
+                      <div>
+                        <div className="font-semibold text-black dark:text-white">{prod.title}</div>
+                        <div className="text-[10px] text-neutral-500 font-mono mt-0.5">
+                          {prod.slug}
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-neutral-600 dark:text-neutral-400 uppercase tracking-wider text-[10px]">
-                    {prod.categories?.name || "Uncategorized"}
-                  </td>
-                  <td className="px-6 py-4 font-mono text-black dark:text-white font-semibold">
-                    ₹{prod.price.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <button
-                      onClick={() => handleToggleFeatured(prod)}
-                      className={`focus:outline-none transition-colors cursor-pointer ${
-                        prod.featured
-                          ? "text-yellow-500"
-                          : "text-neutral-700 hover:text-neutral-500"
-                      }`}
-                    >
-                      <Star size={14} fill={prod.featured ? "currentColor" : "none"} />
-                    </button>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <button
-                      onClick={() => handleToggleActive(prod)}
-                      className={`inline-flex items-center space-x-1.5 focus:outline-none cursor-pointer ${
-                        prod.active ? "text-black dark:text-white" : "text-neutral-600"
-                      }`}
-                    >
-                      {prod.active ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
-                      <span className="text-[10px] font-semibold tracking-wider uppercase">
-                        {prod.active ? "Active" : "Disabled"}
+                    </td>
+                    <td className="px-6 py-4 text-neutral-600 dark:text-neutral-400 uppercase tracking-wider text-[10px]">
+                      {prod.categories?.name || "Uncategorized"}
+                    </td>
+                    <td className="px-6 py-4 font-mono text-black dark:text-white">
+                      <span className={`font-semibold ${hasOffer ? "line-through text-neutral-400 dark:text-neutral-500" : ""}`}>
+                        ₹{origPrice.toFixed(2)}
                       </span>
-                    </button>
-                  </td>
-                  <td className="px-6 py-4 text-right space-x-3">
-                    <Link
-                      href={`/admin/products/${prod.id}`}
-                      className="inline-block text-neutral-600 dark:text-neutral-400 hover:text-black dark:text-white transition-colors focus:outline-none cursor-pointer"
-                    >
-                      <Edit2 size={14} />
-                    </Link>
-                    <button
-                      onClick={() => handleOpenDelete(prod.id)}
-                      className="text-neutral-500 hover:text-red-500 transition-colors focus:outline-none cursor-pointer"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-6 py-4 font-mono text-black dark:text-white">
+                      {hasOffer ? (
+                        <div className="flex items-center space-x-1.5">
+                          <span className="font-semibold text-emerald-600 dark:text-emerald-400 text-xs">
+                            ₹{prod.selling_price?.toFixed(2)}
+                          </span>
+                          <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1 py-0.2 rounded-xs border border-emerald-500/20">
+                            {discount}% OFF
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-neutral-400 text-[10px] italic">No Offer</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex items-center justify-center space-x-2">
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={prod.is_out_of_stock}
+                          onClick={() => handleToggleStock(prod)}
+                          title={prod.is_out_of_stock ? "Click to set IN STOCK" : "Click to set OUT OF STOCK"}
+                          className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                            prod.is_out_of_stock ? "bg-red-600" : "bg-emerald-600"
+                          }`}
+                        >
+                          <span
+                            className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                              prod.is_out_of_stock ? "translate-x-4" : "translate-x-0"
+                            }`}
+                          />
+                        </button>
+                        <span
+                          className={`text-[9px] font-bold tracking-wider uppercase ${
+                            prod.is_out_of_stock
+                              ? "text-red-600 dark:text-red-400"
+                              : "text-emerald-600 dark:text-emerald-400"
+                          }`}
+                        >
+                          {prod.is_out_of_stock ? "OUT" : "IN"}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <button
+                        onClick={() => handleToggleFeatured(prod)}
+                        className={`focus:outline-none transition-colors cursor-pointer ${
+                          prod.featured
+                            ? "text-yellow-500"
+                            : "text-neutral-700 hover:text-neutral-500"
+                        }`}
+                      >
+                        <Star size={14} fill={prod.featured ? "currentColor" : "none"} />
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <button
+                        onClick={() => handleToggleActive(prod)}
+                        className={`inline-flex items-center space-x-1.5 focus:outline-none cursor-pointer ${
+                          prod.active ? "text-black dark:text-white" : "text-neutral-600"
+                        }`}
+                      >
+                        {prod.active ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
+                        <span className="text-[10px] font-semibold tracking-wider uppercase">
+                          {prod.active ? "Active" : "Disabled"}
+                        </span>
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 text-right space-x-3">
+                      <Link
+                        href={`/admin/products/${prod.id}`}
+                        className="inline-block text-neutral-600 dark:text-neutral-400 hover:text-black dark:text-white transition-colors focus:outline-none cursor-pointer"
+                      >
+                        <Edit2 size={14} />
+                      </Link>
+                      <button
+                        onClick={() => handleOpenDelete(prod.id)}
+                        className="text-neutral-500 hover:text-red-500 transition-colors focus:outline-none cursor-pointer"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

@@ -32,7 +32,9 @@ export default function ProductForm({ productId }: ProductFormProps) {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [originalPrice, setOriginalPrice] = useState("");
+  const [sellingPrice, setSellingPrice] = useState("");
+  const [isOutOfStock, setIsOutOfStock] = useState(false);
   const [categoryId, setCategoryId] = useState("");
   const [sizes, setSizes] = useState<string[]>([]);
   const [colors, setColors] = useState<string[]>([]);
@@ -74,7 +76,9 @@ export default function ProductForm({ productId }: ProductFormProps) {
         setTitle(prod.title);
         setSlug(prod.slug);
         setDescription(prod.description || "");
-        setPrice(prod.price.toString());
+        setOriginalPrice(prod.original_price !== undefined && prod.original_price !== null ? prod.original_price.toString() : (prod as unknown as { price: number }).price?.toString() || "");
+        setSellingPrice(prod.selling_price !== null && prod.selling_price !== undefined ? prod.selling_price.toString() : "");
+        setIsOutOfStock(!!prod.is_out_of_stock);
         setCategoryId(prod.category_id);
         setSizes(prod.sizes || []);
         setColors(prod.colors || []);
@@ -142,10 +146,21 @@ export default function ProductForm({ productId }: ProductFormProps) {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const priceNum = parseFloat(price);
+    const origPriceNum = parseFloat(originalPrice);
+    const sellingPriceNum = sellingPrice.trim() !== "" ? parseFloat(sellingPrice) : null;
 
-    if (!title || !slug || isNaN(priceNum) || priceNum < 0 || !categoryId) {
+    if (!title || !slug || isNaN(origPriceNum) || origPriceNum < 0 || !categoryId) {
       showToast("Please fill all required fields correctly.", "error");
+      return;
+    }
+
+    if (sellingPriceNum !== null && (isNaN(sellingPriceNum) || sellingPriceNum < 0)) {
+      showToast("Please enter a valid selling price.", "error");
+      return;
+    }
+
+    if (sellingPriceNum !== null && sellingPriceNum >= origPriceNum) {
+      showToast("Selling price should be strictly lower than original price.", "error");
       return;
     }
 
@@ -160,7 +175,9 @@ export default function ProductForm({ productId }: ProductFormProps) {
       title: title.trim(),
       slug: slug.trim(),
       description: description.trim() || null,
-      price: priceNum,
+      original_price: origPriceNum,
+      selling_price: sellingPriceNum,
+      is_out_of_stock: isOutOfStock,
       category_id: categoryId,
       sizes,
       colors,
@@ -258,26 +275,41 @@ export default function ProductForm({ productId }: ProductFormProps) {
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
             <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
-              Retail Price (₹)
+              Original Price (₹) <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
               required
               step="0.01"
               min="0"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              placeholder="e.g. 120.00"
+              value={originalPrice}
+              onChange={(e) => setOriginalPrice(e.target.value)}
+              placeholder="e.g. 1299.00"
               className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-sm text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
             />
           </div>
 
           <div>
             <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
-              Category Placement
+              Selling Price (₹) <span className="text-neutral-500 font-normal">(Optional Offer)</span>
+            </label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value={sellingPrice}
+              onChange={(e) => setSellingPrice(e.target.value)}
+              placeholder="e.g. 899.00"
+              className="mt-1 block w-full rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 px-3 py-2 text-sm text-black dark:text-white focus:border-black dark:focus:border-neutral-500 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-light tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
+              Category Placement <span className="text-red-500">*</span>
             </label>
             <select
               required
@@ -422,8 +454,39 @@ export default function ProductForm({ productId }: ProductFormProps) {
       {/* Visibility Flags block */}
       <div className="rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-50 dark:bg-neutral-900/50 p-6 space-y-4">
         <h2 className="text-xs font-semibold tracking-widest text-neutral-600 dark:text-neutral-400 uppercase border-b border-neutral-200 dark:border-neutral-850 pb-2">
-          Visibility & Promotion
+          Visibility & Inventory Status
         </h2>
+
+        {/* Modern Toggle Switch for Out of Stock */}
+        <div className="flex items-center justify-between py-1">
+          <div className="space-y-0.5">
+            <label
+              htmlFor="prod-out-of-stock"
+              className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 cursor-pointer block"
+            >
+              Out of Stock Status
+            </label>
+            <p className="text-[10px] text-neutral-500 font-light">
+              Toggle ON to mark product as Out of Stock (disables purchasing on storefront)
+            </p>
+          </div>
+          <button
+            id="prod-out-of-stock"
+            type="button"
+            role="switch"
+            aria-checked={isOutOfStock}
+            onClick={() => setIsOutOfStock(!isOutOfStock)}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+              isOutOfStock ? "bg-red-600" : "bg-neutral-300 dark:bg-neutral-700"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                isOutOfStock ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+        </div>
 
         <div className="flex items-center">
           <input

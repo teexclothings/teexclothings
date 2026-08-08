@@ -14,7 +14,9 @@ import { Loader2, MessageSquare, AlertTriangle } from "lucide-react";
 
 interface PurchaseProduct {
   title: string;
-  price: number;
+  original_price?: number;
+  selling_price?: number | null;
+  price?: number; // legacy fallback
   images: string[];
   categories?: { name: string };
 }
@@ -63,6 +65,16 @@ export default function PurchaseSheet({
   const [sending, setSending] = useState(false);
   const [toastError, setToastError] = useState("");
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const origPrice = product.original_price ?? product.price ?? 0;
+  const sellingPrice = product.selling_price;
+
+  const activePrice =
+    sellingPrice !== undefined &&
+    sellingPrice !== null &&
+    sellingPrice < origPrice
+      ? sellingPrice
+      : origPrice;
 
   useEffect(() => {
     return () => {
@@ -233,14 +245,14 @@ export default function PurchaseSheet({
 
     setSending(true);
 
-    const grandTotal = (product.price * quantity) + shippingCharge;
+    const grandTotal = (activePrice * quantity) + shippingCharge;
 
     const productUrl = `${window.location.origin}/products/${productSlug}`;
 
     const message = generateWhatsAppMessage({
       productName: product.title,
       category: product.categories?.name || "Uncategorized",
-      productPrice: product.price,
+      productPrice: activePrice,
       quantity,
       selectedSize,
       selectedColor,
@@ -288,7 +300,7 @@ export default function PurchaseSheet({
               category={product.categories?.name || ""}
               selectedSize={selectedSize}
               selectedColor={selectedColor}
-              productPrice={product.price}
+              productPrice={activePrice}
               quantity={quantity}
               shippingCharge={shippingCharge}
               shippingLoading={shippingLoading}
