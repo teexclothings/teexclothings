@@ -653,7 +653,7 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
             </h2>
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4">
-            {recommendedProducts.map((prod) => (
+            {Array.from(new Map(recommendedProducts.map((p) => [p.id, p])).values()).map((prod) => (
               <CustomerProductCard key={prod.id} product={prod} />
             ))}
           </div>

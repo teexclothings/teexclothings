@@ -57,16 +57,26 @@ export default async function ProductDetailPage({ params }: Props) {
   // Fallback to other active products if category is thin
   if (finalRecommended.length < 4) {
     const needed = 4 - finalRecommended.length;
+    const excludeIds = [product.id, ...finalRecommended.map((p: { id: string }) => p.id)];
     const { data: fallback } = await supabase
       .from("products")
       .select("*, categories(name)")
       .eq("active", true)
-      .neq("id", product.id)
+      .not("id", "in", `(${excludeIds.join(",")})`)
       .limit(needed);
     if (fallback) {
       finalRecommended = [...finalRecommended, ...fallback];
     }
   }
+
+  // Ensure strict uniqueness by product ID
+  const uniqueRecommendedMap = new Map<string, typeof finalRecommended[number]>();
+  for (const item of finalRecommended) {
+    if (item && (item as { id: string }).id) {
+      uniqueRecommendedMap.set((item as { id: string }).id, item);
+    }
+  }
+  finalRecommended = Array.from(uniqueRecommendedMap.values());
 
   return (
     <ProductDetailsClient
