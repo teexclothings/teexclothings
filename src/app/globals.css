@@ -119,3 +119,27 @@ body {
     -webkit-tap-highlight-color: transparent;
   }
 }
+
+/* Splash Screen Letter Animation */
+@keyframes splash-letter-in {
+  0% {
+    opacity: 0;
+    transform: translateY(100%) scaleY(0.6);
+    filter: blur(4px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-8%) scaleY(1.02);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    filter: blur(0px);
+  }
+}
+
+.splash-letter {
+  opacity: 0;
+  animation: splash-letter-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
