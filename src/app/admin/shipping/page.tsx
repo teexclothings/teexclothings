@@ -250,7 +250,9 @@ export default function ShippingPage() {
                       <button
                         onClick={() => handleToggleActive(rule)}
                         className={`inline-flex items-center space-x-1.5 focus:outline-none cursor-pointer ${
-                          rule.is_active ? "text-black dark:text-white" : "text-neutral-600"
+                          rule.is_active
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-red-600 dark:text-red-400"
                         }`}
                       >
                         {rule.is_active ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
