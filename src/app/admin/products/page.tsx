@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 import { TableSkeleton } from "@/components/ui/Skeletons";
 import Modal from "@/components/ui/Modal";
 import { useToast } from "@/context/ToastContext";
+import CustomSelect from "@/components/ui/CustomSelect";
 import { Plus, Search, Trash2, Edit2, Star, CheckCircle2, XCircle, ShoppingBag } from "lucide-react";
 
 interface Product {
@@ -21,6 +22,7 @@ interface Product {
   colors: string[];
   featured: boolean;
   active: boolean;
+  images?: string[];
   created_at: string;
   categories?: {
     name: string;
@@ -197,18 +199,14 @@ export default function ProductsPage() {
         </div>
 
         <div>
-          <select
+          <CustomSelect
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs tracking-wider uppercase px-4 py-2.5 text-black dark:text-white rounded-sm focus:outline-none focus:border-black dark:focus:border-neutral-500 cursor-pointer"
-          >
-            <option value="">All Categories</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => setSelectedCategory(val)}
+            options={[
+              { value: "", label: "All Categories" },
+              ...categories.map((c) => ({ value: c.id, label: c.name })),
+            ]}
+          />
         </div>
       </div>
 
@@ -229,6 +227,7 @@ export default function ProductsPage() {
           <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400 tracking-widest uppercase font-light">
+                <th className="px-6 py-4 font-light w-16">Preview</th>
                 <th className="px-6 py-4 font-light">Title</th>
                 <th className="px-6 py-4 font-light">Category</th>
                 <th className="px-6 py-4 font-light">Original Price</th>
@@ -244,8 +243,22 @@ export default function ProductsPage() {
                 const origPrice = prod.original_price ?? (prod as unknown as { price: number }).price ?? 0;
                 const hasOffer = prod.selling_price !== null && prod.selling_price !== undefined && prod.selling_price < origPrice;
                 const discount = hasOffer ? Math.round(((origPrice - prod.selling_price!) / origPrice) * 100) : 0;
+                const mainImage = (prod as unknown as { images?: string[] }).images?.[0];
                 return (
                   <tr key={prod.id} className="transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800/50 dark:bg-neutral-850/10">
+                    <td className="px-6 py-3">
+                      <div className="h-12 w-12 rounded border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 overflow-hidden flex items-center justify-center relative flex-shrink-0">
+                        {mainImage ? (
+                          <img
+                            src={mainImage}
+                            alt={prod.title}
+                            className="h-full w-full object-cover object-center"
+                          />
+                        ) : (
+                          <ShoppingBag size={18} className="text-neutral-400 dark:text-neutral-600" />
+                        )}
+                      </div>
+                    </td>
                     <td className="px-6 py-4 font-medium text-black dark:text-white">
                       <div>
                         <div className="font-semibold text-black dark:text-white">{prod.title}</div>
