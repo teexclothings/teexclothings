@@ -62,12 +62,6 @@ export default function DeliveryForm({ formData, setFormData, errors, onStateCha
         placeholder="Street, locality, landmark"
       />
 
-      <DistrictDropdown
-        value={formData.district}
-        state={formData.state}
-        onChange={(v) => updateField("district", v)}
-        error={errors.district}
-      />
 
       <StateDropdown
         value={formData.state}
@@ -80,6 +74,13 @@ export default function DeliveryForm({ formData, setFormData, errors, onStateCha
           onStateChange(stateName, shippingCharge);
         }}
         error={errors.state}
+      />
+      
+      <DistrictDropdown
+        value={formData.district}
+        state={formData.state}
+        onChange={(v) => updateField("district", v)}
+        error={errors.district}
       />
 
       <FormInput

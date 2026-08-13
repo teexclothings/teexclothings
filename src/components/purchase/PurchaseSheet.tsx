@@ -189,11 +189,13 @@ export default function PurchaseSheet({
     const addressResult = validateRequired(formData.address, "Address");
     if (!addressResult.valid) newErrors.address = addressResult.message;
 
+    
+    const stateResult = validateRequired(formData.state, "State");
+    if (!stateResult.valid) newErrors.state = stateResult.message;
+
     const districtResult = validateRequired(formData.district, "District");
     if (!districtResult.valid) newErrors.district = districtResult.message;
 
-    const stateResult = validateRequired(formData.state, "State");
-    if (!stateResult.valid) newErrors.state = stateResult.message;
 
     setErrors(newErrors);
 
