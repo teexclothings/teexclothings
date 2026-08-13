@@ -249,7 +249,7 @@ export default function PurchaseSheet({
 
     const grandTotal = (activePrice * quantity) + shippingCharge;
 
-    const productUrl = `${window.location.origin}/products/${productSlug}`;
+    const productUrl = `${window.location.origin}/products/${productSlug}?v=${Date.now()}`;
 
     const message = generateWhatsAppMessage({
       productName: product.title,
