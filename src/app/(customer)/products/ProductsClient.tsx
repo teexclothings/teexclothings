@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import CustomerProductCard from "@/components/ui/CustomerProductCard";
-import { Search, SlidersHorizontal, X, RotateCcw, Check } from "lucide-react";
+import { Search, SlidersHorizontal, X, RotateCcw, Check, ChevronDown } from "lucide-react";
 
 interface Category {
   id: string;
@@ -21,6 +21,7 @@ interface Product {
   featured: boolean;
   images: string[];
   category_id: string;
+  sizes?: string[];
   created_at: string;
   categories?: {
     name: string;
@@ -32,6 +33,8 @@ interface ProductsClientProps {
   initialProducts: Product[];
   initialSearch?: string;
 }
+
+const AVAILABLE_SIZES = ["S", "M", "L", "XL", "XXL"];
 
 export default function ProductsClient({
   initialCategories,
@@ -46,24 +49,87 @@ export default function ProductsClient({
   const [selectedCategory, setSelectedCategory] = useState(categoryQuery);
   const [bestSellerOnly, setBestSellerOnly] = useState(false);
   const [sortKey, setSortKey] = useState("newest");
+  
+  // Size filter states
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [draftSizes, setDraftSizes] = useState<string[]>([]);
+  const [sizePopoverOpen, setSizePopoverOpen] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   // Temporary mobile modal state
   const [tempCategory, setTempCategory] = useState(categoryQuery);
   const [tempBestSellerOnly, setTempBestSellerOnly] = useState(false);
   const [tempSortKey, setTempSortKey] = useState("newest");
+  const [tempSizes, setTempSizes] = useState<string[]>([]);
 
   // Sync state when URL query parameter changes
   useEffect(() => {
     setSelectedCategory(categoryQuery);
   }, [categoryQuery]);
 
+  // Click outside to close desktop popover
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+        setSizePopoverOpen(false);
+      }
+    }
+    if (sizePopoverOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sizePopoverOpen]);
+
+  // Open size popover
+  const toggleSizePopover = () => {
+    if (!sizePopoverOpen) {
+      setDraftSizes([...selectedSizes]);
+    }
+    setSizePopoverOpen(!sizePopoverOpen);
+  };
+
+  // Toggle draft size checkbox in popover
+  const handleToggleDraftSize = (size: string) => {
+    if (draftSizes.includes(size)) {
+      setDraftSizes(draftSizes.filter((s) => s !== size));
+    } else {
+      setDraftSizes([...draftSizes, size]);
+    }
+  };
+
+  // Apply desktop size filter
+  const handleApplySizePopover = () => {
+    setSelectedSizes([...draftSizes]);
+    setSizePopoverOpen(false);
+  };
+
+  // Clear desktop size filter
+  const handleClearSizePopover = () => {
+    setDraftSizes([]);
+    setSelectedSizes([]);
+    setSizePopoverOpen(false);
+  };
+
   // Open mobile modal with synced draft state
   const openMobileFilter = () => {
     setTempCategory(selectedCategory);
     setTempBestSellerOnly(bestSellerOnly);
     setTempSortKey(sortKey);
+    setTempSizes([...selectedSizes]);
     setMobileFilterOpen(true);
+  };
+
+  // Toggle mobile draft size
+  const handleToggleMobileSize = (size: string) => {
+    if (tempSizes.includes(size)) {
+      setTempSizes(tempSizes.filter((s) => s !== size));
+    } else {
+      setTempSizes([...tempSizes, size]);
+    }
   };
 
   // Handle category selection
@@ -82,6 +148,9 @@ export default function ProductsClient({
     setBestSellerOnly(false);
     setSortKey("newest");
     setSearch("");
+    setSelectedSizes([]);
+    setDraftSizes([]);
+    setSizePopoverOpen(false);
     router.push("/products", { scroll: false });
   };
 
@@ -90,6 +159,7 @@ export default function ProductsClient({
     handleCategorySelect(tempCategory);
     setBestSellerOnly(tempBestSellerOnly);
     setSortKey(tempSortKey);
+    setSelectedSizes([...tempSizes]);
     setMobileFilterOpen(false);
   };
 
@@ -98,6 +168,7 @@ export default function ProductsClient({
     setTempCategory("");
     setTempBestSellerOnly(false);
     setTempSortKey("newest");
+    setTempSizes([]);
   };
 
   // Match category object by slug or id
@@ -121,7 +192,11 @@ export default function ProductsClient({
 
     const matchBestSeller = !bestSellerOnly || product.featured === true;
 
-    return matchCategory && matchSearch && matchBestSeller;
+    const matchSize =
+      selectedSizes.length === 0 ||
+      (product.sizes && product.sizes.some((size) => selectedSizes.includes(size)));
+
+    return matchCategory && matchSearch && matchBestSeller && matchSize;
   });
 
   // Helper function to calculate effective price (incorporating offer/selling price)
@@ -151,7 +226,12 @@ export default function ProductsClient({
     { label: "Price: High → Low", value: "price-desc" },
   ];
 
-  const hasActiveFilters = selectedCategory !== "" || bestSellerOnly || sortKey !== "newest" || search !== "";
+  const hasActiveFilters =
+    selectedCategory !== "" ||
+    bestSellerOnly ||
+    sortKey !== "newest" ||
+    search !== "" ||
+    selectedSizes.length > 0;
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12 space-y-8 flex-1 flex flex-col justify-start bg-transparent text-foreground">
@@ -169,7 +249,7 @@ export default function ProductsClient({
           </p>
         </div>
 
-        {/* Desktop / Tablet Pills Row (Combination of Sort & Best Seller filter) */}
+        {/* Desktop / Tablet Pills Row */}
         <div className="hidden md:flex flex-wrap items-center gap-2">
           {/* Best Seller Toggle Pill */}
           <button
@@ -183,6 +263,83 @@ export default function ProductsClient({
           >
             Best Selling {bestSellerOnly ? "✓" : ""}
           </button>
+
+          {/* Size Popover Filter Pill */}
+          <div className="relative" ref={popoverRef}>
+            <button
+              type="button"
+              onClick={toggleSizePopover}
+              className={`inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full border transition-all cursor-pointer ${
+                selectedSizes.length > 0
+                  ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white shadow-xs"
+                  : "bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-250 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600"
+              }`}
+            >
+              <span>
+                SIZE {selectedSizes.length > 0 ? `(${selectedSizes.length})` : ""}
+              </span>
+              <ChevronDown
+                size={13}
+                className={`transition-transform duration-200 ${
+                  sizePopoverOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {/* Desktop Size Popover Dropdown */}
+            {sizePopoverOpen && (
+              <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 shadow-xl z-30 animate-in fade-in zoom-in-95 duration-150">
+                <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400 mb-3 border-b border-neutral-100 dark:border-neutral-900 pb-2">
+                  SIZE
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  {AVAILABLE_SIZES.map((size) => {
+                    const isChecked = draftSizes.includes(size);
+                    return (
+                      <label
+                        key={size}
+                        onClick={() => handleToggleDraftSize(size)}
+                        className={`flex items-center space-x-2 p-2 rounded-xl border text-xs font-medium cursor-pointer transition-all select-none ${
+                          isChecked
+                            ? "border-black dark:border-white bg-neutral-100 dark:bg-neutral-900 font-bold text-black dark:text-white"
+                            : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 text-neutral-700 dark:text-neutral-300"
+                        }`}
+                      >
+                        <div
+                          className={`w-4 h-4 rounded flex items-center justify-center border transition-all ${
+                            isChecked
+                              ? "bg-black dark:bg-white border-black dark:border-white text-white dark:text-black"
+                              : "border-neutral-300 dark:border-neutral-700"
+                          }`}
+                        >
+                          {isChecked && <Check size={12} strokeWidth={3} />}
+                        </div>
+                        <span>{size}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-neutral-100 dark:border-neutral-900 gap-2">
+                  <button
+                    type="button"
+                    onClick={handleClearSizePopover}
+                    className="flex-1 py-1.5 text-xs font-semibold text-neutral-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+                  >
+                    Clear
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleApplySizePopover}
+                    className="flex-1 py-1.5 bg-black dark:bg-white text-white dark:text-black rounded-lg text-xs font-bold transition-all cursor-pointer hover:bg-neutral-800 dark:hover:bg-neutral-200"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
 
           <div className="h-4 w-[1px] bg-neutral-200 dark:bg-neutral-800 mx-1" />
 
@@ -297,7 +454,7 @@ export default function ProductsClient({
             No silhouettes matched
           </h3>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 font-light">
-            Try adjusting your search criteria or category filter.
+            Try adjusting your search criteria, size, or category filter.
           </p>
         </div>
       ) : (
@@ -333,6 +490,32 @@ export default function ProductsClient({
                 >
                   <X size={20} />
                 </button>
+              </div>
+            </div>
+
+            {/* Size Filter Section (Mobile) */}
+            <div className="space-y-3">
+              <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400">
+                Size
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {AVAILABLE_SIZES.map((size) => {
+                  const active = tempSizes.includes(size);
+                  return (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => handleToggleMobileSize(size)}
+                      className={`px-4 py-2.5 rounded-full text-xs font-semibold transition-all ${
+                        active
+                          ? "bg-black dark:bg-white text-white dark:text-black font-bold"
+                          : "bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
