@@ -30,11 +30,11 @@ export const metadata: Metadata = {
   },
   description:
     "Experience bespoke minimalist clothing. Timeless collections crafted for the contemporary wardrobe with elegant craftsmanship.",
-  metadataBase: new URL("https://teexclothings.com"),
+  metadataBase: new URL("https://teexclothing.in"),
   openGraph: {
     title: "TEEX | Premium Luxury Clothing",
     description: "Discover timeless minimalist silhouettes and premium quality clothing.",
-    url: "https://teexclothings.com",
+    url: "https://teexclothing.in",
     siteName: "TEEX",
     locale: "en_US",
     type: "website",
