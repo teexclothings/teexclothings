@@ -15,17 +15,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const { data: product } = await supabase
     .from("products")
-    .select("title, description")
+    .select("title, description, images")
     .eq("slug", slug)
     .maybeSingle();
 
   if (!product) return {};
 
+  const title = `${product.title} | TEEX`;
+  const description =
+    product.description ||
+    "Discover premium clothing silhouettes designed with ultimate focus on fabric, cut, and quality details.";
+  const images = product.images && Array.isArray(product.images) && product.images.length > 0
+    ? [product.images[0]]
+    : [];
+
   return {
-    title: `${product.title} | TEEX`,
-    description:
-      product.description ||
-      "Discover premium clothing silhouettes designed with ultimate focus on fabric, cut, and quality details.",
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images,
+      type: "website",
+      url: `/products/${slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images,
+    },
   };
 }
 

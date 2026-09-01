@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import CustomerProductCard from "@/components/ui/CustomerProductCard";
+import { buildCloudinaryUrl } from "@/utils/cloudinaryUrl";
 import { ArrowRight, ChevronLeft, ChevronRight, VolumeX, ShieldCheck, Truck, Sparkles, MessageCircle, Image as ImageIcon, Layers } from "lucide-react";
 
 interface Banner {
@@ -218,9 +219,11 @@ export default function HomeClient({
                           </div>
                         ) : (
                           <img
-                            src={banner.media_url}
+                            src={buildCloudinaryUrl(banner.media_url, { width: 1600 })}
                             alt={banner.title || "Hero banner"}
                             className="h-full w-full object-cover"
+                            loading={index === 0 ? "eager" : "lazy"}
+                            fetchPriority={index === 0 ? "high" : "auto"}
                           />
                         )}
                       </div>
@@ -241,9 +244,11 @@ export default function HomeClient({
                             </div>
                           ) : (
                             <img
-                              src={mobileUrl}
+                              src={buildCloudinaryUrl(mobileUrl, { width: 900 })}
                               alt={banner.title || "Hero banner"}
                               className="h-full w-full object-cover"
+                              loading={index === 0 ? "eager" : "lazy"}
+                              fetchPriority={index === 0 ? "high" : "auto"}
                             />
                           )}
                         </div>
@@ -363,9 +368,10 @@ export default function HomeClient({
                 >
                   {cat.image_url ? (
                     <img
-                      src={cat.image_url}
+                      src={buildCloudinaryUrl(cat.image_url, { width: 480 })}
                       alt={cat.name}
                       className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="h-full w-full bg-gradient-to-br from-neutral-800 to-neutral-950 flex flex-col items-center justify-center p-6 text-center text-neutral-500 space-y-2">
@@ -398,9 +404,10 @@ export default function HomeClient({
                   <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 shadow-2xs group-hover:border-black dark:group-hover:border-white transition-all flex items-center justify-center">
                     {cat.image_url ? (
                       <img
-                        src={cat.image_url}
+                        src={buildCloudinaryUrl(cat.image_url, { width: 200 })}
                         alt={cat.name}
                         className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
                       />
                     ) : (
                       <div className="h-full w-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400">
@@ -535,9 +542,10 @@ export default function HomeClient({
               >
                 {imgUrl ? (
                   <img
-                    src={imgUrl}
+                    src={buildCloudinaryUrl(imgUrl, { width: 400 })}
                     alt={product?.title || `Product look ${idx + 1}`}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center space-y-1 text-neutral-400 p-2 text-center">
@@ -585,9 +593,10 @@ export default function HomeClient({
               >
                 {imgUrl ? (
                   <img
-                    src={imgUrl}
+                    src={buildCloudinaryUrl(imgUrl, { width: 400 })}
                     alt={product?.title || `Product look ${idx + 1}`}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center space-y-1 text-neutral-400 p-2 text-center">

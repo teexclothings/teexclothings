@@ -23,6 +23,8 @@ export const viewport = {
   userScalable: false,
 };
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://teexclothing.in";
+
 export const metadata: Metadata = {
   title: {
     default: "TEEX | Premium Luxury Clothing",
@@ -30,11 +32,11 @@ export const metadata: Metadata = {
   },
   description:
     "Experience bespoke minimalist clothing. Timeless collections crafted for the contemporary wardrobe with elegant craftsmanship.",
-  metadataBase: new URL("https://teexclothing.in"),
+  metadataBase: new URL(siteUrl),
   openGraph: {
     title: "TEEX | Premium Luxury Clothing",
     description: "Discover timeless minimalist silhouettes and premium quality clothing.",
-    url: "https://teexclothing.in",
+    url: siteUrl,
     siteName: "TEEX",
     locale: "en_US",
     type: "website",

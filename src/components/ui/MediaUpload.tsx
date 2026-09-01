@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { compressImage } from "@/utils/imageCompressor";
 import { uploadToCloudinary, isCloudinaryConfigured } from "@/utils/cloudinary";
+import { buildCloudinaryUrl } from "@/utils/cloudinaryUrl";
 
 interface MediaUploadProps {
   value: string | string[] | null;
@@ -134,7 +135,7 @@ export default function MediaUpload({
         {isVideo ? (
           <video src={url} className="object-cover w-full h-full" muted playsInline />
         ) : (
-          <img src={url} alt="Media Preview" className="object-cover w-full h-full" />
+          <img src={buildCloudinaryUrl(url, { width: 300 })} alt="Media Preview" className="object-cover w-full h-full" loading="lazy" />
         )}
         <button
           type="button"
