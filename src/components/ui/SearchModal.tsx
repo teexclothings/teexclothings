@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X, ChevronRight, ArrowRight, Loader2 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
+import { buildCloudinaryUrl } from "@/utils/cloudinaryUrl";
 
 interface Category {
   id: string;
@@ -22,6 +23,10 @@ interface Product {
     name: string;
   };
 }
+
+// Module-level cache to avoid re-fetching on every modal open
+let cachedProducts: Product[] | null = null;
+let cachedCategories: Category[] | null = null;
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -49,6 +54,13 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }, 50);
 
     const fetchData = async () => {
+      // Use cached data if available
+      if (cachedProducts && cachedCategories) {
+        setProducts(cachedProducts);
+        setCategories(cachedCategories);
+        return;
+      }
+
       setLoading(true);
       const supabase = createClient();
 
@@ -65,8 +77,14 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           .order("created_at", { ascending: true }),
       ]);
 
-      if (prodRes.data) setProducts(prodRes.data as Product[]);
-      if (catRes.data) setCategories(catRes.data);
+      if (prodRes.data) {
+        cachedProducts = prodRes.data as Product[];
+        setProducts(cachedProducts);
+      }
+      if (catRes.data) {
+        cachedCategories = catRes.data;
+        setCategories(catRes.data);
+      }
       setLoading(false);
     };
 
@@ -202,9 +220,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         <div className="w-14 h-14 rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800 flex-shrink-0 border border-neutral-200/60 dark:border-neutral-800/60">
                           {product.images?.[0] ? (
                             <img
-                              src={product.images[0]}
+                              src={buildCloudinaryUrl(product.images[0], { width: 120 })}
                               alt={product.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-neutral-400 text-[9px]">
@@ -279,9 +298,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         <div className="w-14 h-14 rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800 flex-shrink-0 border border-neutral-200/60 dark:border-neutral-800/60">
                           {product.images?.[0] ? (
                             <img
-                              src={product.images[0]}
+                              src={buildCloudinaryUrl(product.images[0], { width: 120 })}
                               alt={product.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-neutral-400 text-[9px]">

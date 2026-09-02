@@ -8,6 +8,7 @@ import StateDropdown from "@/components/ui/StateDropdown";
 import { createClient } from "@/utils/supabase/client";
 import { loadDeliveryDetails } from "@/utils/localStorage";
 import CustomerProductCard from "@/components/ui/CustomerProductCard";
+import { buildCloudinaryUrl } from "@/utils/cloudinaryUrl";
 
 interface Product {
   id: string;
@@ -288,9 +289,8 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                 {zoomed ? <ZoomOut size={14} /> : <ZoomIn size={14} />}
               </button>
 
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={galleryImages[activeImage]}
+                src={buildCloudinaryUrl(galleryImages[activeImage], { width: 900 })}
                 alt={product.title}
                 className={`w-full h-full transition-all duration-500 object-contain ${
                   zoomed ? "scale-150" : ""
@@ -367,11 +367,11 @@ export default function ProductDetailsClient({ product, recommendedProducts }: P
                         : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-450 dark:hover:border-neutral-550"
                     }`}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={img}
+                      src={buildCloudinaryUrl(img, { width: 150 })}
                       alt={`Thumbnail ${idx + 1}`}
                       className="h-full w-full object-cover"
+                      loading="lazy"
                     />
                   </button>
                 ))}
