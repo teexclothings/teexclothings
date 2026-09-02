@@ -74,6 +74,25 @@ export default function HomeClient({
 }: HomeClientProps) {
   const [activeBanner, setActiveBanner] = useState(0);
   const instaScrollRef = useRef<HTMLDivElement>(null);
+  const categoryScrollRef = useRef<HTMLDivElement>(null);
+
+  // Category layout calculations:
+  // - Multiples of 5 (e.g. 5, 10, 15...): Grid layout (5 per row)
+  // - Non-multiples of 5 < 10 (e.g. 6, 7, 8, 9): Single-row scrollable layout
+  // - Non-multiples of 5 > 10 (e.g. 11, 12, 13...): Grid layout (row-wise)
+  const categoryCount = initialCategories.length;
+  const isMultipleOf5 = categoryCount > 0 && categoryCount % 5 === 0;
+  const isDesktopScrollable = !isMultipleOf5 && categoryCount < 10;
+
+  const scrollCategories = (direction: "left" | "right") => {
+    if (!categoryScrollRef.current) return;
+    const container = categoryScrollRef.current;
+    const scrollAmount = container.clientWidth * 0.8;
+    container.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
 
   // Auto rotate banners every 8 seconds if there are multiple banners
   useEffect(() => {
@@ -342,57 +361,119 @@ export default function HomeClient({
               FIND YOUR STYLE
             </h2>
           </div>
-          <Link
-            href="/products"
-            className="hidden md:inline-flex items-center space-x-1.5 text-xs font-bold tracking-wider uppercase text-black dark:text-white hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors"
-          >
-            <span>VIEW ALL COLLECTIONS</span>
-            <ArrowRight size={14} />
-          </Link>
+          <div className="hidden md:flex items-center space-x-4">
+            {isDesktopScrollable && initialCategories.length > 5 && (
+              <div className="flex items-center space-x-1.5">
+                <button
+                  type="button"
+                  onClick={() => scrollCategories("left")}
+                  className="p-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-black dark:text-white transition-colors cursor-pointer"
+                  aria-label="Scroll left"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollCategories("right")}
+                  className="p-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-black dark:text-white transition-colors cursor-pointer"
+                  aria-label="Scroll right"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
+            <Link
+              href="/products"
+              className="inline-flex items-center space-x-1.5 text-xs font-bold tracking-wider uppercase text-black dark:text-white hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors"
+            >
+              <span>VIEW ALL COLLECTIONS</span>
+              <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
 
-        {/* Dynamic Categories Display (Desktop Grid + Mobile Circular Avatars) */}
+        {/* Dynamic Categories Display (Desktop Grid / Scrollable + Mobile Circular Avatars) */}
         {initialCategories.length === 0 ? (
           <div className="rounded-xs border border-neutral-200 dark:border-neutral-850 bg-neutral-50 dark:bg-neutral-900 p-12 text-center text-xs text-neutral-500 dark:text-neutral-400 uppercase">
             No categories defined in database.
           </div>
         ) : (
           <>
-            {/* Desktop Grid Layout */}
-            <div className="hidden md:grid md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {initialCategories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/products?category=${cat.slug || cat.id}`}
-                  className="group relative aspect-[3/4] w-full overflow-hidden bg-neutral-900 rounded-xs border border-neutral-200 dark:border-neutral-850 block select-none"
-                >
-                  {cat.image_url ? (
-                    <img
-                      src={buildCloudinaryUrl(cat.image_url, { width: 480 })}
-                      alt={cat.name}
-                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="h-full w-full bg-gradient-to-br from-neutral-800 to-neutral-950 flex flex-col items-center justify-center p-6 text-center text-neutral-500 space-y-2">
-                      <Layers size={32} strokeWidth={1.2} className="text-neutral-400" />
-                      <span className="text-[9px] font-mono tracking-widest uppercase text-neutral-400">
-                        CATEGORY PLACEHOLDER
+            {/* Desktop Layout */}
+            {isDesktopScrollable ? (
+              /* Single-Row Scrollable Layout (For non-multiples of 5 under 10 items e.g., 6, 7, 8, 9) */
+              <div
+                ref={categoryScrollRef}
+                className="hidden md:flex space-x-4 overflow-x-auto pb-3 scrollbar-none snap-x snap-mandatory scroll-smooth"
+              >
+                {initialCategories.map((cat) => (
+                  <Link
+                    key={cat.id}
+                    href={`/products?category=${cat.slug || cat.id}`}
+                    className="group relative aspect-[3/4] w-[calc((100%-80px)/5.25)] flex-shrink-0 snap-start overflow-hidden bg-neutral-900 rounded-xs border border-neutral-200 dark:border-neutral-850 block select-none"
+                  >
+                    {cat.image_url ? (
+                      <img
+                        src={buildCloudinaryUrl(cat.image_url, { width: 480 })}
+                        alt={cat.name}
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-gradient-to-br from-neutral-800 to-neutral-950 flex flex-col items-center justify-center p-6 text-center text-neutral-500 space-y-2">
+                        <Layers size={32} strokeWidth={1.2} className="text-neutral-400" />
+                        <span className="text-[9px] font-mono tracking-widest uppercase text-neutral-400">
+                          CATEGORY PLACEHOLDER
+                        </span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+                      <span className="text-xs font-extrabold tracking-wider uppercase drop-shadow-xs">
+                        {cat.name}
                       </span>
+                      <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                     </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
-                    <span className="text-xs font-extrabold tracking-wider uppercase drop-shadow-xs">
-                      {cat.name}
-                    </span>
-                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                  </div>
-                </Link>
-              ))}
-            </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              /* Grid Layout (5 columns for multiples of 5 or items > 10) */
+              <div className="hidden md:grid md:grid-cols-5 gap-4">
+                {initialCategories.map((cat) => (
+                  <Link
+                    key={cat.id}
+                    href={`/products?category=${cat.slug || cat.id}`}
+                    className="group relative aspect-[3/4] w-full overflow-hidden bg-neutral-900 rounded-xs border border-neutral-200 dark:border-neutral-850 block select-none"
+                  >
+                    {cat.image_url ? (
+                      <img
+                        src={buildCloudinaryUrl(cat.image_url, { width: 480 })}
+                        alt={cat.name}
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-gradient-to-br from-neutral-800 to-neutral-950 flex flex-col items-center justify-center p-6 text-center text-neutral-500 space-y-2">
+                        <Layers size={32} strokeWidth={1.2} className="text-neutral-400" />
+                        <span className="text-[9px] font-mono tracking-widest uppercase text-neutral-400">
+                          CATEGORY PLACEHOLDER
+                        </span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+                      <span className="text-xs font-extrabold tracking-wider uppercase drop-shadow-xs">
+                        {cat.name}
+                      </span>
+                      <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
 
-            {/* Mobile Circular Avatars Layout (Matching attached reference design) */}
+            {/* Mobile Circular Avatars Layout */}
             <div className="flex md:hidden space-x-6 overflow-x-auto pb-4 pt-1 select-none scrollbar-none items-start">
               {initialCategories.map((cat) => (
                 <Link

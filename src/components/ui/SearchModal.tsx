@@ -83,7 +83,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       }
       if (catRes.data) {
         cachedCategories = catRes.data;
-        setCategories(cachedCategories);
+        setCategories(catRes.data);
       }
       setLoading(false);
     };
