@@ -23,7 +23,7 @@ export const viewport = {
   userScalable: false,
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://teexclothings.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://teexclothing.in";
 
 export const metadata: Metadata = {
   title: {

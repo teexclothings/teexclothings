@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Heart, Image as ImageIcon } from "lucide-react";
 import { useState } from "react";
+import { buildCloudinaryUrl } from "@/utils/cloudinaryUrl";
 
 interface ProductCardProps {
   product: {
@@ -66,7 +67,7 @@ export default function CustomerProductCard({ product }: ProductCardProps) {
           {/* Primary Image or Clean SVG Placeholder */}
           {primaryImage ? (
             <img
-              src={primaryImage}
+              src={buildCloudinaryUrl(primaryImage, { width: 600 })}
               alt={product.title}
               className={`h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 ${
                 product.is_out_of_stock ? "opacity-60 grayscale-[30%]" : ""
